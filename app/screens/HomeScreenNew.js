@@ -86,7 +86,7 @@ class HomeScreenNew extends Component {
 					</TouchableWithoutFeedback>
 
 					<View>
-						<Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Home</Text>
+						<Text style={{ fontFamily:"Roboto-Light",fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Home</Text>
 					</View>
 
 					<View>
@@ -107,7 +107,7 @@ class HomeScreenNew extends Component {
 								<TouchableOpacity onPress={() => this.props.navigation.navigate("JobPost")}>
 									<View style={{ justifyContent: 'center', alignItems: 'center' }}>
 										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/1.png')} />
-										<Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>Add Post</Text>
+										<Text style={{fontFamily:"Roboto-Light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Add Post</Text>
 									</View>
 								</TouchableOpacity>
 							</Card>
@@ -115,7 +115,7 @@ class HomeScreenNew extends Component {
 								<TouchableOpacity onPress={() => this.props.navigation.navigate("JobList")}>
 									<View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
 										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/2.png')} />
-										<Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>Listings</Text>
+										<Text style={{fontFamily:"Roboto-Light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Listings</Text>
 									</View>
 								</TouchableOpacity>
 							</Card>
@@ -133,7 +133,7 @@ class HomeScreenNew extends Component {
 									this.props.navigation.dispatch(resetAction);}}>
 									<View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', marginLeft: 3, marginRight: 3 }}>
 										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/3.png')} />
-										<Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>FAQs</Text>
+										<Text style={{ fontFamily:"Roboto-Light",fontWeight: 'bold', fontSize: 18, color: 'black' }}>FAQs</Text>
 									</View>
 								</TouchableOpacity>
 							</Card>
@@ -141,7 +141,7 @@ class HomeScreenNew extends Component {
 								<TouchableOpacity onPress={() => this.props.navigation.navigate("ContactAdmin")}>
 									<View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
 										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/4.png')} />
-										<Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>Contact</Text>
+										<Text style={{fontFamily:"Roboto-Light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Contact</Text>
 									</View>
 								</TouchableOpacity>
 							</Card>
@@ -180,6 +180,7 @@ let styles = StyleSheet.create({
 
 	},
 	submitText: {
+		fontFamily:"Roboto-Light",
 		color: 'white',
 		textAlign: 'center',
 		paddingLeft: 10,

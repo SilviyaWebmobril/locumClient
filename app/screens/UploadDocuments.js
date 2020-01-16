@@ -341,7 +341,7 @@ export default class UploadDocuments extends Component {
             </TouchableWithoutFeedback>
 
             <View>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Upload Documents</Text>
+              <Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Upload Documents</Text>
             </View>
 
             <View>
@@ -465,6 +465,7 @@ let styles = StyleSheet.create({
 
   },
   submitText: {
+    fontFamily:"Roboto-Light",
     color: 'black',
     textAlign: 'center',
     margin: 25,
@@ -484,6 +485,7 @@ let styles = StyleSheet.create({
     marginTop: 20
   },
   submitTextTwo: {
+    fontFamily:"Roboto-Light",
     color: 'white',
     textAlign: 'center',
     paddingLeft: 10,

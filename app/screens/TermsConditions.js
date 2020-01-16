@@ -41,7 +41,7 @@ export default class TermsCondition extends Component {
         </TouchableWithoutFeedback>
 
         <View>
-         <Text style={{fontSize: 20,fontWeight: 'bold', color: "white",marginLeft:-10}}>Terms & Condition</Text>
+         <Text style={{fontFamily:'Roboto-Light',fontSize: 20,fontWeight: 'bold', color: "white",marginLeft:-10}}>Terms & Condition</Text>
         </View>
 
        <View>

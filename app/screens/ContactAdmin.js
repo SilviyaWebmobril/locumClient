@@ -148,7 +148,7 @@ this.setState({id:user_id})
 						 </TouchableWithoutFeedback>
 
 						 <View>
-						  <Text style={{fontSize: 20,fontWeight: 'bold', color: "white",paddingRight:25}}>Contact Admin</Text>
+						  <Text style={{fontFamily:"Roboto-Light",fontSize: 20,fontWeight: 'bold', color: "white",paddingRight:25}}>Contact Admin</Text>
 						 </View>
 
 						<View>
@@ -212,6 +212,7 @@ let styles = StyleSheet.create({
 
     },
     submitText:{
+      fontFamily:"Roboto-Light",
         color:'white',
         textAlign:'center',
         paddingLeft : 10,

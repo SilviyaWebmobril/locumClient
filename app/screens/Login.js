@@ -478,7 +478,7 @@ class Login extends Component {
 
 
 
-        <Text onPress={this.forgot.bind(this)} style={{ alignSelf: 'flex-end', marginBottom: 5, marginTop: 5 }}>Forgot Password?</Text>
+        <Text onPress={this.forgot.bind(this)} style={{fontFamily:"Roboto-Light",  alignSelf: 'flex-end', marginBottom: 5, marginTop: 5 }}>Forgot Password?</Text>
         <TouchableOpacity
           style={styles.submitButton}
           onPress={this.onLogin.bind(this)}
@@ -489,7 +489,7 @@ class Login extends Component {
         <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
           <Text style={{ color: 'black' }}>Don't have an account ? </Text>
 
-          <Text onPress={this.signup.bind(this)} style={{ textDecorationLine: 'underline', color: 'black', fontWeight: 'bold' }}>SIGN UP</Text>
+          <Text onPress={this.signup.bind(this)} style={{fontFamily:"Roboto-Light",  textDecorationLine: 'underline', color: 'black', fontWeight: 'bold' }}>SIGN UP</Text>
 
         </View>
       </View>
@@ -522,6 +522,7 @@ let styles = StyleSheet.create({
     marginBottom: 15
   },
   submitText: {
+    fontFamily:"Roboto-Light", 
     color: 'white',
     textAlign: 'center',
     paddingLeft: 10,

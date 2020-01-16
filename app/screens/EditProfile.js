@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   Text, View, Button, StyleSheet, Dimensions, SafeAreaView,
-  ScrollView, Image, BackHandler, FlatList, TouchableOpacity, ToastAndroid, ActivityIndicator, TouchableWithoutFeedback, Platform
+  ScrollView, Image, BackHandler, FlatList, TouchableOpacity, 
+  ToastAndroid, ActivityIndicator, TouchableWithoutFeedback, Platform
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import ImagePicker from "react-native-image-picker";
@@ -915,7 +916,7 @@ class EditProfile extends Component {
             </TouchableWithoutFeedback>
 
             <View>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", }}></Text>
+              <Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", }}></Text>
             </View>
 
             <View>
@@ -929,23 +930,31 @@ class EditProfile extends Component {
           
 					<KeyboardAwareScrollView  >
 						<View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
-						<View style={{ width: Dimensions.get('window').width, height: 100, backgroundColor: '#4C74E6', }}>
+						<View style={{ width: Dimensions.get('window').width , height: 100, backgroundColor: '#4C74E6', }}>
               {/*change margin top and bottom to make view hirht flexible in below header vieww */}
-              <Text style={{ fontSize: 18, fontWeight: 'bold', color: "white", marginBottom: '15%', marginTop: 10, alignSelf:"center"}}>{this.state.name}</Text>
-
-            <View style={{ backgroundColor: 'white', borderRadius: 100 / 2, alignSelf: 'center', flex: 1, borderColor: '#000000', elevation: 10, position: 'absolute', top: Dimensions.get('window').height * 0.16, marginTop: -55 }}>
+              <Text numberOfLines={10} style={{ fontSize: 18,marginLeft:10,marginRight:10, fontWeight: 'bold', 
+              color: "white", marginBottom: '15%', marginTop: 10, alignSelf:"center"}}>{this.state.name}</Text>
+            <TouchableWithoutFeedback onPress={()=> {this.selectPhotoTapped()}}>
+            <View style={{ backgroundColor: 'white', borderRadius: 100 / 2, alignSelf: 'center', flex: 1,
+             borderColor: '#000000', elevation: 0, position: 'absolute', top: Dimensions.get('window').height * 0.16, marginTop: -55 }}>
             
               {result}
             </View>
-
-
-
-            <View style={{ padding: 10, backgroundColor: '#686BE4', elevation: 13, width: 50, height: 50, borderRadius: 50 / 2, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', marginLeft: '15%', marginTop: 11 }}>
-              <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-                <Image style={{ width: 23, height: 23 }} resizeMode='contain'
+            </TouchableWithoutFeedback>
+            
+            {/* <TouchableWithoutFeedback onPress={()=> ToastAndroid.show("ASDfasdf",ToastAndroid.LONG)}>
+                <View style={{ padding: 10, backgroundColor: '#686BE4', 
+                elevation:10,width: 50, height: 50, 
+                borderRadius: 50 / 2, alignSelf: 'center',
+                 justifyContent: 'center', alignItems: 'center',
+                 position:'absolute',left:140,marginTop:100}}>
+                  <Image style={{ width: 23, height: 23 }} resizeMode='contain'
                   source={require('../assets/clinic/camera-2.png')} />
-              </TouchableOpacity>
-            </View>
+                </View>
+                </TouchableWithoutFeedback>
+              
+            */}
+           
 
             </View>
 
@@ -1273,6 +1282,7 @@ let styles = StyleSheet.create({
 
   },
   submitText: {
+    fontFamily:"Roboto-Light",
     color: 'white',
     textAlign: 'center',
     paddingLeft: 10,

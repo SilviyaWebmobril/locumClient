@@ -59,7 +59,28 @@ export default class JobList extends Component {
 								var location = responseJson.result[i].job_location
 								var experience = responseJson.result[i].exp_required
 								var description = responseJson.result[i].job_desc
+								var from_last_index;
+								var from;
+								if(responseJson.result[i].from_time == null){
 
+									from_last_index = "";
+									from = "";
+
+								}else{
+									from_last_index = responseJson.result[i].from_time.lastIndexOf(":")
+									from = responseJson.result[i].from_time.substring(0,from_last_index);
+								}
+								var to_last_index;
+								var to;
+								if(responseJson.result[i].to_time == null){
+
+									to_last_index="";
+									to="";
+
+								}else{
+									to_last_index	= responseJson.result[i].to_time.lastIndexOf(":");
+									to = responseJson.result[i].to_time.substring(0,to_last_index);
+								}
 
 								const array = [...temp_arr];
 								array[i] = { ...array[i], name: "Need " + profile + " with " + experience + " years experience" };
@@ -69,6 +90,8 @@ export default class JobList extends Component {
 								array[i] = { ...array[i], location: location };
 								array[i] = { ...array[i], date: date };
 								array[i] = { ...array[i], key: id };
+								array[i] = { ...array[i], from_time: from};
+								array[i] = { ...array[i], to_time:to};
 								temp_arr = array
 								
 							}//end of for
@@ -118,12 +141,16 @@ export default class JobList extends Component {
 			for (var i = 0; i < this.state.jobs.length; i++) {
 				if (this.state.jobs[i].key == job_id) {
 					let result = {}
+					console.log("this.job",this.state.jobs[i]);
 					result["job_id"] = job_id;
 					result["profile"] = this.state.jobs[i].profile
 					result["location"] = this.state.jobs[i].location
 					result["experience"] = this.state.jobs[i].experience
 					result["date"] = this.state.jobs[i].date
 					result["description"] = this.state.jobs[i].description
+					result["to"] = this.state.jobs[i].to_time;
+					result["from"] =  this.state.jobs[i].from_time
+					
 					this.props.navigation.navigate('JobDetails', { result: result });
 				}
 			}
@@ -164,7 +191,7 @@ export default class JobList extends Component {
 					</TouchableWithoutFeedback>
 
 					<View>
-						<Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Listed Vaccancy</Text>
+						<Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Listed Vaccancy</Text>
 					</View>
 
 					<View>
@@ -187,11 +214,11 @@ export default class JobList extends Component {
 								<TouchableOpacity onPress={() => this.next(item.key)}>
 									<View>
 										<Card containerStyle={{ padding: 10, borderRadius: 5 }} >
-											<Text style={{ color: 'black', fontSize: 15, marginBottom: 5 ,fontWeight:"bold"}}>Requirement : <Text style={{fontSize:15,fontWeight:"normal"}}>{item.name}</Text></Text>
-											<Text style={{ marginBottom: 5 ,fontWeight:"bold"}}>Description : <Text style={{fontWeight:"normal"}}>{item.description}</Text></Text>
+											<Text style={{fontFamily:"Roboto-Light", color: 'black', fontSize: 15, marginBottom: 5 ,fontWeight:"bold"}}>Requirement : <Text style={{fontSize:15,fontWeight:"normal"}}>{item.name}</Text></Text>
+											<Text style={{fontFamily:"Roboto-Light", marginBottom: 5 ,fontWeight:"bold"}}>Description : <Text style={{fontWeight:"normal"}}>{item.description}</Text></Text>
 											<View style={{ flexDirection: 'row', justifyContent: 'space-between',marginBottom:5 }}>
-												<Text style={{fontWeight:"bold"}}>Required Date : </Text>
-												<Text style={{textAlign:"right"}}>{item.date}</Text>
+												<Text style={{fontFamily:"Roboto-Light",fontWeight:"bold"}}>Required Date : </Text>
+												<Text style={{fontFamily:"Roboto-Light",textAlign:"right"}}>{item.date}</Text>
 												
 											</View>
 											<Text style={{ color: '#4C74E6' ,justifyContent:"flex-end",textAlign:"right"}}>Read More >></Text>
@@ -204,7 +231,7 @@ export default class JobList extends Component {
 					</View>
 				</ScrollView>
 				 :
-				 <Text style={{textAlign:"center",justifyContent:"center",flex:1,marginTop:20,fontWeight:"bold",fontSize:14}}>No Jobs Found.</Text>
+				 <Text style={{fontFamily:"Roboto-Light",textAlign:"center",justifyContent:"center",flex:1,marginTop:20,fontWeight:"bold",fontSize:14}}>No Jobs Found.</Text>
 				}
 				
 			</View>
@@ -234,6 +261,7 @@ let styles = StyleSheet.create({
 
 	},
 	submitText: {
+		fontFamily:"Roboto-Light",
 		color: 'white',
 		textAlign: 'center',
 		paddingLeft: 10,

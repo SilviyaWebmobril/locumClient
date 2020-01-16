@@ -214,8 +214,8 @@ export default class Wallet extends Component {
 
 					<View style={{ width: '100%', height: 150, backgroundColor: '#4C74E6', justifyContent: 'center', alignItems: 'center', flex: 3, flexGrow: 1 }}>
 						{/*change margin top and bottom to make view hirht flexible in below header vieww */}
-						<Text style={{ fontSize: 18, fontWeight: 'bold', color: "white", marginBottom: '2%', marginTop: '1%', }}>{this.state.name}</Text>
-						<Text style={{ fontSize: 18, fontWeight: 'bold', color: "white", marginBottom: '23%', marginTop: '1%', }}>${this.state.balance}</Text>
+						<Text style={{fontFamily:"Roboto-Light", fontSize: 18, fontWeight: 'bold', color: "white", marginBottom: '2%', marginTop: '1%', }}>{this.state.name}</Text>
+						<Text style={{fontFamily:"Roboto-Light", fontSize: 18, fontWeight: 'bold', color: "white", marginBottom: '23%', marginTop: '1%', }}>${this.state.balance}</Text>
 					</View>
 
 
@@ -291,10 +291,10 @@ export default class Wallet extends Component {
 									<Card containerStyle={{ padding: 15, borderRadius: 10 }} >
 										<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 
-											<Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>{item.date}</Text>
+											<Text style={{fontFamily:"Roboto-Light", fontSize: 15, color: 'black', fontWeight: 'bold' }}>{item.date}</Text>
 
 
-											<Text style={{ color: '#4C74E6', fontSize: 15 }}>${item.price}</Text>
+											<Text style={{fontFamily:"Roboto-Light", color: '#4C74E6', fontSize: 15 }}>${item.price}</Text>
 										</View>
 									</Card>
 								</View>
@@ -336,6 +336,7 @@ let styles = StyleSheet.create({
 
 	},
 	submitText: {
+		fontFamily:"Roboto-Light",
 		color: 'white',
 		textAlign: 'center',
 		paddingLeft: 10,

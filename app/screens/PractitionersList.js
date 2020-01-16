@@ -345,7 +345,7 @@ export default class PractitionersList extends Component {
 						</TouchableWithoutFeedback>
 
 						<View>
-							<Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Practitioners List</Text>
+							<Text style={{fontFamily:"Roboto-Light",  fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Practitioners List</Text>
 						</View>
 
 						<View>
@@ -380,8 +380,8 @@ export default class PractitionersList extends Component {
 
 
 															<View style={{ justifyContent: 'space-around', alignItems: 'flex-start', marginLeft: 5, marginRight: 10 }}>
-																<Text style={{ color: 'black', fontSize: 15, fontWeight: "bold" }}>{item.name}</Text>
-																<Text>{item.description}</Text>
+																<Text style={{fontFamily:"Roboto-Light",  color: 'black', fontSize: 15, fontWeight: "bold" }}>{item.name}</Text>
+																<Text style={{fontFamily:"Roboto-Light", }}>{item.description}</Text>
 															</View>
 
 														</View>
@@ -402,9 +402,9 @@ export default class PractitionersList extends Component {
 															:
 															(item.application_status == 1
 																?
-																<Text style={{ fontSize: 13, marginBottom: 10, fontWeight: "bold", marginTop: 5, color: "#5AA86C", textAlign: "center" }}>Approved</Text>
+																<Text style={{fontFamily:"Roboto-Light",  fontSize: 13, marginBottom: 10, fontWeight: "bold", marginTop: 5, color: "#5AA86C", textAlign: "center" }}>Approved</Text>
 																:
-																<Text style={{ fontSize: 13, marginBottom: 10, fontWeight: "bold", marginTop: 5, color: "red", textAlign: "center" }}>Rejected</Text>
+																<Text style={{fontFamily:"Roboto-Light",  fontSize: 13, marginBottom: 10, fontWeight: "bold", marginTop: 5, color: "red", textAlign: "center" }}>Rejected</Text>
 															)
 														}
 
@@ -419,7 +419,7 @@ export default class PractitionersList extends Component {
 							</View>
 						</ScrollView>
 						:
-						<Text style={{ textAlign: "center", justifyContent: "center", flex: 1, marginTop: 20, fontWeight: "bold", fontSize: 14 }}>No Practitioners Applied.</Text>
+						<Text style={{fontFamily:"Roboto-Light",  textAlign: "center", justifyContent: "center", flex: 1, marginTop: 20, fontWeight: "bold", fontSize: 14 }}>No Practitioners Applied.</Text>
 					}
 
 				</View>

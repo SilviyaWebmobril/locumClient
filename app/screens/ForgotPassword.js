@@ -131,7 +131,7 @@ export default class ForgotPassword extends Component {
 							</TouchableWithoutFeedback>
 
 							<View>
-								<Text style={{ fontSize: 21, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Forgot Password</Text>
+								<Text style={{fontFamily:"Roboto-Light", fontSize: 21, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Forgot Password</Text>
 							</View>
 
 							<View>
@@ -145,7 +145,7 @@ export default class ForgotPassword extends Component {
 
 					<View style={{ padding: 10, width: '90%' }}>
 
-						<Text style={{ fontSize: 17, color: "black", marginTop: 15, marginBottom: 15 }}>Don't worry! Just enter your Email Id below and we will send you the password reset instructions</Text>
+						<Text style={{fontFamily:"Roboto-Light", fontSize: 17, color: "black", marginTop: 15, marginBottom: 15 }}>Don't worry! Just enter your Email Id below and we will send you the password reset instructions</Text>
 
 						<TextField
 							style={{ width: '100%' }}
@@ -189,6 +189,7 @@ let styles = StyleSheet.create({
 
 	},
 	submitText: {
+		fontFamily:"Roboto-Light",
 		color: 'white',
 		textAlign: 'center',
 		paddingLeft: 10,

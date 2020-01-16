@@ -491,7 +491,7 @@ export default class CreateProfile extends Component {
             </TouchableWithoutFeedback>
 
             <View>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}></Text>
+              <Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}></Text>
             </View>
 
             <View>
@@ -510,56 +510,51 @@ export default class CreateProfile extends Component {
 
           <View style={{ width: Dimensions.get('window').width, height: 100, backgroundColor: '#4C74E6' }}>
               {/*change margin top and bottom to make view hirht flexible in below header vieww */}
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", marginBottom: 15,alignSelf:"center" }}>{this.state.name}</Text>
+              <Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", marginBottom: 15,alignSelf:"center" }}>{this.state.name}</Text>
            
 
 
             {
               this.state.ImageSource == null ?
-                <View
-                  style={{
-                    position: 'absolute',
-                    overflow: 'hidden',
-                    top: Dimensions.get('window').height * 0.16,
-                    marginTop: Platform.OS == 'android' ? -55 : -75,
-                    marginBottom: 30,
-                    backgroundColor: 'white',
-                    borderRadius: 50,
-                    padding: 20,
-                    borderColor: '#000000',
-                    borderWidth: 1,
-                    alignSelf: 'center',
-
-                    height: null
-                  }}>
-                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-                    <Image style={{ width: 60, height: 60, marginTop: 2 }} source={require('../assets/clinic/camera.png')} />
-                  </TouchableOpacity>
-                </View>
+              <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+              
+                    <Image style={{
+                      //position: 'absolute',
+										overflow: 'hidden',
+										//top: Dimensions.get('window').height * 0.16,
+										marginTop: Platform.OS == 'android' ? 45 : 55,
+										marginBottom: 20,
+										backgroundColor: 'white',
+										borderRadius: 50,
+										padding: 20,
+										borderColor: '#000000',
+										borderWidth: 1,
+										alignSelf: 'center',
+										height: null, 
+                    width: 100, height: 100, marginTop: 2 }} source={require('../assets/clinic/camera.png')} />
+               
+               </TouchableOpacity>
                 :
-                <View
-                  style={{
-                    position: 'absolute',
-                    overflow: 'hidden',
-                    top: Dimensions.get('window').height * 0.16,
-										marginTop: Platform.OS == 'android' ? -55 : -75,
-                    marginBottom: 30,
-                    backgroundColor: 'white',
-                    borderRadius: 50,
-
-                    borderColor: '#909090',
-                    borderWidth: 1,
-                    alignSelf: 'center',
-
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: null,
-                    height: null
-                  }}>
-                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
-                    <Image source={this.state.ImageSource} style={{ width: 100, height: 100, marginTop: 2 }} />
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                
+                    <Image source={this.state.ImageSource} style={{ 
+                        //position: 'absolute',
+										overflow: 'hidden',
+										//top: Dimensions.get('window').height * 0.16,
+										marginTop: Platform.OS == 'android' ? 45 : 55,
+										marginBottom: 20,
+										backgroundColor: 'white',
+										borderRadius: 50,
+										padding: 20,
+										borderColor: '#000000',
+										borderWidth: 1,
+										alignSelf: 'center',
+										height: null, width: 100, height: 100, marginTop: 2 ,
+                    width: 100, height: 100, marginTop: 2
+                    }} />
+                  
+               
+                </TouchableOpacity>
             }
 
             </View>
@@ -724,8 +719,8 @@ export default class CreateProfile extends Component {
                 />
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('TermsConditions')}>
                   <View style={{ flexDirection: 'row', marginLeft: -15, flexWrap: 'wrap', flexShrink: 1 }}>
-                    <Text style={{ color: 'black' }}>Accept  </Text>
-                    <Text style={{ textDecorationLine: 'underline', marginLeft: 2, color: 'blue' }}>Terms & Condition</Text>
+                    <Text style={{ fontFamily:"Roboto-Light",color: 'black' }}>Accept  </Text>
+                    <Text style={{fontFamily:"Roboto-Light", textDecorationLine: 'underline', marginLeft: 2, color: 'blue' }}>Terms & Condition</Text>
                   </View>
 
                 </TouchableOpacity>
@@ -774,6 +769,7 @@ let styles = StyleSheet.create({
     marginTop: 20
   },
   submitText: {
+    fontFamily:"Roboto-Light",
     color: 'white',
     textAlign: 'center',
     paddingLeft: 10,

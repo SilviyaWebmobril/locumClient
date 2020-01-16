@@ -16,6 +16,7 @@
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-chip": "^2.1.8",
+    "react-native-datepicker": "^1.7.2",
     "react-native-directed-scrollview": "^2.0.0",
     "react-native-document-picker": "^3.2.4",
     "react-native-elements": "^1.2.7",
@@ -28,6 +29,7 @@
     "react-native-material-dropdown": "^0.11.1",
     "react-native-material-textfield": "^0.16.1",
     "react-native-modal-datetime-picker": "^7.6.0",
+    "react-native-module": "0.0.1",
     "react-native-paypal-wrapper": "^1.3.2",
     "react-native-reanimated": "^1.4.0",
     "react-native-render-html": "^4.1.2",
@@ -38,7 +40,8 @@
     "react-native-webview": "^8.0.1",
     "react-navigation": "^4.0.10",
     "react-navigation-drawer": "^2.3.3",
-    "react-navigation-stack": "^1.10.3"
+    "react-navigation-stack": "^1.10.3",
+    "rnpm": "^1.9.0"
   },
   "devDependencies": {
     "@babel/core": "7.7.2",
@@ -52,5 +55,8 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": ["./assets/fonts/"]
   }
 }

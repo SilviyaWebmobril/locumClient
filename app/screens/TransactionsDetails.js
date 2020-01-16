@@ -67,7 +67,7 @@ export default class TransactionsDetails extends Component {
 						 </TouchableWithoutFeedback>
 						 
 						 <View>
-						  <Text style={{fontSize: 21,fontWeight: 'bold', color: "white",paddingRight:25}}>Transactions List</Text>
+						  <Text style={{fontFamily:"Roboto-Light", fontSize: 21,fontWeight: 'bold', color: "white",paddingRight:25}}>Transactions List</Text>
 						 </View>
 						 
 						<View>
@@ -92,13 +92,13 @@ export default class TransactionsDetails extends Component {
 										
 										<Image style={{width:30,height:30,marginRight:5}} source = {require('../assets/clinic/small-mark.png')}/>
 										<View>
-											<Text style ={{ color: 'black', fontSize: 18 ,fontWeight: 'bold' }}>{item.name}</Text>
-											<Text>From {item.from}</Text>
+											<Text style ={{fontFamily:"Roboto-Light",  color: 'black', fontSize: 18 ,fontWeight: 'bold' }}>{item.name}</Text>
+											<Text style={{fontFamily:"Roboto-Light", }}>From {item.from}</Text>
 										</View>
 										
 										<View style={{alignSelf:'flex-end',marginRight:10}}>
-											<Text style ={{ color: 'blue', fontSize: 20 ,fontWeight: 'bold' ,alignSelf:'center'}}>${item.price}</Text>
-											<Text>Date: {item.date}</Text>
+											<Text style ={{fontFamily:"Roboto-Light",  color: 'blue', fontSize: 20 ,fontWeight: 'bold' ,alignSelf:'center'}}>${item.price}</Text>
+											<Text style={{fontFamily:"Roboto-Light", }}> Date: {item.date}</Text>
 										</View>
 										</View>
 									</Card>
@@ -134,6 +134,7 @@ let styles = StyleSheet.create({
 	  
     },
     submitText:{
+		fontFamily:"Roboto-Light", 
         color:'white',
         textAlign:'center',
         paddingLeft : 10,

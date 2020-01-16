@@ -140,7 +140,7 @@ export default class FAQ extends Component {
                 </TouchableWithoutFeedback>
 
                 <View>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>FAQ</Text>
+                    <Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>FAQ</Text>
                 </View>
 
                 <View>
@@ -172,12 +172,14 @@ export default class FAQ extends Component {
     },
   
     Panel_text: {
+      fontFamily:"Roboto-Light",
       fontSize: 18,
       color: '#000',
       padding: 10
     },
   
     Panel_Button_Text: {
+      fontFamily:"Roboto-Light",
       textAlign: 'center',
       color: '#fff',
       fontSize: 21

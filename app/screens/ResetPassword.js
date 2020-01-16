@@ -200,7 +200,7 @@ export default class ResetPassword extends Component {
 					</TouchableWithoutFeedback>
 
 					<View>
-						<Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Reset Password</Text>
+						<Text style={{fontFamily:"Roboto-Light",  fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Reset Password</Text>
 					</View>
 
 					<View>
@@ -326,6 +326,7 @@ let styles = StyleSheet.create({
 
 	},
 	submitText: {
+		fontFamily:"Roboto-Light", 
 		color: 'white',
 		textAlign: 'center',
 		paddingLeft: 10,

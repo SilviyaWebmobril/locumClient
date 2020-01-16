@@ -292,8 +292,8 @@ export default class Register extends Component {
 					</TouchableOpacity>
 
 					<View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-						<Text style={{ color: 'black' }}>Already have an account ?</Text>
-						<Text onPress={() => this.props.navigation.goBack()} style={{ textDecorationLine: 'underline', color: 'black', fontWeight: 'bold' }}> SIGN IN</Text>
+						<Text style={{fontFamily:"Roboto-Light",  color: 'black' }}>Already have an account ?</Text>
+						<Text onPress={() => this.props.navigation.goBack()} style={{fontFamily:"Roboto-Light",  textDecorationLine: 'underline', color: 'black', fontWeight: 'bold' }}> SIGN IN</Text>
 					</View>
 				</View>
 				</View>
@@ -324,6 +324,7 @@ let styles = StyleSheet.create({
 		marginBottom: 15
 	},
 	submitText: {
+		fontFamily:"Roboto-Light", 
 		color: 'white',
 		textAlign: 'center',
 		paddingLeft: 10,

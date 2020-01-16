@@ -128,7 +128,7 @@ export default class TransactionsList extends Component {
 					</TouchableWithoutFeedback>
 
 					<View>
-						<Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Transactions List</Text>
+						<Text style={{ fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Transactions List</Text>
 					</View>
 
 					<View>
@@ -179,23 +179,23 @@ export default class TransactionsList extends Component {
 
 								<View style={{ width: '100%' }}>
 									<Card containerStyle={{ padding: 12, borderRadius: 5 }} >
-										<Text style={{ color: 'black', fontSize: 18, marginBottom: 10, fontWeight: "bold", color: "#4C74E6", }}>{item.package.name}</Text>
+										<Text style={{ fontFamily:"Roboto-Light", color: 'black', fontSize: 18, marginBottom: 10, fontWeight: "bold", color: "#4C74E6", }}>{item.package.name}</Text>
 										<View style={{ flexDirection: "row", marginLeft: 10, marginBottom: 10 }}>
 											<Image source={require('../assets/nav/clock.png')} style={{ width: 15, height: 15 }} />
-											<Text style={{ fontSize: 12, marginLeft: 5, marginTop: -2 }}>{item.created_at.split(' ')[1]}</Text>
+											<Text style={{ fontFamily:"Roboto-Light", fontSize: 12, marginLeft: 5, marginTop: -2 }}>{item.created_at.split(' ')[1]}</Text>
 										</View>
 										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-											<Text style={{ alignSelf: "flex-end", fontSize: 15 }}>Date</Text>
-											<Text style={{ color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.created_at.split(' ')[0]}</Text>
+											<Text style={{ fontFamily:"Roboto-Light", alignSelf: "flex-end", fontSize: 15 }}>Date</Text>
+											<Text style={{fontFamily:"Roboto-Light",  color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.created_at.split(' ')[0]}</Text>
 										</View>
 										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
-											<Text style={{ alignSelf: "flex-end", fontSize: 15 }}>Mode Of Payment</Text>
-											<Text style={{ color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>Wallet</Text>
+											<Text style={{ fontFamily:"Roboto-Light", alignSelf: "flex-end", fontSize: 15 }}>Mode Of Payment</Text>
+											<Text style={{ fontFamily:"Roboto-Light", color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>Wallet</Text>
 										</View>
 										<View style={{ width: "100%", height: 1, backgroundColor: "#808080", marginBottom: 5 }}></View>
 										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
-											<Text style={{ alignSelf: "flex-end", fontSize: 15, color: '#5AA86C', fontWeight: "bold" }}>Total</Text>
-											<Text style={{ color: '#5AA86C', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>$ {item.package.amt}</Text>
+											<Text style={{ fontFamily:"Roboto-Light", alignSelf: "flex-end", fontSize: 15, color: '#5AA86C', fontWeight: "bold" }}>Total</Text>
+											<Text style={{ fontFamily:"Roboto-Light", color: '#5AA86C', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>$ {item.package.amt}</Text>
 										</View>
 
 
@@ -209,7 +209,7 @@ export default class TransactionsList extends Component {
 							keyExtractor={item => item.id}
 						/>
 						:
-						<Text style={{ textAlign: "center", justifyContent: "center", flex: 1, marginTop: 20, fontWeight: "bold", fontSize: 14 }}>No Transactions Found.</Text>
+						<Text style={{ fontFamily:"Roboto-Light", textAlign: "center", justifyContent: "center", flex: 1, marginTop: 20, fontWeight: "bold", fontSize: 14 }}>No Transactions Found.</Text>
 						}
 						
 					</View>

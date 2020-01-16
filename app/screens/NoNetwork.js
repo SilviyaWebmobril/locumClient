@@ -22,7 +22,7 @@ export default class SplashScreen extends Component {
               alignItems: 'center',
             }}>
 
-           <Text style={{fontSize:22,color:'#4C74E6',fontWeight:'bold'}}>Not Connected to internet</Text>
+           <Text style={{fontFamily:"Roboto-Light", fontSize:22,color:'#4C74E6',fontWeight:'bold'}}>Not Connected to internet</Text>
 
           </View>
 

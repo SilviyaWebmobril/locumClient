@@ -115,7 +115,7 @@ componentWillMount(){
 						 </TouchableWithoutFeedback>
 
 						 <View>
-						  <Text style={{fontSize: 21,fontWeight: 'bold', color: "white",paddingRight:25}}>Jobs</Text>
+						  <Text style={{fontFamily:"Roboto-Light", fontSize: 21,fontWeight: 'bold', color: "white",paddingRight:25}}>Jobs</Text>
 						 </View>
 
 						<View>
@@ -191,6 +191,7 @@ let styles = StyleSheet.create({
 
     },
     submitText:{
+      fontFamily:"Roboto-Light", 
         color:'white',
         textAlign:'center',
         paddingLeft : 10,

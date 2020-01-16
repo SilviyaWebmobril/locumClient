@@ -233,6 +233,8 @@ export default class Packages extends Component {
 
             }).then((response) => response.json())
               .then((responseJson) => {
+
+                console.log("response... ",responseJson);
                 this.setState({ loading_status: false })
                 //ToastAndroid.show(JSON.stringify(responseJson), ToastAndroid.SHORT);
 
@@ -444,7 +446,7 @@ export default class Packages extends Component {
           </TouchableWithoutFeedback>
 
           <View>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Packages</Text>
+            <Text style={{fontFamily:"Roboto-Light",  fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Packages</Text>
           </View>
 
           <View>
@@ -465,16 +467,16 @@ export default class Packages extends Component {
 
                 <View style={{ width: '100%' }}>
                   <Card containerStyle={{ padding: 10, borderRadius: 5 }} >
-                    <Text style={{ color: 'black', fontSize: 18, marginBottom: 5, fontWeight: "bold", color: "#4C74E6" }}>{item.name}</Text>
+                    <Text style={{fontFamily:"Roboto-Light",  color: 'black', fontSize: 18, marginBottom: 5, fontWeight: "bold", color: "#4C74E6" }}>{item.name}</Text>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 
-                      <Text style={{ color: 'black', fontSize: 15, marginBottom: 5, }}>Total Jobs </Text>
-                      <Text style={{ marginBottom: 5, fontWeight: "bold" }}>{item.jobs_count}</Text>
+                      <Text style={{fontFamily:"Roboto-Light",  color: 'black', fontSize: 15, marginBottom: 5, }}>Total Jobs </Text>
+                      <Text style={{fontFamily:"Roboto-Light",  marginBottom: 5, fontWeight: "bold" }}>{item.jobs_count}</Text>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 
-                      <Text style={{ color: 'black', fontSize: 15, marginBottom: 5, }}>Cost </Text>
-                      <Text style={{ marginBottom: 5, fontWeight: "bold" }}> $ {item.amt}</Text>
+                      <Text style={{fontFamily:"Roboto-Light",  color: 'black', fontSize: 15, marginBottom: 5, }}>Cost </Text>
+                      <Text style={{fontFamily:"Roboto-Light",  marginBottom: 5, fontWeight: "bold" }}> $ {item.amt}</Text>
                     </View>
 
                     {!this.state.applied_coupon_status
@@ -482,10 +484,10 @@ export default class Packages extends Component {
                       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 
                         <TouchableOpacity onPress={() => this.applyPromo(item.id)}>
-                          <Text style={{ color: '#4C74E6', alignSelf: "flex-start", fontWeight: "bold", fontSize: 12 }}>APPLY COUPON</Text>
+                          <Text style={{fontFamily:"Roboto-Light",  color: '#4C74E6', alignSelf: "flex-start", fontWeight: "bold", fontSize: 12 }}>APPLY COUPON</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.next(item.id)}>
-                          <Text style={{ color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12 }}>BUY NOW</Text>
+                          <Text style={{fontFamily:"Roboto-Light",  color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12 }}>BUY NOW</Text>
                         </TouchableOpacity>
 
                       </View>
@@ -498,25 +500,25 @@ export default class Packages extends Component {
                         <View >
                           <View style={{ width: "100%", height: 1, backgroundColor: "#808080", marginBottom: 2 }}></View>
                           <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: "space-between" }}>
-                            <Text>Coupon Price</Text>
-                            <Text style={{ color: 'black', fontSize: 15, marginBottom: 2, fontWeight: "bold" }}>$ {this.state.coupon_amt}</Text>
+                            <Text style={{fontFamily:"Roboto-Light", }}>Coupon Price</Text>
+                            <Text style={{fontFamily:"Roboto-Light",  color: 'black', fontSize: 15, marginBottom: 2, fontWeight: "bold" }}>$ {this.state.coupon_amt}</Text>
                           </View>
                           <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
-                            <Text>Amount Left To Pay</Text>
-                            <Text style={{ color: 'black', fontSize: 15, fontWeight: "bold" }}>$ {parseFloat(this.state.choosen_package_price) - parseFloat(this.state.coupon_amt)}</Text>
+                            <Text style={{fontFamily:"Roboto-Light", }}>Amount Left To Pay</Text>
+                            <Text style={{fontFamily:"Roboto-Light",  color: 'black', fontSize: 15, fontWeight: "bold" }}>$ {parseFloat(this.state.choosen_package_price) - parseFloat(this.state.coupon_amt)}</Text>
                           </View>
                           <TouchableOpacity onPress={() => this.next(item.id)}>
-                            <Text style={{ color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12, marginTop: 10 }}>BUY</Text>
+                            <Text style={{fontFamily:"Roboto-Light",  color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12, marginTop: 10 }}>BUY</Text>
                           </TouchableOpacity>
                         </View>
                         :
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 
                           <TouchableOpacity onPress={() => this.applyPromo(item.id)}>
-                            <Text style={{ color: '#4C74E6', alignSelf: "flex-start", fontWeight: "bold", fontSize: 12 }}>APPLY COUPON</Text>
+                            <Text style={{ fontFamily:"Roboto-Light", color: '#4C74E6', alignSelf: "flex-start", fontWeight: "bold", fontSize: 12 }}>APPLY COUPON</Text>
                           </TouchableOpacity>
                           <TouchableOpacity onPress={() => this.next(item.id)}>
-                            <Text style={{ color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12 }}>BUY NOW</Text>
+                            <Text style={{fontFamily:"Roboto-Light",  color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12 }}>BUY NOW</Text>
                           </TouchableOpacity>
 
                         </View>

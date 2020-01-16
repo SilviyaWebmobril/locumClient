@@ -169,8 +169,8 @@ export default class Drawer extends Component {
              
             }
 
-            <View style={{ marginLeft: 15 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 17, color: 'white' }}>{name}</Text>
+            <View style={{ marginLeft: 15 ,width:"60%"}}>
+              <Text numberOfLines={10} style={{fontFamily:"Roboto-Light", fontWeight: 'bold', fontSize: 17, color: 'white' }}>{name}</Text>
 
             </View>
 
@@ -359,6 +359,7 @@ const styles = StyleSheet.create({
 
   },
   drawertext: {
+    fontFamily:"Roboto-Light",
     fontSize: 14,
     color: 'black',
     marginTop: 15,

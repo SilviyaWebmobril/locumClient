@@ -18,6 +18,8 @@ export default class JobDetails extends Component {
 			date:'',
 			description:'',
 			job_id:'',
+			from:"",
+			to:""
 
 
 		};
@@ -26,13 +28,17 @@ export default class JobDetails extends Component {
 
 componentWillMount(){
 	var result  = this.props.navigation.getParam('result')
+	console.log("result from",result['from']);
 	this.setState({
 		job_id : result['job_id'],
 		profile : result['profile'],
 		location : result['location'],
 		description : result['description'],
 		date : result['date'],
-		experience : result['experience']
+		experience : result['experience'],
+		from:result['from'],
+		to:result['to']
+
 	})
 }
 
@@ -50,7 +56,7 @@ componentWillMount(){
 						 </TouchableWithoutFeedback>
 
 						 <View>
-						  <Text style={{fontSize: 20,fontWeight: 'bold', color: "white",marginLeft:-15}}>Job details</Text>
+						  <Text style={{fontFamily:"Roboto-Light",fontSize: 20,fontWeight: 'bold', color: "white",marginLeft:-15}}>Job details</Text>
 						 </View>
 
 						<View>
@@ -62,30 +68,52 @@ componentWillMount(){
 
 			 <View style={{width:'100%'}}>
 
-				<View style={{backgroundColor:'#604D8F',width:'100%',height:'30%',justifyContent:'center',paddingTop:15,padding:5,marginBottom:5}}>
+				<View style={{backgroundColor:'#604D8F',width:'100%',height:null,justifyContent:'center',padding:12}}>
 						<View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',margin:5}}>
 							<View style={{flexDirection:'row',marginBottom:10}}>
 									<Image style={{width:20,height:20,marginRight:5}} source={require('../assets/clinic/manager-avatar.png')}/>
-									<Text style={{color:'white',fontSize:16}}>Job Profile : </Text>
-									<Text style={{color:'white',fontSize:16}}>{this.state.profile}</Text>
+									<Text style={{fontFamily:"Roboto-Light",color:'white',fontSize:16}}>Job Profile : </Text>
+									<Text style={{fontFamily:"Roboto-Light",color:'white',fontSize:16}}>{this.state.profile}</Text>
 							</View>
-							<Text style={{color:'white',fontWeight:'bold',fontSize:12,marginTop:-4}}>Date : {this.state.date}</Text>
+							
 						</View>
-						<View style={{flexDirection:'row',marginBottom:10,margin:5}}>
+						<View style={{flexDirection:'row',marginBottom:10,margin:5, width:"80%"}}>
 								<Image style={{width:20,height:20,marginRight:5}} source={require('../assets/clinic/map.png')}/>
-								<Text style={{color:'white',fontSize:16}}>Location : </Text>
-								<Text style={{color:'white',fontSize:16}}>{this.state.location}</Text>
+								<Text style={{fontFamily:"Roboto-Light",color:'white',fontSize:16}}>Location : </Text>
+								<Text style={{fontFamily:"Roboto-Light",color:'white',fontSize:16,lineHeight:20, width:"80%"}}>{this.state.location}</Text>
 						</View>
 						<View style={{flexDirection:'row',marginBottom:10,margin:5}}>
 								<Image style={{width:20,height:20,marginRight:5}} source={require('../assets/clinic/clock2.png')}/>
-								<Text style={{color:'white',fontSize:16}}>Exp required : </Text>
-								<Text style={{color:'white',fontSize:16}}>{this.state.experience} years</Text>
+								<Text style={{fontFamily:"Roboto-Light",color:'white',fontSize:16}}>Exp required : </Text>
+								<Text style={{fontFamily:"Roboto-Light",color:'white',fontSize:16}}>{this.state.experience} years</Text>
 						</View>
+						<View style={{flexDirection:'row',marginBottom:10,margin:5}}>
+							<Text style={{fontFamily:"Roboto-Light",fontFamily:"Roboto-Light",color:'white',fontWeight:'bold',fontSize:14,marginTop:-4}}>Date : {this.state.date}</Text>
+						</View>
+						{
+							this.state.from !== "" 
+							?
+							<View style={{flexDirection:'row',marginBottom:10,margin:5,justifyContent:"space-between"}}>
+								<Text style={{fontFamily:"Roboto-Light",color:'white',fontWeight:'bold',fontSize:14,marginTop:-4}}>From : {this.state.from}</Text>
+							</View>
+							:
+							<View/>
+						}
+						{this.state.to !== "" 
+						?
+						<View style={{flexDirection:'row',marginBottom:10,margin:5,justifyContent:"space-between"}}>
+							
+							<Text style={{fontFamily:"Roboto-Light",color:'white',fontWeight:'bold',fontSize:14,marginTop:-4}}>To : {this.state.to}</Text>
+						</View>
+						:
+						<View/>
+						}					
+						
 
 				</View>
 					<Card containerStyle={{padding: 15,borderRadius:5,height:'20%',margin:10}}>
-					<Text style={{color:'black',fontSize:14,fontWeight:'bold',marginBottom:5}}>Description</Text>
-					<Text>{this.state.description}</Text>
+					<Text style={{fontFamily:"Roboto-Light",color:'black',fontSize:14,fontWeight:'bold',marginBottom:5}}>Description</Text>
+					<Text style={{fontFamily:"Roboto-Light",}}>{this.state.description}</Text>
 					</Card>
 
 					 <TouchableOpacity onPress={() => this.props.navigation.navigate("PractitionersList",{job_id:this.state.job_id})}
@@ -123,6 +151,7 @@ let styles = StyleSheet.create({
 
     },
     submitText:{
+		fontFamily:"Roboto-Light",
         color:'white',
         textAlign:'center',
         paddingLeft : 10,

@@ -348,7 +348,7 @@ export default class ApplyPromo extends Component {
           </TouchableWithoutFeedback>
 
           <View>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Apply Promo</Text>
+            <Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Apply Promo</Text>
           </View>
 
           <View>
@@ -373,7 +373,7 @@ export default class ApplyPromo extends Component {
             />
             {this.state.error
               ?
-              <Text style={{ color: "red", marginTop: 5 }}>{this.state.errorMsg}</Text>
+              <Text style={{fontFamily:"Roboto-Light", color: "red", marginTop: 5 }}>{this.state.errorMsg}</Text>
               :
               <View />
             }
@@ -416,15 +416,15 @@ export default class ApplyPromo extends Component {
 
 
                 <Card containerStyle={{ padding: 10, borderRadius: 5 }} >
-                  <Text style={{ color: 'black', fontSize: 15, marginBottom: 5, fontWeight: "bold", color: "#4C74E6" }}>{item.name}</Text>
+                  <Text style={{fontFamily:"Roboto-Light", color: 'black', fontSize: 15, marginBottom: 5, fontWeight: "bold", color: "#4C74E6" }}>{item.name}</Text>
 
-                  <Text style={{ marginBottom: 5 }}>Price : $ {item.price}</Text>
+                  <Text style={{fontFamily:"Roboto-Light", marginBottom: 5 }}>Price : $ {item.price}</Text>
 
                   <TouchableOpacity onPress={() => {
                     this.setState({ promo: item.name })
                     this.setState({promo_price:item.price})
                   }}>
-                    <Text style={{ color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12 }}>Apply</Text>
+                    <Text style={{fontFamily:"Roboto-Light", color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12 }}>Apply</Text>
                   </TouchableOpacity>
 
 
@@ -444,7 +444,7 @@ export default class ApplyPromo extends Component {
 
       
         :
-        <Text style={{textAlign:"center",justifyContent:"center",flex:1,marginTop:20,fontWeight:"bold",fontSize:14}}>{this.state.statusError}</Text>
+        <Text style={{fontFamily:"Roboto-Light",textAlign:"center",justifyContent:"center",flex:1,marginTop:20,fontWeight:"bold",fontSize:14}}>{this.state.statusError}</Text>
         }
 
       </View>
@@ -475,6 +475,7 @@ let styles = StyleSheet.create({
     marginBottom: 15
   },
   submitText: {
+    fontFamily:"Roboto-Light",
     color: 'white',
     textAlign: 'center',
     paddingLeft: 10,

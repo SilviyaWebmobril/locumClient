@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     },
   
     Panel_text: {
+      fontFamily:"Roboto-Light",
       fontSize: 18,
       color: '#000',
       padding: 10,
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
     },
   
     Panel_Button_Text: {
+      fontFamily:"Roboto-Light",
       textAlign: 'left',
       color: '#fff',
       fontSize: 15
