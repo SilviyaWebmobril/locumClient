@@ -191,7 +191,7 @@ export default class JobList extends Component {
 					</TouchableWithoutFeedback>
 
 					<View>
-						<Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Listed Vaccancy</Text>
+						<Text style={{fontFamily:"Roboto-Light", fontSize: 20, fontWeight: 'bold', color: "white", paddingRight: 25 }}>Listed Vacancy</Text>
 					</View>
 
 					<View>

@@ -1,5 +1,5 @@
 import React ,  {Component}from 'react';
-import { Text, View, Button, StyleSheet, Dimensions, StatusBar,ScrollView, Image, FlatList,SafeAreaView,
+import { Text, View, Button, StyleSheet, Dimensions, StatusBar,ScrollView, Image, FlatList,SafeAreaView,Alert,
   TouchableOpacity,ToastAndroid,TouchableWithoutFeedback,ActivityIndicator,Keyboard,
   KeyboardAvoidingView,Platform} from 'react-native';
 import { TextField } from 'react-native-material-textfield';
@@ -17,7 +17,8 @@ export default class AddMoney extends Component {
 		this.state = {
 			amount:'',
 			id:'',
-			loading_status:false
+      loading_status:false,
+      onFocusKeyboard:false
 
 
 		};
@@ -37,16 +38,9 @@ export default class AddMoney extends Component {
         }
         else{
 
-
-          const {
-            transactionId,
-            referenceNo,
-            amount,
-            remark,
-            authorizationCode
-          } = data;
-
-
+          
+          
+          console.log("user id",user_id);
 
 
 
@@ -54,11 +48,17 @@ export default class AddMoney extends Component {
                 //txnid and payal id should have same value
                 formData.append('userid', user_id);
                 formData.append('txn_status',"approved");
-                formData.append('txn_id', transactionId.toString());
-                formData.append('amt',amount.toString());
+                if(Platform.OS == "ios"){
+                  formData.append('txn_id', data.transactionID.toString());
+                }else{
+                  formData.append('txn_id', data.transactionId.toString());
+                }
+               
+                formData.append('amt',data.amount.toString());
                 //formData.append('paypal_id',pid.toString());
                 formData.append('role',2);
 
+                console.log("formdata",formData);
                 this.setState({loading_status:true})
                 fetch('http://webmobril.org/dev/locum/api/recharge_wallet', {
                 method: 'POST',
@@ -77,6 +77,8 @@ export default class AddMoney extends Component {
                           showMessage(0, responseJson.message, 'Add Money', true, false);
 
                           if (this.props.navigation.getParam('buy_package') == 1) {
+
+                            console.log("buying package again");
 
                             var result = this.props.navigation.getParam('result');
                             var price = result["price"];
@@ -127,42 +129,29 @@ export default class AddMoney extends Component {
 
     successNotify = data => {
 
-      console.log("Success...",data);
       if (Platform.OS === "ios") {
-        const {
-          transactionId,
-          referenceNo,
-          amount,
-          remark,
-          authorizationCode
-        } = data;
-
-        Alert.alert("Message", `Payment authcode is ${authorizationCode}`, {
+        console.log("my data is in ios",data);
+        this.ipay88Payment(data)
+        
+        Alert.alert("Message", "Payment Completed Successfully!", {
           cancelable: true
         });
       } else {
+  
+        console.log("my data is",data);
         this.ipay88Payment(data);
-
-        const {
-          transactionId,
-          referenceNo,
-          amount,
-          remark,
-          authorizationCode
-        } = data;
-
-        ToastAndroid.show(
-          `Message: Payment authcode is ${authorizationCode}`,
-          ToastAndroid.LONG
-        );
+       
+       
+        showMessage(1, `Message: Payment Completed Successfully!`, 'Add Money', true, false);
+       
       }
-     
+      
     };
 
     cancelNotify = data => {
 
       console.log("Cancel...",data);
-      const { transactionId, referenceNo, amount, remark, error } = data;
+      const { transactionID, referenceNo, amount, remark, error } = data;
 
       if (Platform.OS === "ios") {
         Alert.alert("Message", `${error}`, { cancelable: true });
@@ -174,7 +163,7 @@ export default class AddMoney extends Component {
 
     failedNotify = data => {
       console.log("Failed...",data);
-      const { transactionId, referenceNo, amount, remark, error } = data;
+      const { transactionID, referenceNo, amount, remark, error } = data;
 
       if (Platform.OS === "ios") {
         Alert.alert("Message", `${error}`, { cancelable: true });
@@ -218,6 +207,7 @@ export default class AddMoney extends Component {
               // if (Object.keys(errs).length > 0) {
               //   console.log(errs);
               // }
+              
   
               
             }
@@ -237,6 +227,7 @@ export default class AddMoney extends Component {
 
  async getUserId(){
   var id = await AsyncStorage.getItem('uname')
+  console.log("id/....",id);
   return id
 }
 
@@ -414,9 +405,19 @@ this.setState({id:user_id})
           <View style={{padding:10,width:'90%'}}>
 
 
+          <IPay88
+            successNotify={this.successNotify}
+            failedNotify={this.failedNotify}
+            cancelNotify={this.cancelNotify}
+          />
+
+
+
+
 
             <TextField
             style = {{width:'100%'}}
+            onBlur={()=>{this.state.onFocusKeyboard}}
             label='Enter Amount '
             value={this.state.amount}
             keyboardType = 'numeric'
@@ -430,7 +431,7 @@ this.setState({id:user_id})
 
 
           <TouchableOpacity
-          onPress={this.pay.bind(this)}
+           onPress={() => {Keyboard.dismiss(); this.pay()}}
             style={styles.submitButton}>
                 <Text style={styles.submitText}>Add</Text>
           </TouchableOpacity>

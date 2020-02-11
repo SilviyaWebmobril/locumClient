@@ -42,6 +42,30 @@ class JobPost extends Component {
 
   }
 
+  isTimeVaild(){
+     if(this.state.from_time !== ""){
+
+      console.log("in from time",this.state.to_time)
+      if(this.state.to_time == ""){
+        console.log("in to time")
+        showMessage(0, 'You must enter "To Time"', "Job Post", true, false);
+        return false
+      }
+
+
+    }else if(this.state.to_time !== ""){
+      console.log("in to time",this.state.from_time)
+      if(this.state.from_time == ""){
+        console.log("in from time")
+        showMessage(0, 'You must enter "From Time"', "Job Post", true, false);
+        return false
+      }
+
+        
+    }
+    return true;
+  }
+
   isValid() {
 
 
@@ -75,6 +99,13 @@ class JobPost extends Component {
       showMessage(0, 'You must enter a job description', "Job Post", true, false);
 
       return false
+    }else if(this.state.experience.toString().length === 0){
+      showMessage(0, 'You must enter a Experience', "Job Post", true, false);
+
+      return false
+    }else if(!this.isTimeVaild()){
+
+      return  false;
     }
 
     return valid;
@@ -462,7 +493,7 @@ class JobPost extends Component {
                 style={{ width: '100%' }}
                 label='Experience (in years)'
                 keyboardType='numeric'
-                maxLength={5}
+                maxLength={3}
                 textContentType='telephoneNumber'
                 value={this.state.experience}
                 onChangeText={(experience) => this.setState({ experience })}
@@ -489,13 +520,14 @@ class JobPost extends Component {
                 onChangeText={(description) => this.setState({ description })}
               />
 
+             
               <DatePicker
                 style={{ width: "100%", marginTop: 20 }}
                 date={this.state.date}
                 mode="date"
                 placeholder="Select Date"
                 format="YYYY-MM-DD"
-                minDate={this.state.date}
+                minDate={this.getFormattedDate(new Date())}
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 customStyles={{
@@ -512,9 +544,11 @@ class JobPost extends Component {
                 }}
                 onDateChange={(date) => { this.setState({ date: date }) }}
               />
-
+             
+             
+              <View style={{flexDirection:"row"}}>
               <DatePicker
-                style={{ width: "100%", marginTop: 20 }}
+                style={{ width: "85%", marginTop: 20 }}
                 date={this.state.from_time}
                 mode="time"
                 // showIcon={false}
@@ -537,10 +571,15 @@ class JobPost extends Component {
                 }}
                 onDateChange={(from_time) => { this.setState({ from_time: from_time }) }}
               />
+               <TouchableOpacity onPress={()=>{this.setState({from_time:""})}}>
+                <Text style={{marginTop:30,textAlign:'center',marginLeft:10,textDecorationLine:'underline',color:"#4C74E6"}}>Reset</Text>
+              </TouchableOpacity>
+              
+              </View>
 
-
+              <View style={{flexDirection:"row"}}>
               <DatePicker
-                style={{ width: "100%", marginTop: 20 }}
+                style={{ width: "85%", marginTop: 20 }}
                 date={this.state.to_time}
                 mode="time"
                 placeholder="Select To Time"
@@ -563,6 +602,11 @@ class JobPost extends Component {
                 }}
                 onDateChange={(to_time) => { this.setState({ to_time: to_time }) }}
               />
+               <TouchableOpacity onPress={()=>{this.setState({to_time:""})}}>
+                <Text style={{marginTop:30,textAlign:'center',marginLeft:10,textDecorationLine:'underline',color:"#4C74E6"}}>Reset</Text>
+              </TouchableOpacity>
+              
+              </View>
 
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 

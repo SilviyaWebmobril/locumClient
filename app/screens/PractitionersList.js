@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-	Text, View, Button, StyleSheet, SafeAreaView, Dimensions,
+	Text, View, Button, StyleSheet, SafeAreaView, Dimensions,Alert,
 	ScrollView, Image, FlatList, TouchableOpacity, ToastAndroid, TouchableWithoutFeedback, ActivityIndicator
 } from 'react-native';
 import { Card, ListItem, Icon } from 'react-native-elements';
@@ -317,6 +317,50 @@ export default class PractitionersList extends Component {
 	}
 
 
+	onRemoveAlert = (key) => {
+
+		Alert.alert(
+			'Reject',
+			'Are you sure you want to Reject the job application?',
+			[
+				{
+					text: 'Cancel',
+					onPress: () => console.log('Cancel Pressed'),
+					style: 'cancel'
+				},
+				{
+					text: 'OK',
+					onPress: () => {this.remove(key)}
+				}
+			],
+			{
+				cancelable: false
+			}
+		);
+	}
+
+	onAcceptAlert = (key) => {
+
+		Alert.alert(
+			'Accept',
+			'Are you sure you want to Accept the job application?',
+			[
+				{
+					text: 'Cancel',
+					onPress: () => console.log('Cancel Pressed'),
+					style: 'cancel'
+				},
+				{
+					text: 'OK',
+					onPress: () => {this.accept(key)}
+				}
+			],
+			{
+				cancelable: false
+			}
+		);
+	}
+
 
 
 	render() {
@@ -389,11 +433,12 @@ export default class PractitionersList extends Component {
 														{item.application_status == 0
 															?
 															<View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-																<TouchableOpacity onPress={() => { this.accept(item.key) }}>
+																<TouchableOpacity onPress={() => { this.onAcceptAlert(item.key) }}>
 																	<Image source={require('../assets/clinic/accept.jpg')} style={{ height: 25, width: 25, marginRight: 5 }} />
 																</TouchableOpacity>
 																<TouchableOpacity onPress={() => {
-																	this.remove(item.key)
+																	this.onRemoveAlert(item.key)
+																	
 																}}>
 																	<Image source={require('../assets/clinic/reject.jpg')} style={{ height: 25, width: 25 }} />
 																</TouchableOpacity>

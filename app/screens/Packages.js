@@ -127,7 +127,7 @@ export default class Packages extends Component {
               formData.append('user_id', item);
               formData.append('amt', price.toString());
               formData.append('job_count', count);
-    
+              formData.append("coupon_applied","");
     
               this.setState({ loading_status: true })
               fetch('http://webmobril.org/dev/locum/api/get_package', {
@@ -356,71 +356,6 @@ export default class Packages extends Component {
   }
 
   render() {
-
-
-    //  if (this.state.loading_status) {
-    //    return (
-    //      <ActivityIndicator
-    //      animating={true}
-    //      style={styles.indicator}
-    //      size="large"
-    //      />
-    //    );
-    //  }
-
-
-
-    //         return (
-
-
-    // 		<View style ={styles.container}>
-    // 			{/*for header*/}
-    // 			 <View style = {{flexDirection:'row',justifyContent:'space-between',alignItems: 'center',width:'100%',height:'09%',backgroundColor: '#4C74E6'}}>
-
-    // 						<TouchableWithoutFeedback onPress={() =>this.props.navigation.navigate("HomeScreen")}>
-    // 									 <Image style={{width: 25, height: 25,margin:10}}  source={require('../assets/clinic/left-arrow.png')} />
-    // 						 </TouchableWithoutFeedback>
-
-    // 						 <View>
-    // 						  <Text style={{fontSize: 21,fontWeight: 'bold', color: "white",paddingRight:25}}>Packages</Text>
-    // 						 </View>
-
-    // 						<View>
-    // 						</View>
-
-    // 			 </View>
-
-    // 			 {/*for main content*/}
-    // 			 <ScrollView style={{paddingBottom:15,width:'100%'}}>
-    // 			 <View style={{padding:1,width:'100%'}}>
-    // 						  <FlatList
-    // 							  style={{marginBottom:20}}
-    // 							  data={this.state.packages}
-    // 							  showsVerticalScrollIndicator={false}
-    // 							  scrollEnabled={false}
-    // 							  renderItem={({item}) =>
-
-    // 							   <TouchableOpacity  onPress={() => this.next(item.id)}>
-    // 									  <View>
-    // 											<Card containerStyle={{padding: 10,borderRadius:10}} >
-    // 											  <Text style={{color:'black',fontSize:18,marginBottom:5}}>Total Jobs : {item.jobs_count}</Text>
-    // 											  <Text style={{marginBottom:5}}>$ {item.amt}</Text>
-    // 											  <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-    //                         <Text></Text>
-    // 											  <Text style={{color:'#4C74E6'}}>BUY NOW</Text>
-    // 											  </View>
-    // 											</Card>
-    // 								</View>
-    // 							  </TouchableOpacity>
-    // 							  }
-    // 							  keyExtractor={item => item.id}
-    // 							/>
-    // 			 </View>
-    // 			</ScrollView>
-    // 		</View>
-
-    //         )
-
 
     if (this.state.loading_status) {
       return (

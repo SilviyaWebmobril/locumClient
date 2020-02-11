@@ -188,16 +188,37 @@ export default class TransactionsList extends Component {
 											<Text style={{ fontFamily:"Roboto-Light", alignSelf: "flex-end", fontSize: 15 }}>Date</Text>
 											<Text style={{fontFamily:"Roboto-Light",  color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.created_at.split(' ')[0]}</Text>
 										</View>
-										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
-											<Text style={{ fontFamily:"Roboto-Light", alignSelf: "flex-end", fontSize: 15 }}>Mode Of Payment</Text>
-											<Text style={{ fontFamily:"Roboto-Light", color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>Wallet</Text>
+										{/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
+											<Text style={{ fontFamily:'Roboto-Light', alignSelf: "flex-end", fontSize: 15 }}>Mode Of Payment</Text>
+											<Text style={{ fontFamily:'Roboto-Light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>Wallet</Text>
+										</View> */}
+										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+											<Text style={{ fontFamily:'Roboto-Light', alignSelf: "flex-end", fontSize: 15 }}>Available Jobs</Text>
+											<Text style={{ fontFamily:'Roboto-Light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.package.jobs_count}</Text>
 										</View>
-										<View style={{ width: "100%", height: 1, backgroundColor: "#808080", marginBottom: 5 }}></View>
-										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
-											<Text style={{ fontFamily:"Roboto-Light", alignSelf: "flex-end", fontSize: 15, color: '#5AA86C', fontWeight: "bold" }}>Total</Text>
-											<Text style={{ fontFamily:"Roboto-Light", color: '#5AA86C', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>$ {item.package.amt}</Text>
+										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+											<Text style={{ fontFamily:'Roboto-Light', alignSelf: "flex-end", fontSize: 15 }}>Package Price</Text>
+											<Text style={{ fontFamily:'Roboto-Light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.package.amt}</Text>
 										</View>
 
+										<View style={{ width: "100%", height: 1, backgroundColor: "#808080", marginBottom: 5 }}></View>
+										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
+											<Text style={{ fontFamily:'Roboto-Light', alignSelf: "flex-end", fontSize: 15, color: 'grey', fontWeight: "bold" }}>Total</Text>
+											<Text style={{ fontFamily:'Roboto-Light', color: 'grey', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>$ {item.package.amt}</Text>
+										</View>
+										{item.purchased_using == 2 || item.purchased_using == 3
+										?
+										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+											<Text style={{ fontFamily:'Roboto-Light', alignSelf: "flex-end", fontSize: 15, color: 'grey', }}>Coupon ({item.coupon.name})</Text>
+											<Text style={{ fontFamily:'Roboto-Light', color: 'grey', alignSelf: "flex-end",  fontSize: 15 }}> -$ {item.coupon.price}</Text>
+										</View>
+										:
+										<View/>
+										}
+										<View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+											<Text style={{ fontFamily:'Roboto-Light', alignSelf: "flex-end", fontSize: 15, color: 'black',  }}>Paid By Wallet</Text>
+											<Text style={{ fontFamily:'Roboto-Light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.purchased_using == 2 ? '$ 0' : '$ '+item.amt}</Text>
+										</View>
 
 
 

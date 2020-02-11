@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text, View, Button, StyleSheet, SafeAreaView,
+  Text, View, Button, StyleSheet, SafeAreaView,Alert,
   Dimensions, ScrollView, Image, FlatList,
   TouchableOpacity, ToastAndroid,
   TouchableWithoutFeedback
@@ -125,6 +125,48 @@ export default class Drawer extends Component {
     //this.setState({
     //  starCount: rating
     // });
+  }
+
+
+  onlogout =()=>{
+
+		Alert.alert(
+			'Logout',
+			'Are you sure you want to logout?',
+			[
+				{
+					text: 'Cancel',
+					onPress: () => console.log('Cancel Pressed'),
+					style: 'cancel'
+				},
+				{
+					text: 'OK',
+					onPress: () => this.logout()
+				}
+			],
+			{
+				cancelable: false
+			}
+		);
+  }
+  
+
+  logout = () => {
+
+    AsyncStorage.clear();
+           
+    showMessage(0,"Successfully logged out","Logout",true,false)
+
+    this.setState({ name: '', user_image: null })
+    this.props.navigation.closeDrawer()
+    this.props.navigation.navigate("Login")
+    const resetAction = StackActions.reset({
+      index: 0,
+      key: 'Login',
+      actions: [NavigationActions.navigate({ routeName: 'Login' })],
+    });
+    this.props.navigation.dispatch(resetAction);
+
   }
 
 
@@ -319,19 +361,7 @@ export default class Drawer extends Component {
 
 
           <TouchableOpacity onPress={() => {
-            AsyncStorage.clear();
-           
-            showMessage(0,"Successfully logged out","Logout",true,false)
-       
-            this.setState({ name: '', user_image: null })
-            this.props.navigation.closeDrawer()
-            this.props.navigation.navigate("Login")
-            const resetAction = StackActions.reset({
-              index: 0,
-              key: 'Login',
-              actions: [NavigationActions.navigate({ routeName: 'Login' })],
-            });
-            this.props.navigation.dispatch(resetAction);
+           this.onlogout();
           }}>
             <View style={styles.drawerlayout}>
               <Image source={require('../assets/nav/logout.png')} style={styles.drawerimage} />

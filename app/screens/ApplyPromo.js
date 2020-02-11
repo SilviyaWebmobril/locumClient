@@ -28,7 +28,8 @@ export default class ApplyPromo extends Component {
       error: false,
       errorMsg: "Invalid Promo Code",
       promo_price:0,
-      statusError:""
+      statusError:"",
+      coupon_applied:""
     };
 
   }
@@ -191,23 +192,45 @@ export default class ApplyPromo extends Component {
                   body: formData
     
                 }).then((response) => response.json())
-                  .then((responseJson) => {
-                    this.setState({ loading_status: false })
+                  .then( async(responseJson) => {
+                    this.setState({ loading_status: false });
+                    
                     if (responseJson.status === "success") {
-                      showMessage(0, responseJson.message, "Apply Promo", true, false);
+
+                      if(responseJson.amt_to_pay === 0){
+
+                        showMessage(0, responseJson.message, "Apply Promo", true, false);
+                        var result = this.props.navigation.getParam('result')
     
-                      // Commented not getting now..
-                      // var fees = responseJson.amt_to_pay
-                      // this.setState({ amount: fees })
-                      // if (fees == 0) {
-                      //   //navigate to home
-                      // }
-                      // else {
-                      //   this.paypal(fees)
-                      // }
-                      this.props.navigation.state.params.checkcouponvalidity(packageid,this.state.promo_price);
-                      this.props.navigation.pop();
+                         var job_remaining = await AsyncStorage.getItem('job_remaining')
+                          console.log("job count111",job_remaining);
+                          
+                          let TotalJobs  = parseInt(job_remaining) + parseInt(result['job_count']);
+                          console.log("job count222",TotalJobs);
+                          AsyncStorage.setItem("job_remaining",TotalJobs.toString());
+                          this.props.navigation.state.params.checkcouponvalidity(packageid,this.state.promo_price);
+                          this.props.navigation.pop();
+                          this.props.navigation.navigate('Transactions');
+                            const resetAction = StackActions.reset({
+                              index: 0,
+                              key: 'Transactions',
+                              actions: [NavigationActions.navigate({ routeName: 'TransactionsList' })],
+                            });
+                            this.props.navigation.dispatch(resetAction);
     
+    
+                      }else{
+    
+                         // this.props.navigation.state.params.checkcouponvalidity(packageid);
+                          var result = this.props.navigation.getParam('result')
+                          this.setState({coupon_applied:responseJson.coupon_applied},()=>{
+                            this.pay(packageid,(parseFloat(this.state.amount) - parseFloat(this.state.promo_price)),result['job_count'] )
+                          
+                          })
+                          
+    
+                      }
+                     
                     }
                     else {
     
@@ -232,6 +255,101 @@ export default class ApplyPromo extends Component {
     });
   
   }
+
+
+  pay= async(id, price, count) => {
+
+    NetInfo.isConnected.fetch().then(async isConnected =>  {
+      if (!isConnected) {
+        this.props.navigation.navigate("NoNetwork")
+        return;
+      }else{
+
+
+        let wallet = await AsyncStorage.getItem('avlbal');
+        console.log("calling pay again",wallet);
+        AsyncStorage.getItem('uname')
+          .then((item) => {
+            if (item) {
+              var formData = new FormData();
+              //txnid and payal id should have same value
+              formData.append('package_id', id);
+              formData.append('user_id', item);
+              formData.append('amt', price.toString());
+              formData.append('job_count', count);
+              formData.append("coupon_applied",this.state.coupon_applied);
+    
+    
+              this.setState({ loading_status: true })
+              fetch('http://webmobril.org/dev/locum/api/get_package', {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'multipart/form-data',
+                },
+                body: formData
+    
+              }).then((response) => response.json())
+                .then((responseJson) => {
+                  this.setState({ loading_status: false })
+                  
+                  if (responseJson.status === 'success') {
+                    //success in inserting data
+                    
+                    let new_price = parseFloat(wallet) - parseFloat(price);
+                    console.log("res.........",responseJson);
+                    AsyncStorage.setItem("avlbal", new_price.toString());
+                   AsyncStorage.setItem('job_remaining',responseJson.jobs_remaining.toString())
+                    showMessage(1, responseJson.message, 'Packages', true, false);
+                    this.setState({coupon_applied_package:0,coupon_amt:0,applied_coupon_status:false})
+                   
+                    this.props.navigation.navigate('Transactions');
+                    const resetAction = StackActions.reset({
+                      index: 0,
+                      key: 'Transactions',
+                      actions: [NavigationActions.navigate({ routeName: 'TransactionsList' })],
+                    });
+                    this.props.navigation.dispatch(resetAction);
+                    
+                   // this.onRefresh();
+    
+                  } else {
+    
+                    let obj = {
+                      'user_id': item,
+                      'price': price,
+                      'package_id': id,
+                      'job_count': count
+                    }
+    
+    
+                    if (parseFloat(wallet) <= 0 || parseFloat(wallet) <  (parseFloat(this.state.choosen_package_price) - parseFloat(this.state.coupon_amt))) {
+                      this.props.navigation.navigate("AddMoney", { buy_package: 1, result: obj,payAgain:this.pay })
+                      const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'AddMoney',
+                        actions: [NavigationActions.navigate({ routeName: 'AddMoney' })],
+                      });
+                      this.props.navigation.dispatch(resetAction);
+                    } 
+                    showMessage(1, responseJson.message, 'Packages', true, false);
+    
+                  }
+    
+    
+                }).catch((error) => {
+                  console.error(error);
+                });
+    
+            }
+            else { }
+          });
+
+      }
+    });
+   
+  }
+
 
 
   onSkip() {

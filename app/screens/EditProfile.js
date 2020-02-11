@@ -636,6 +636,8 @@ class EditProfile extends Component {
       formData.append('description', this.state.description)
 
 
+
+
       let final = '';
       // var index = imageList.indexOf(200);
 
@@ -661,6 +663,7 @@ class EditProfile extends Component {
 
       // ToastAndroid.show(JSON.stringify(formData), ToastAndroid.SHORT);
 
+      console.log("new form adata", formData);
 
 
       this.setState({ loading_status: true })
