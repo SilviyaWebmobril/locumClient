@@ -77,6 +77,8 @@
 		<string>Roboto-Black.ttf</string>
 		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Light.ttf</string>
+		<string>roboto-bold.ttf</string>
+		<string>roboto-light.ttf</string>
 	</array>
 </dict>
 </plist>
