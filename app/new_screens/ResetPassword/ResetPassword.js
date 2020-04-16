@@ -6,9 +6,14 @@ import {userResetPassword} from '../redux/stores/actions/register_user';
 import {showMessage} from '../Globals/Globals';
 import NetInfo from "@react-native-community/netinfo";
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
+import {checkuserAuthentication ,logoutUser} from '../redux/stores/actions/auth_action';
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
 
 const ResetPassword = (props) => {
 
+    const device_token  = useSelector(state => state.auth.device_token)
     const [old_password_visible , setOldPasswordVisible] = useState(true);
     const [oldPassword,setOldPassword] = useState(""); 
     const [newPassword ,setNewPassword] = useState("");
@@ -81,9 +86,30 @@ const ResetPassword = (props) => {
                        return;
                    }
                    else{
-                    
-                     dispatch(userResetPassword(user_id,oldPassword,newPassword,confirmPassword,props.navigation))
 
+                    dispatch(checkuserAuthentication(user_id,device_token))
+                        .then(response => {
+                            if(response.data.error){
+                                
+                                showMessage(0, 'Session Expired! Please Login.', 'Reset Password', true, false);
+                                dispatch(logoutUser())
+                                props.navigation.navigate("Login");
+                               
+                                const resetAction = StackActions.reset({
+                                    index: 0,
+                                    key: 'Login',
+                                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                                });
+                                props.navigation.dispatch(resetAction);
+
+                            }else{
+
+                                dispatch(userResetPassword(user_id,oldPassword,newPassword,confirmPassword,props.navigation))
+
+                            }
+                        })
+                    
+                     
                    }
                 });
 

@@ -4,16 +4,44 @@ import {Card} from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import ApiUrl from '../Globals/ApiUrl';
 import {get_applied_jobs} from '../redux/stores/actions/search_job_action';
+import {checkuserAuthentication ,logoutUser} from '../redux/stores/actions/auth_action';
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
+import {showMessage} from '../Globals/Globals';
 
 const AppliedJob = (props) => {
 
     const dispatch  = useDispatch();
+    const device_token  = useSelector(state => state.auth.device_token)
     const  applied_jobs = useSelector(state => state.search_job.applied_jobs);
     const user_id  = useSelector(state => state.auth.user_id);
 
  
     useEffect(() => {
-        dispatch(get_applied_jobs(user_id))
+
+        dispatch(checkuserAuthentication(user_id,device_token))
+            .then(response => {
+
+                if(response.data.error){
+                    showMessage(0, 'Session Expired! Please Login.', 'Applied Job', true, false);
+                    dispatch(logoutUser())
+                    props.navigation.navigate("Login");
+                   
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Login',
+                        actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                    });
+                    props.navigation.dispatch(resetAction);
+
+                }else{
+
+                    dispatch(get_applied_jobs(user_id))
+                    
+                }
+            })
+       
        
     }, [])
 

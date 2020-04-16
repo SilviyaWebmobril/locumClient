@@ -24,16 +24,32 @@ const TermsAndCondition = (props) => {
                 <View
                 style={[
                 StyleSheet.absoluteFill,
-                { backgroundColor: 'rgba(0, 0, 0, 0.7)', justifyContent: 'center' }
+                { backgroundColor: 'rgba(255, 255, 255, 0.9)', justifyContent: 'center' }
                 ]}
                 >
-                    <ActivityIndicator size="large" />
+                     <ActivityIndicator
+                        animating={true}
+                        color='#4C74E6'
+                        style={styles.indicator}
+                        size="large"
+                    />
                 </View>
             )}
         </View>
     
     )
 }
+
+const styles = StyleSheet.create({
+    indicator: {
+        
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: 80
+	}
+
+});
 
 
 export default TermsAndCondition ;

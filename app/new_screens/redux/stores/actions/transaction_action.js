@@ -23,6 +23,7 @@ export const transcationHistory = (user_id) => {
                 });
 
               
+                console.log("trans......",response.data.data);
                 if (response.data.status === 'success') {
                     if (response.data.data.length > 0) {
 

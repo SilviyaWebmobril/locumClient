@@ -4,18 +4,43 @@ import {Card } from 'react-native-elements';
 import {transcationHistory} from '../redux/stores/actions/transaction_action';
 import {useDispatch ,useSelector } from 'react-redux';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
+import {checkuserAuthentication ,logoutUser} from '../redux/stores/actions/auth_action'
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
+import {showMessage} from '../Globals/Globals';
+
 
 
 const TransactionList  = () => {
 
     const dispatch = useDispatch();
+    const device_token  = useSelector(state => state.auth.device_token)
     const loading_status  = useSelector(state => state.register.loading_status);
     const transactionsList  = useSelector(state => state.transactions.transaction_history);
     const user_id = useSelector(state =>  state.auth.user_id);
 
     useEffect(()=>{
 
-        dispatch(transcationHistory(user_id));
+        dispatch(checkuserAuthentication(user_id,device_token))
+            .then(response => {
+                if(response.data.error){
+                    showMessage(0, 'Session Expired! Please Login.', 'Transaction List', true, false);
+                    dispatch(logoutUser())
+                    props.navigation.navigate("Login");
+                  
+                    const resetAction = StackActions.reset({
+                      index: 0,
+                      key: 'Login',
+                      actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                    });
+                    props.navigation.dispatch(resetAction);
+
+                }else{
+                    dispatch(transcationHistory(user_id));
+                }
+            })
+       
 
     },[]);
     
@@ -67,15 +92,22 @@ const TransactionList  = () => {
                                     <Text style={{ fontFamily:'roboto-light', alignSelf: "flex-end", fontSize: 15, color: 'grey', fontWeight: "bold" }}>Total</Text>
                                     <Text style={{ fontFamily:'roboto-light', color: 'grey', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>$ {item.package.amt}</Text>
                                 </View>
-                                {item.purchased_using == 2 || item.purchased_using == 3
+                                {item.coupon !== null 
                                 ?
-                                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                                    <Text style={{ fontFamily:'roboto-light', alignSelf: "flex-end", fontSize: 15, color: 'grey', }}>Coupon ({item.coupon.name})</Text>
-                                    <Text style={{ fontFamily:'roboto-light', color: 'grey', alignSelf: "flex-end",  fontSize: 15 }}> -$ {item.coupon.price}</Text>
-                                </View>
+                                    ((item.purchased_using == 2) || (item.purchased_using == 3)
+                                        ?
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                                            <Text style={{ fontFamily:'roboto-light', alignSelf: "flex-end", fontSize: 15, color: 'grey', }}>Coupon ({item.coupon.name})</Text>
+                                            <Text style={{ fontFamily:'roboto-light', color: 'grey', alignSelf: "flex-end",  fontSize: 15 }}> -$ {item.coupon.price}</Text>
+                                        </View>
+                                        :
+                                        <View/>
+                                    )
                                 :
-                                <View/>
+                                    <View/>
                                 }
+
+                                
                                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                                     <Text style={{ fontFamily:'roboto-light', alignSelf: "flex-end", fontSize: 15, color: 'black',  }}>Paid By Wallet</Text>
                                     <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.purchased_using == 2 ? '$ 0' : '$ '+item.amt}</Text>

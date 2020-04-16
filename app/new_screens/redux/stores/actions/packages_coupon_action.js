@@ -50,7 +50,7 @@ import ApiUrl from '../../../Globals/ApiUrl';
 // }
 
 
-export const buy_packages = (id,user_id,amount,job_count,navigation) => (dispatch)=> 
+export const buy_packages = (id,user_id,amount,job_count,coupon_applied,navigation) => (dispatch)=> 
 new Promise(function(resolve){
 
     dispatch({
@@ -62,7 +62,7 @@ new Promise(function(resolve){
     formData.append('user_id', user_id);
     formData.append('amt', amount.toString());
     formData.append('job_count', job_count);
-    formData.append("coupon_applied","");
+    formData.append("coupon_applied",coupon_applied);
     
     Axios.post(ApiUrl.base_url + ApiUrl.buy_package,formData)
         .then(response => {
@@ -234,6 +234,7 @@ new Promise(function(resolve){
                 
             }else{
              
+                resolve(response);
                 showMessage(0, response.data.message, "Apply Promo", true, false);
             }
 

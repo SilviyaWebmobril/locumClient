@@ -20,7 +20,8 @@ public class MainApplication extends Application implements ReactApplication {
       new ReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
-          return false
+          return BuildConfig.DEBUG
+
                   ;
         }
 
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
             packages.add( new RNFirebaseMessagingPackage() );
           return packages;
         }
+
 
         @Override
         protected String getJSMainModuleName() {

@@ -8,12 +8,14 @@ import { Dropdown } from 'react-native-material-dropdown';
 import {fetchJobCategories,fetchGrades,fetchSpecialities,submitEditProfile,getStatesList,getCitiesList} from '../redux/stores/actions/register_user';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import Geocoder from 'react-native-geocoding';
-import {showMessage} from '../Globals/Globals'
+import {showMessage} from '../Globals/Globals';
+import {checkuserAuthentication , logoutUser} from '../redux/stores/actions/auth_action';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 const EditProfile = (props) => {
 
     const user = useSelector(state => state.register.user);
-console.log("useeerrr...",user);
+    const device_token  = useSelector(state => state.auth.device_token)
     const [profession_id ,setProfessionId ] = useState(user.profile_id);
     const [profession_label ,setProfessionLabel ] = useState("");
     const [speciality_id ,setSpecialityId ] = useState(user.speciality_id);
@@ -320,11 +322,33 @@ console.log("useeerrr...",user);
                 var location = json.results[0].geometry.location;
                 console.log(json);
                 console.log("location",location);
-                dispatch(submitEditProfile(user.id,user.name,profession_id,mobile,ic_no,speciality_id,license,grades_id
-                    ,user_address,description,location.lat ,location.lng,state_id, city_id,weekly_rate,monthly_rate,hourly_rate,props.navigation));
-    
-                // dispatch(submitEditProfile(user.id,user.name,profession_id,mobile,degree,ic_no,speciality_id,license,grades_id,experience
-                //     ,user_address,current_work,description,location.lat ,location.lng,state_id, city_id,weekly_rate,monthly_rate,hourly_rate,props.navigation))
+
+                dispatch(checkuserAuthentication(user.id,device_token))
+                    .then(response => {
+
+                        if(response.data.error){
+
+                            showMessage(0, 'Session Expired! Please Login.', 'Edit Profile', true, false);
+                            dispatch(logoutUser());
+                            props.navigation.navigate("Login")
+                            const resetAction = StackActions.reset({
+                                index: 0,
+                                key: 'Login',
+                                actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                            });
+                            props.navigation.dispatch(resetAction);
+        
+
+                        }else{
+
+                            dispatch(submitEditProfile(user.id,user.name,profession_id,mobile,ic_no,speciality_id,license,grades_id
+                                ,user_address,description,location.lat ,location.lng,state_id, city_id,weekly_rate,monthly_rate,hourly_rate,props.navigation));
+                
+                        }
+                    })
+
+                
+              
             })
             .catch(error => 
                 {
@@ -378,7 +402,7 @@ console.log("useeerrr...",user);
                     
                 />
                 <TextField
-                    style={{ alignSelf: 'center',marginTop:10  }}
+                    style={{ alignSelf: 'center',marginTop:10,color:'grey'  }}
                     label='Mobile'
                     keyboardType='numeric'
                     textContentType='telephoneNumber'

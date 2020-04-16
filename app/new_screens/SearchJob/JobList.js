@@ -9,10 +9,15 @@ import { Card, ListItem, Icon } from 'react-native-elements';
 import {getJobList} from '../redux/stores/actions/search_job_action';
 import { getday,getWeekday,getMonth,getYear} from '../Globals/Globals';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
-
+import {checkuserAuthentication ,logoutUser} from '../redux/stores/actions/auth_action'
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
+import {showMessage} from '../Globals/Globals';
 const JobList = (props) => {
 
     const dispatch = useDispatch();
+    const device_token  = useSelector(state => state.auth.device_token)
     const searched_job_list = useSelector(state => state.search_job.search_jobs_list);
     const loading_status = useSelector(state => state.register.loading_status);
     
@@ -20,7 +25,25 @@ const JobList = (props) => {
 
     useEffect(()=> {
 
-       dispatch(getJobList(user.id));
+        dispatch(checkuserAuthentication(user.id,device_token))
+            .then(response => {
+                if(response.data.error){
+                    showMessage(0, 'Session Expired! Please Login.', 'Job List', true, false);
+                    dispatch(logoutUser())
+                    props.navigation.navigate("Login");
+                   
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Login',
+                        actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                    });
+                    props.navigation.dispatch(resetAction);
+
+                }else{
+                    dispatch(getJobList(user.id));
+                }
+            })
+    
 
     },[]);
 
@@ -49,7 +72,7 @@ const JobList = (props) => {
 								<TouchableOpacity onPress={()=> {
                                     console.log("it",item);
                                     props.navigation.navigate('JobDetails',{"id" :item.id ,
-                                        "profile" : item.name , "experience" :item.exp_required , "location": item.job_location,
+                                        "profile" : item.profile.name , "experience" :item.exp_required , "location": item.job_location,
                                         "date" : item.required_date , "description" : item.job_desc , "cid" : item.cid ,
                                          "from" : item.from_time , "to" : item.to_time,
 

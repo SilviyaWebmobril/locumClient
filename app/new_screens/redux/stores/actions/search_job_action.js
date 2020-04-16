@@ -211,7 +211,8 @@ export const getJobAppliedList = (user_id, job_id) => {
     }
 } 
 
-export const acceptApplication = (id , status) => {
+// list to check if coming from list or details to update the UI
+export const acceptApplication = (id , status,navigation , list) => {
 
     return dispatch => {
 
@@ -243,7 +244,16 @@ export const acceptApplication = (id , status) => {
                     type:ActionTypes.CHANGE_APPLICATION_STATUS_USER,
                     change_application_status : status,
                     id : id
-                })
+                });
+
+                if(list === 0){
+                    if(navigation.getParam('result')['fetch'] == 0){
+                        navigation.goBack()
+                    }else{
+                        navigation.state.params.fetch();
+                        navigation.goBack()
+                    }
+                }
 
             }else{
                 showMessage(0,response.data.message, `${type} Practitioner`, true, false);

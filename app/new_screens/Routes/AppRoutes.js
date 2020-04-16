@@ -8,6 +8,7 @@ import Register from '../NewUserRegister/Register';
 import NetworkError from '../Globals/NetworkError';
 import CreateProfile from '../NewUserRegister/CreateProfile';
 import HeaderComponent from '../CustomUI/HeaderComponent';
+import HeaderComponentt from '../CustomUI/HeaderComponentt';
 import TermsCondition from '../TermsAndCondition/TermsCondition';
 import MyHeader from '../CustomUI/MyHeader';
 import UploadDocuments from '../NewUserRegister/UploadDocuments';
@@ -107,9 +108,9 @@ const CreateProfileStack =  createStackNavigator({
       }
      },
      PractitionersDetails: { screen: PractitionersDetails,
-      navigationOptions:{
-        header : props =><HeaderComponent value={0} edit={0} title="Practitioners Details" {...props} wallet={0} />
-      }
+      // navigationOptions:{
+      //   // header : props => <HeaderComponentt  {...props}/>
+      // }
      },
      FrequentlyAskedQues :{
        screen: FrequentlyAskedQues,
@@ -183,7 +184,7 @@ const PackageStack = createStackNavigator({
    },
    AddMoney: { screen: AddMoney,
     navigationOptions:{
-      header : props => <MyHeader {...props} title="Add Money" value={1} />
+      header : props => <MyHeader {...props} title="Add Money" value={0} />
     }
    },
    ApplyCoupon: { screen: ApplyCoupon,
@@ -206,7 +207,7 @@ const PackageStack = createStackNavigator({
   },
   AddMoney: { screen: AddMoney,
     navigationOptions:{
-      header : props => <MyHeader {...props} title="Add Money" value={1} />
+      header : props => <MyHeader {...props} title="Add Money" value={0} />
     }
    },
   NoNetwork : { screen : NetworkError,
@@ -264,7 +265,7 @@ const resetStack = createStackNavigator({
 const termsStack = createStackNavigator({
   TermsCondition: { screen: TermsCondition,
     navigationOptions:{
-      header : props => <MyHeader {...props} title="Terms And Conditions" value={0}/>
+      header : props => <MyHeader {...props} title="Terms And Conditions" value={1}/>
     }
   },
   NoNetwork : { screen : NetworkError,

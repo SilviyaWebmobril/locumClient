@@ -5,13 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import {get_packages,updateRemainingJobs} from '../redux/stores/actions/packages_coupon_action';
 import { StackActions, NavigationActions } from 'react-navigation';
-import { checkuserAuthentication} from '../redux/stores/actions/auth_action';
+import { checkuserAuthentication,logoutUser} from '../redux/stores/actions/auth_action';
 import NetInfo from "@react-native-community/netinfo";
 import {buy_packages } from '../redux/stores/actions/packages_coupon_action';
+import {showMessage} from '../Globals/Globals';
+
 
 const BuyPackages = (props) => {
 
     const dispatch = useDispatch();
+    const device_token  = useSelector(state => state.auth.device_token)
     const getPackages = useSelector(state =>state.packages_and_coupons.packages);
     const loading_status = useSelector(state =>state.register.loading_status);
     const user_id  = useSelector(state => state.auth.user_id);
@@ -62,7 +65,7 @@ const BuyPackages = (props) => {
   
     }
 
-    const buyNowHandler = (id ,package_price , jobs_count) => {
+    const buyNowHandler = (id ,package_price , jobs_count,couponApplied) => {
 
       console.log('jobs_count',jobs_count);
 
@@ -71,12 +74,26 @@ const BuyPackages = (props) => {
 
         if(isConnected){
 
-            dispatch(checkuserAuthentication(user_id,props.navigation));
-            
-            if(authenticated){
-            
-              let net_price = parseFloat(package_price)-parseFloat(applied_coupon_amount);
-                dispatch(buy_packages(id ,user.id,net_price,jobs_count,props.navigation))
+            dispatch(checkuserAuthentication(user_id,device_token))
+              .then(response => {
+
+                if(response.data.error){
+                  showMessage(0, 'Session Expired! Please Login.', 'Buy Packages', true, false);
+                  dispatch(logoutUser())
+                  
+                  props.navigation.navigate("Login");
+                
+                  const resetAction = StackActions.reset({
+                    index: 0,
+                    key: 'Login',
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                  });
+                  props.navigation.dispatch(resetAction);
+
+                }else{
+
+                let net_price = parseFloat(package_price)-parseFloat(applied_coupon_amount);
+                dispatch(buy_packages(id ,user.id,net_price,jobs_count,couponApplied,props.navigation))
                   .then(response => {
 
                     console.log("hi",response);
@@ -84,14 +101,12 @@ const BuyPackages = (props) => {
 
                       setAppliedCouponStatus(false);
                       setAppliedCouponAmount(0);
-                      let TotalJobs  = parseInt(user_job_remaining) + parseInt(jobs_count);
-                       console.log("job count222",TotalJobs);
-                       dispatch(updateRemainingJobs(TotalJobs));
+                     
                       props.navigation.navigate('Transactions');
                       const resetAction = StackActions.reset({
                         index: 0,
                         key: 'Transactions',
-                        actions: [NavigationActions.navigate({ routeName: 'TransactionsList' })],
+                        actions: [NavigationActions.navigate({ routeName: 'TransactionList' })],
                       });
                       props.navigation.dispatch(resetAction);
 
@@ -100,25 +115,28 @@ const BuyPackages = (props) => {
                         'user_id': user_id,
                         'price': net_price,
                         'package_id': id,
-                        'job_count': jobs_count
+                        'job_count': jobs_count,
+                        'coupon_applied' :couponApplied,
                       }
       
       
                       console.log("wallet",user.wallet_balance);
                       if (parseFloat(user.wallet_balance) <= 0 || parseFloat(user.wallet_balance) <  parseFloat(net_price) ) {
-                        props.navigation.navigate("Wallet", { buy_package: 1, result: obj,payAgain:buyNowHandler })
+                        props.navigation.navigate("AddMoney", { buy_package: 1, result: obj,payAgain:buyNowHandler })
                         const resetAction = StackActions.reset({
                           index: 0,
-                          key: 'Wallet',
-                          actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
+                          key: 'AddMoney',
+                          actions: [NavigationActions.navigate({ routeName: 'AddMoney' })],
                         });
                         props.navigation.dispatch(resetAction);
                       } 
                     }
                   })
-            
-            }
 
+                }
+              })
+            
+         
         }else{
           props.navigation.navigate('NoNetwork');
         }
@@ -173,7 +191,7 @@ const BuyPackages = (props) => {
                         <TouchableOpacity onPress={()=>applyPromoHandler(item.id, item.amt , item.jobs_count)}>
                           <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', alignSelf: "flex-start", fontWeight: "bold", fontSize: 12 }}>APPLY COUPON</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={buyNowHandler(item.id,item.amt , item.jobs_count)}>
+                        <TouchableOpacity onPress={buyNowHandler(item.id,item.amt , item.jobs_count ,"")}>
                           <Text style={{  fontFamily:'roboto-light',color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12 }}>BUY NOW</Text>
                         </TouchableOpacity>
 
@@ -194,7 +212,7 @@ const BuyPackages = (props) => {
                             <Text style={{ fontFamily:'roboto-light',}}>Amount Left To Pay</Text>
                             <Text style={{ fontFamily:'roboto-light', color: 'black', fontSize: 15,fontWeight:"bold" }}>$ {parseFloat(choosen_package_price) - parseFloat(this.state.coupon_amt)}</Text>
                         </View>
-                        <TouchableOpacity onPress={()=>buyNowHandler(item.id,item.amt , item.jobs_count)}>
+                        <TouchableOpacity onPress={()=>buyNowHandler(item.id,item.amt , item.jobs_count,"")}>
                           <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 12,marginTop:10 }}>BUY</Text>
                         </TouchableOpacity>
                       </View>
@@ -204,7 +222,7 @@ const BuyPackages = (props) => {
                         <TouchableOpacity onPress={()=>applyPromoHandler(item.id, item.amt , item.jobs_count)}>
                           <Text style={{ fontFamily:'roboto-bold', color: '#4C74E6', alignSelf: "flex-start", fontSize: 12 }}>APPLY COUPON</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>buyNowHandler(item.id,item.amt , item.jobs_count)}>
+                        <TouchableOpacity onPress={()=>buyNowHandler(item.id,item.amt , item.jobs_count,"")}>
                           <Text style={{ fontFamily:'roboto-bold', color: '#4C74E6', alignSelf: "flex-end", fontSize: 12 }}>BUY NOW</Text>
                         </TouchableOpacity>
 

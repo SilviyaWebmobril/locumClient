@@ -19,7 +19,7 @@ const JobDetails =(props) => {
         <View style={styles.container}>
             <View style={styles.details}>
                 <View style={styles.viewRow}>
-                    <Image source={require('../assets/clinic/manager-avatar.png')}  style={styles.imageStyle} />
+                    {/* <Image source={require('../assets/clinic/manager-avatar.png')}  style={styles.imageStyle} /> */}
 
                     <View style={{flexDirection:'row'}}>
                         <Text style={styles.textHeading}>Profile :</Text>
@@ -28,7 +28,7 @@ const JobDetails =(props) => {
                     
                 </View>
                 <View style={styles.viewRow}>
-                    <Image source={require('../assets/clinic/clock2.png')}  style={styles.imageStyle} />
+                    {/* <Image source={require('../assets/clinic/clock2.png')}  style={styles.imageStyle} /> */}
                     <View style={{flexDirection:'row'}}>
                         <Text style={styles.textHeading}>Experience : </Text>
                         <Text style={styles.textSubheading}>{experience} Years</Text>

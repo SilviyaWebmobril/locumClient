@@ -3,17 +3,21 @@ import { Text, View, Button, StyleSheet,
   TouchableOpacity,ActivityIndicator,KeyboardAvoidingView} from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import NetInfo from "@react-native-community/netinfo";
-import { checkuserAuthentication } from '../redux/stores/actions/auth_action';
+import { checkuserAuthentication ,logoutUser} from '../redux/stores/actions/auth_action';
 import { showMessage } from '../Globals/Globals'
 import {useSelector ,useDispatch} from 'react-redux';
 import Axios from 'axios';
 import ApiUrl from '../Globals/ApiUrl';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator'
 import {showSpinner ,hideSpinner} from '../redux/stores/actions/register_user'
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
 
 const ContactAdmin = (props) => {
 
   const user_id = useSelector(state => state.register.user.id);
+  const device_token  = useSelector(state => state.auth.device_token)
   const loading_status = useSelector(state => state.register.loading_status);
   console.log(loading_status);
   const [message ,setMessage] = useState("");
@@ -54,35 +58,50 @@ const ContactAdmin = (props) => {
          else {
           if(isValid()){
 
-            dispatch(checkuserAuthentication(user_id,props.navigation));
-            if(authenticated){
+            dispatch(checkuserAuthentication(user_id,device_token))
+              .then(response => {
 
-              dispatch(showSpinner())
-              var formData = new FormData();
-              formData.append('subject',subject);
-              formData.append('message', message);
-              formData.append('role', 2);
-              formData.append('userid',user_id);
-              dispatch(hideSpinner())
-              Axios.post(ApiUrl.base_url+ApiUrl.contact_admin,formData)
-                .then(response=>{
+                if(response.data.error){
+                  showMessage(0, 'Session Expired! Please Login.', 'Contact Admin', true, false);
+                      props.navigation.navigate("Login");
+                      dispatch(logoutUser())
+                      const resetAction = StackActions.reset({
+                          index: 0,
+                          key: 'Login',
+                          actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                      });
+                      props.navigation.dispatch(resetAction);
 
-                  if(response.data.status === "success"){
-                    showMessage(0, response.data.message, "Contact Admin", true, false);
-                  
-                    props.navigation.navigate("HomeScreen");
-                  }else{
-                    showMessage(0, responseJson.message, "Contact Admin", true, false);
-                    
-                  }
 
-                })
-                .catch(error => {
-                  showMessage(0, "Something went wrong ! Please try again later.", "Contact Admin", true, false);
-                })
-              
-            }
- 
+                }else{
+
+                  dispatch(showSpinner())
+                  var formData = new FormData();
+                  formData.append('subject',subject);
+                  formData.append('message', message);
+                  formData.append('role', 2);
+                  formData.append('userid',user_id);
+                  dispatch(hideSpinner())
+                  Axios.post(ApiUrl.base_url+ApiUrl.contact_admin,formData)
+                    .then(response=>{
+    
+                      if(response.data.status === "success"){
+                        showMessage(0, response.data.message, "Contact Admin", true, false);
+                      
+                        props.navigation.navigate("HomeScreen");
+                      }else{
+                        showMessage(0, responseJson.message, "Contact Admin", true, false);
+                        
+                      }
+    
+                    })
+                    .catch(error => {
+                      showMessage(0, "Something went wrong ! Please try again later.", "Contact Admin", true, false);
+                    })
+
+                }
+
+              })
           
 
           }

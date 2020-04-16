@@ -4,15 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import {get_coupons} from '../redux/stores/actions/packages_coupon_action';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import {Card } from 'react-native-elements';
-import { checkuserAuthentication} from '../redux/stores/actions/auth_action';
+import { checkuserAuthentication,logoutUser} from '../redux/stores/actions/auth_action';
 import { applyCoupons,updateRemainingJobs,buy_packages} from '../redux/stores/actions/packages_coupon_action';
 import NetInfo from "@react-native-community/netinfo";
 import { StackActions, NavigationActions } from 'react-navigation';
+import {showMessage} from '../Globals/Globals';
 
 
 const ApplyCoupon = (props) => {
 
     const couponList  = useSelector(state => state.packages_and_coupons.coupons);
+    const device_token  = useSelector(state => state.auth.device_token)
     
     const dispatch = useDispatch();
     const userid  = useSelector(state =>state.auth.user_id);
@@ -37,8 +39,25 @@ const ApplyCoupon = (props) => {
   
     useEffect(()=> {
 
-      
-        dispatch(get_coupons(userid));
+        dispatch(checkuserAuthentication(userid,device_token))
+          .then(response =>{
+            if(response.data.error){
+              showMessage(0, 'Session Expired! Please Login.', 'Apply Coupon', true, false);
+              dispatch(logoutUser())
+              
+              props.navigation.navigate("Login");
+            
+              const resetAction = StackActions.reset({
+                index: 0,
+                key: 'Login',
+                actions: [NavigationActions.navigate({ routeName: 'Login' })],
+              });
+              props.navigation.dispatch(resetAction);
+            }else{
+              dispatch(get_coupons(userid));
+
+            }
+          })
     },[]);
 
 
@@ -98,53 +117,99 @@ const ApplyCoupon = (props) => {
         if(isValid()){
           NetInfo.isConnected.fetch().then(isConnected => {
             if(isConnected) {
-                dispatch(checkuserAuthentication(userid, props.navigation))
-                if(authenticated){
-                  //user_id ,package_id,amount ,coupon_code,job_count,
-                  var result = props.navigation.getParam('result')
-                  dispatch(applyCoupons(userid,result["package_id"],result["price"],promo_name,result['job_count']))
-                    .then(response => {
 
-                      console.log("final response",response);
-                      if(response.data.amt_to_pay == 0){
-                        // 1 then send to transaction and chage remaining job
+              dispatch(checkuserAuthentication(userid,device_token))
+              .then(response =>{
+                if(response.data.error){
+                  showMessage(0, 'Session Expired! Please Login.', 'Apply Coupon', true, false);
+                  dispatch(logoutUser())
+                  props.navigation.navigate("Login");
+                
+                  const resetAction = StackActions.reset({
+                    index: 0,
+                    key: 'Login',
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                  });
+                  props.navigation.dispatch(resetAction);
+                }else{
+                    //user_id ,package_id,amount ,coupon_code,job_count,
+                    var result = props.navigation.getParam('result')
+                    dispatch(applyCoupons(userid,result["package_id"],result["price"],promo_name,result['job_count']))
+                      .then(response => {
+  
+                        console.log("final response",response);
+                        if(response.data.amt_to_pay == 0){
+                          // 1 then send to transaction and chage remaining job
+  
+                          let result = props.navigation.getParam('result')
+  
+                           let TotalJobs  = parseInt(user_job_remaining) + parseInt(result['job_count']);
+                           console.log("job count222",TotalJobs);
+                           dispatch(updateRemainingJobs(TotalJobs))
+                           props.navigation.state.params.checkcouponvalidity(result["package_id"],promo_price);
+                           props.navigation.pop();
+                           props.navigation.navigate('TransactionList');
+                             const resetAction = StackActions.reset({
+                               index: 0,
+                               key: 'Transactions',
+                               actions: [NavigationActions.navigate({ routeName: 'TransactionList' })],
+                             });
+                             props.navigation.dispatch(resetAction);
+     
+     
+  
+                        }else if(response.data.status == 0){
 
-                        let result = props.navigation.getParam('result')
+                          console.log("hfbhfbhd")
+                          let result = props.navigation.getParam('result')
+                          let net_price = parseFloat(result["price"])-parseFloat(promo_price);
 
-                         let TotalJobs  = parseInt(user_job_remaining) + parseInt(result['job_count']);
-                         console.log("job count222",TotalJobs);
-                         dispatch(updateRemainingJobs(TotalJobs))
-                         props.navigation.state.params.checkcouponvalidity(result["package_id"],promo_price);
-                         props.navigation.pop();
-                         props.navigation.navigate('TransactionList');
-                           const resetAction = StackActions.reset({
-                             index: 0,
-                             key: 'Transactions',
-                             actions: [NavigationActions.navigate({ routeName: 'TransactionList' })],
-                           });
-                           props.navigation.dispatch(resetAction);
-   
-   
+                          let obj = {
+                            'user_id': userid,
+                            'price': net_price,
+                            'package_id': result["package_id"],
+                            'job_count': result['job_count'],
+                            "coupon_applied" : response.data.coupon_applied
+                          }
+          
+          
+                          console.log("wallet",user.wallet_balance);
+                          if (parseFloat(user.wallet_balance) <= 0 || parseFloat(user.wallet_balance) <  parseFloat(net_price) ) {
+                            props.navigation.navigate("AddMoney", { buy_package: 1, result: obj,payAgain:buyNowHandler })
+                            const resetAction = StackActions.reset({
+                              index: 0,
+                              key: 'AddMoney',
+                              actions: [NavigationActions.navigate({ routeName: 'AddMoney' })],
+                            });
+                            props.navigation.dispatch(resetAction);
 
-                      }else{
+                          }
+                        }
+                        else if(response.data.amt_to_pay == 1){
 
-                        // send to wallet to add money
+                          // send to wallet to add money
 
-                         // this.props.navigation.state.params.checkcouponvalidity(packageid);
-                        let result = props.navigation.getParam('result')
-                        setCouponApplied(response.data.coupon_applied)
-                        buyNowHandler(result["package_id"],(parseFloat(amount) - parseFloat(promo_price)))
-                        // this.setState({coupon_applied:responseJson.coupon_applied},()=>{
-                        // this.pay(packageid,(parseFloat(this.state.amount) - parseFloat(this.state.promo_price)),result['job_count'] )
+                          
+                          let result = props.navigation.getParam('result')
+                          setCouponApplied(response.data.coupon_applied)
+                          console.log("pack id",result["package_id"]);
+                          console.log("pack price",result["price"]);
+                          console.log("promo_price",promo_price);
+                          console.log("job_count",result['job_count']);
+                          console.log("coupon applied",response.data.coupon_applied);
+                          console.log("sub",parseFloat(result["price"]) - parseFloat(promo_price))
+                          let net_price = parseFloat(result["price"]) - parseFloat(promo_price);
+                         buyNowHandler(result["package_id"],net_price,result['job_count'],response.data.coupon_applied)
+                          
+                        
+
+                        }
                       
-                      //})
-                      
-
-                      }
-                    })
-
+                      })
+    
                 }
-
+              })
+               
             }else{
               props.navigation.navigate('NoNetwork')
             }
@@ -155,7 +220,7 @@ const ApplyCoupon = (props) => {
       }
 
 
-      const buyNowHandler = (id ,package_price , jobs_count) => {
+      const buyNowHandler = (id ,net_price , jobs_count,couponApplied) => {
 
         console.log('jobs_count',jobs_count);
   
@@ -163,51 +228,62 @@ const ApplyCoupon = (props) => {
         NetInfo.isConnected.fetch().then(isConnected => {
   
           if(isConnected){
-  
-              dispatch(checkuserAuthentication(userid,props.navigation));
+
+            dispatch(checkuserAuthentication(userid,device_token))
+            .then(response =>{
+              if(response.data.error){
+                showMessage(0, 'Session Expired! Please Login.', 'Apply Coupon', true, false);
+                dispatch(logoutUser())
+                props.navigation.navigate("Login");
               
-              if(authenticated){
-              
-                let net_price = parseFloat(package_price)-parseFloat(promo_price);
-                  dispatch(buy_packages(id ,user.id,net_price,jobs_count,props.navigation))
-                    .then(response => {
-  
-                      console.log("hi",response);
-                      if(response ==  1){
-  
-                        setAppliedCouponStatus(false);
-                        setAppliedCouponAmount(0)
-                        props.navigation.navigate('TransactionList');
+                const resetAction = StackActions.reset({
+                  index: 0,
+                  key: 'Login',
+                  actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                });
+                props.navigation.dispatch(resetAction);
+              }else{
+                
+                dispatch(buy_packages(id ,user.id,net_price,jobs_count,couponApplied,props.navigation))
+                  .then(response => {
+
+                    console.log("hi",response);
+                    if(response ==  1){
+
+                     
+                      props.navigation.navigate('TransactionList');
+                      const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Transactions',
+                        actions: [NavigationActions.navigate({ routeName: 'TransactionList' })],
+                      });
+                      props.navigation.dispatch(resetAction);
+
+                    }else{
+                      let obj = {
+                        'user_id': userid,
+                        'price': net_price,
+                        'package_id': id,
+                        'job_count': jobs_count,
+                        "coupon_applied" : couponApplied
+                      }
+      
+      
+                      console.log("wallet",user.wallet_balance);
+                      if (parseFloat(user.wallet_balance) <= 0 || parseFloat(user.wallet_balance) <  parseFloat(net_price) ) {
+                        props.navigation.navigate("AddMoney", { buy_package: 1, result: obj,payAgain:buyNowHandler })
                         const resetAction = StackActions.reset({
                           index: 0,
-                          key: 'Transactions',
-                          actions: [NavigationActions.navigate({ routeName: 'TransactionList' })],
+                          key: 'AddMoney',
+                          actions: [NavigationActions.navigate({ routeName: 'AddMoney' })],
                         });
                         props.navigation.dispatch(resetAction);
+                      } 
+                    }
+                })
   
-                      }else{
-                        let obj = {
-                          'user_id': userid,
-                          'price': net_price,
-                          'package_id': id,
-                          'job_count': jobs_count
-                        }
-        
-        
-                        console.log("wallet",user.wallet_balance);
-                        if (parseFloat(user.wallet_balance) <= 0 || parseFloat(user.wallet_balance) <  parseFloat(net_price) ) {
-                          props.navigation.navigate("Wallet", { buy_package: 1, result: obj,payAgain:buyNowHandler })
-                          const resetAction = StackActions.reset({
-                            index: 0,
-                            key: 'Wallet',
-                            actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
-                          });
-                          props.navigation.dispatch(resetAction);
-                        } 
-                      }
-                  })
-              
               }
+            })
   
           }else{
             props.navigation.navigate('NoNetwork');

@@ -334,7 +334,7 @@ const CreateProfile = (props,navigation) => {
                    
                     <View style={{width:Dimensions.get('window').width * 0.9,marginTop:30 }}>
                             <TextField
-                                style={{ alignSelf: 'center',marginTop:10 }}
+                                style={{ alignSelf: 'center',marginTop:10,color:"grey" }}
                                 label='Name'
                                 value={name}
                                 editable={false}
@@ -343,11 +343,21 @@ const CreateProfile = (props,navigation) => {
 
 
                             <TextField
-                                style={{ alignSelf: 'center',marginTop:10  }}
+                                style={{ alignSelf: 'center',marginTop:10,color:"grey"  }}
                                 label='Email'
                                 value={email}
                                 editable={false}
                                 onChangeText={(email) => setEmail(email)}
+                            />
+
+                            <TextField
+                                style={{ alignSelf: 'center',marginTop:10,color:"grey"  }}
+                                label='Mobile'
+                                keyboardType='numeric'
+                                textContentType='telephoneNumber'
+                                value={mobile}
+                                editable={false}
+                                onChangeText={(mobile) => setMobile(mobile)}
                             />
 
                             <Dropdown
@@ -371,15 +381,7 @@ const CreateProfile = (props,navigation) => {
                                 onChangeText={(value) => {onGradeChangeListener(value) }}
                                 
                             />
-                            <TextField
-                                style={{ alignSelf: 'center',marginTop:10  }}
-                                label='Mobile'
-                                keyboardType='numeric'
-                                textContentType='telephoneNumber'
-                                value={mobile}
-                                editable={false}
-                                onChangeText={(mobile) => setMobile(mobile)}
-                            />
+                         
                             {/* <TextField
                                 style={{ alignSelf: 'center',marginTop:10  }}
                                 label='Degree'
@@ -396,7 +398,7 @@ const CreateProfile = (props,navigation) => {
                             /> */}
 
                             <TextField
-                                style={{ alignSelf: 'center',marginTop:10  }}
+                                style={{ alignSelf: 'center',marginTop:10 ,color:"grey" }}
                                 label='Country'
                                 value="Malaysia"
                                 editable={false}

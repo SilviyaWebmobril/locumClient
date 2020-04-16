@@ -4,12 +4,18 @@ import IPay88, { Pay } from "ipay88-sdk";
 import { TextField } from 'react-native-material-textfield';
 import {showMessage} from '../Globals/Globals';
 import NetInfo from "@react-native-community/netinfo";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
+import { checkuserAuthentication,logoutUser } from '../redux/stores/actions/auth_action';
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
 
 const AddMoney = (props) => {
 
     const [amount,setAmount] = useState("");
+    const dispatch = useDispatch();
+    const device_token  = useSelector(state => state.auth.device_token)
     const [onFocusKeyboard, setOnFocusKeyboard]  = useState('');
     const user_id = useSelector(state => state.auth.user_id);
     const loading_status = useSelector(state =>state.register.loading_status);
@@ -63,81 +69,105 @@ const AddMoney = (props) => {
       }
       else {
 
-        var formData = new FormData();
-        //txnid and payal id should have same value
-        formData.append('userid', user_id);
-        formData.append('txn_status', "approved");
-        if(Platform.OS == "ios"){
-          formData.append('txn_id', data.transactionID.toString());
-        }else{
-          formData.append('txn_id', data.transactionId.toString());
-        }
-        formData.append('amt', data.amount.toString());
-        //formData.append('paypal_id',pid.toString());
-        formData.append('role', 2);
-        console.log("formdata id",formData);
+        dispatch(checkuserAuthentication(user_id,device_token))
+          .then(response => {
 
-        
-        fetch('http://webmobril.org/dev/locum/api/recharge_wallet', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formData
-
-        }).then((response) => response.json())
-          .then((responseJson) => {
-            
-            console.log("res... ipay",responseJson)
-            //ToastAndroid.show(JSON.stringify(responseJson), ToastAndroid.SHORT);
-
-            if (responseJson.status === 'success') {
-              //success in inserting data
-
-              showMessage(1, responseJson.message, 'Add Money', true, false);
-
-
-              if (props.navigation.getParam('buy_package') == 1) {
-
-                var result = props.navigation.getParam('result');
-                var price = result["price"];
-                var packageid = result["package_id"];
-                var count = result['job_count'];
-                props.navigation.state.params.payAgain(packageid, price, count);
-                props.navigation.pop();
-
-
-
-              } else {
-
-                props.navigation.navigate('Wallet');
+              if(response.data.error){
+                showMessage(0, 'Session Expired! Please Login.', 'Add Money', true, false);
+                dispatch(logoutUser())
+                props.navigation.navigate("Login");
+              
                 const resetAction = StackActions.reset({
                   index: 0,
-                  key: 'Wallet',
-                  actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
+                  key: 'Login',
+                  actions: [NavigationActions.navigate({ routeName: 'Login' })],
                 });
                 props.navigation.dispatch(resetAction);
 
+              }else{
+
+                var formData = new FormData();
+                //txnid and payal id should have same value
+                formData.append('userid', user_id);
+                formData.append('txn_status', "approved");
+                if(Platform.OS == "ios"){
+                  formData.append('txn_id', data.transactionID.toString());
+                }else{
+                  formData.append('txn_id', data.transactionId.toString());
+                }
+                formData.append('amt', data.amount.toString());
+                //formData.append('paypal_id',pid.toString());
+                formData.append('role', 2);
+                console.log("formdata id",formData);
+        
+                
+                fetch('http://webmobril.org/dev/locum/api/recharge_wallet', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                  },
+                  body: formData
+        
+                }).then((response) => response.json())
+                  .then((responseJson) => {
+                    
+                    console.log("res... ipay",responseJson)
+                    //ToastAndroid.show(JSON.stringify(responseJson), ToastAndroid.SHORT);
+        
+                    if (responseJson.status === 'success') {
+                      //success in inserting data
+        
+                      showMessage(1, responseJson.message, 'Add Money', true, false);
+        
+        
+                      if (props.navigation.getParam('buy_package') == 1) {
+        
+                        var result = props.navigation.getParam('result');
+                        var price = result["price"];
+                        var packageid = result["package_id"];
+                        var count = result['job_count'];
+                        var coupon = result['coupon_applied'];
+                        props.navigation.state.params.payAgain(packageid, price, count,coupon);
+                        props.navigation.pop();
+        
+        
+        
+                      } else {
+        
+                        props.navigation.navigate('Wallet');
+                        const resetAction = StackActions.reset({
+                          index: 0,
+                          key: 'Wallet',
+                          actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
+                        });
+                        props.navigation.dispatch(resetAction);
+        
+        
+                      }
+        
+        
+        
+                    } else {
+        
+                      showMessage(0, responseJson.message, 'Add Money', true, false);
+        
+                    }
+        
+        
+                  }).catch((error) => {
+                    console.error(error);
+                  });
+        
+        
+        
+        
 
               }
 
+          })
 
-
-            } else {
-
-              showMessage(0, responseJson.message, 'Add Money', true, false);
-
-            }
-
-
-          }).catch((error) => {
-            console.error(error);
-          });
-
-
-
-
+      
 
       }
 
@@ -193,30 +223,54 @@ const AddMoney = (props) => {
     Keyboard.dismiss();
    
     if (isValid()) {
-      try {
-        const data = {};
-        data.paymentId = "2"; // refer to ipay88 docs
-        data.merchantKey = "QrB9d97iae";
-        data.merchantCode = "M05194";
-        //data.referenceNo = (Math.floor(100000 + Math.random() * 900)).toString();
-        data.referenceNo =  Math.floor(100000 + Math.random() * 900000).toString();
-        data.amount = amount.toString();
-        data.currency = "MYR";
-        data.productDescription = "Payment";
-        data.userName = "locum";
-        data.userEmail = "test123@gmail.com";
-        data.userContact = "0123456789";
-        data.remark = "me";
-        data.utfLang = "UTF-8";
-        data.country = "MY";
-        data.backendUrl = "http://webmobril.com";
-        const errs = Pay(data);
-        // if (Object.keys(errs).length > 0) {
-        //   console.log(JSON.stringify(errs));
-        // }
-      } catch (e) {
-        console.log("hi",e);
-      }
+
+      dispatch(checkuserAuthentication(user_id,device_token))
+        .then(response => {
+          
+          if(response.data.error){
+
+            showMessage(0, 'Session Expired! Please Login.', 'Add Money', true, false);
+            dispatch(logoutUser())
+            props.navigation.navigate("Login");
+          
+            const resetAction = StackActions.reset({
+              index: 0,
+              key: 'Login',
+              actions: [NavigationActions.navigate({ routeName: 'Login' })],
+            });
+            props.navigation.dispatch(resetAction);
+
+
+          }else{
+
+            try {
+              const data = {};
+              data.paymentId = "2"; // refer to ipay88 docs
+              data.merchantKey = "QrB9d97iae";
+              data.merchantCode = "M05194";
+              //data.referenceNo = (Math.floor(100000 + Math.random() * 900)).toString();
+              data.referenceNo =  Math.floor(100000 + Math.random() * 900000).toString();
+              data.amount = amount.toString();
+              data.currency = "MYR";
+              data.productDescription = "Payment";
+              data.userName = "locum";
+              data.userEmail = "test123@gmail.com";
+              data.userContact = "0123456789";
+              data.remark = "me";
+              data.utfLang = "UTF-8";
+              data.country = "MY";
+              data.backendUrl = "http://webmobril.com";
+              const errs = Pay(data);
+              // if (Object.keys(errs).length > 0) {
+              //   console.log(JSON.stringify(errs));
+              // }
+            } catch (e) {
+              console.log("hi",e);
+            }
+
+          }
+        })
+      
     }
   };
 

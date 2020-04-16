@@ -4,11 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import {Card} from 'react-native-elements'
 import {wallet_history} from '../redux/stores/actions/transaction_action';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
-
+import { checkuserAuthentication,logoutUser } from '../redux/stores/actions/auth_action';
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
+import {showMessage} from '../Globals/Globals';
 
 const Wallet = (props) => {
 
     const dispatch = useDispatch();
+    const device_token  = useSelector(state => state.auth.device_token)
     const loading_status = useSelector(state => state.register.loading_status);
     const wallets = useSelector(state => state.transactions.wallet_history);
     const user_id  = useSelector(state => state.auth.user_id);
@@ -16,7 +21,26 @@ const Wallet = (props) => {
 
     useEffect(()=> {
 
-        dispatch(wallet_history(user_id));
+        dispatch(checkuserAuthentication(user_id,device_token))
+            .then(response => {
+
+                if(response.data.error){
+                    showMessage(0, 'Session Expired! Please Login.', 'Wallet', true, false);
+                    dispatch(logoutUser())
+                    props.navigation.navigate("Login");
+                  
+                    const resetAction = StackActions.reset({
+                      index: 0,
+                      key: 'Login',
+                      actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                    });
+                    props.navigation.dispatch(resetAction);
+
+                }else{
+                    dispatch(wallet_history(user_id));
+                }
+            })
+     
 
     },[]);
 

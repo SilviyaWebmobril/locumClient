@@ -24,9 +24,9 @@ export const userDevicetoken = (token) => {
     }
  }
 
- export const checkuserAuthentication  = (user_id,navigation) => {
-
-    return dispatch => {
+ export const checkuserAuthentication  = (user_id,device_token) =>  (dispatch) => 
+ 
+    new Promise((resolve , reject) => {
 
         dispatch({
             type: SHOW_LOADING,
@@ -34,6 +34,7 @@ export const userDevicetoken = (token) => {
         });
         let formdata  = new FormData();
         formdata.append("user_id",user_id);
+        formdata.append("token",device_token)
         console.log("form",formdata);
         axios.post(ApiUrl.base_url+ApiUrl.check_token,formdata)
         .then(response => {
@@ -41,37 +42,39 @@ export const userDevicetoken = (token) => {
             dispatch({
                 type :HIDE_SPINNER,
                
-            })
+            });
 
-            console.log("response.data.error",response.data);
-            if(response.data.error){
+            resolve(response)
 
-                console.log("hi");
+            // console.log("response.data.error",response.data);
+            // if(response.data.error){
+
+            //     console.log("hi");
                
 
-                dispatch({
-                    type :AUTH_CHANGED,
-                    authenticated:false
+            //     dispatch({
+            //         type :AUTH_CHANGED,
+            //         authenticated:false
 
-                })
+            //     })
 
-                navigation.navigate("Login")
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    key: 'Login',
-                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
-                });
-                navigation.dispatch(resetAction);
+            //     navigation.navigate("Login")
+            //     const resetAction = StackActions.reset({
+            //         index: 0,
+            //         key: 'Login',
+            //         actions: [NavigationActions.navigate({ routeName: 'Login' })],
+            //     });
+            //     navigation.dispatch(resetAction);
               
             
-            }else{
+            // }else{
 
-                dispatch({
-                    type :AUTH_CHANGED,
-                    authenticated:true
+            //     dispatch({
+            //         type :AUTH_CHANGED,
+            //         authenticated:true
 
-                })
-            }
+            //     })
+            // }
            
 
         })
@@ -84,6 +87,8 @@ export const userDevicetoken = (token) => {
             showMessage(0,'Something went wrong. Please try again later !', 'Create Profile', true, false);
         })
 
-    }
- }
 
+    })
+ 
+
+ 

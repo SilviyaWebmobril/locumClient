@@ -6,11 +6,14 @@ import NetInfo from "@react-native-community/netinfo";
 import { useSelector , useDispatch} from 'react-redux';
 import { Dropdown } from 'react-native-material-dropdown';
 import {fetchJobCategories} from '../redux/stores/actions/register_user';
-import { checkuserAuthentication} from '../redux/stores/actions/auth_action';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import { searchRequestedJobs } from '../redux/stores/actions/search_job_action';
 import {showMessage}  from '../Globals/Globals';
 import DatePicker from 'react-native-datepicker';
+import {checkuserAuthentication ,logoutUser} from '../redux/stores/actions/auth_action'
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
 
 const SearchJob = (props) => {
 
@@ -24,6 +27,7 @@ const SearchJob = (props) => {
         return date.getFullYear() + "-" + (date.getMonth()+1) + "-" +date.getDate();
       }
    
+      const device_token  = useSelector(state => state.auth.device_token)
 
     const wallet_balance = useSelector(state => state.register.user.wallet_balance);
     const [location_frame_status ,setLocationFrameStatus ] = useState(false);
@@ -51,42 +55,6 @@ const SearchJob = (props) => {
         dispatch(fetchJobCategories());
        
     },[]);
-
-    // useEffect( () => {
-
-    //     BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
-
-    //     return () => {
-    //         BackHandler.removeEventListener(
-    //           "hardwareBackPress",
-    //           backButtonHandler
-    //         );
-    //       };
-        
-       
-
-    // },[backButtonHandler,location_frame_status])
-
-    // const backButtonHandler = () => {
-
-    //     if (location_frame_status) {
-    //        // setLocationFrameStatus(false);
-    //         return true;
-    //       }
-    
-         
-         
-    // }
-
-    // const  getFormattedDate = (date) => {
-
-    //     console.log("get foramt date",date);
-    
-    //     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    
-    //     return date.getFullYear() + "-" + (date.getMonth()+1) + "-" +date.getDate();
-    //   }
-    
 
 
 
@@ -147,15 +115,26 @@ const SearchJob = (props) => {
 
                 if(isConnected){
 
-                    dispatch(checkuserAuthentication(user_id,props.navigation));
-                    
-                    if(authenticated){
-                    
-                            dispatch(searchRequestedJobs(user_id ,dropdown_value_id,experience,fulladdress,latitude,longitude,date,description,from_time,to_time,props.navigation,wallet_balance));
+                  dispatch(checkuserAuthentication(user_id,device_token))
+                    .then(response => {
+                      if(response.data.error){
+                        showMessage(0, 'Session Expired! Please Login.', 'Search Job', true, false);
+                        dispatch(logoutUser())
+                        props.navigation.navigate("Login");
+                      
+                        const resetAction = StackActions.reset({
+                          index: 0,
+                          key: 'Login',
+                          actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                        });
+                        props.navigation.dispatch(resetAction);
+                      }else{
+                        dispatch(searchRequestedJobs(user_id ,dropdown_value_id,experience,fulladdress,latitude,longitude,date,description,from_time,to_time,props.navigation,wallet_balance));
                         
-                    
-                    }
+                      }
+                  })
 
+                
                 }else{
                   props.navigation.navigate("NoNetwork")
                 }
@@ -396,7 +375,7 @@ const SearchJob = (props) => {
             <TouchableOpacity
                 onPress={searchJob}
                 style={styles.submitButton}>
-                <Text style={styles.submitText}>Search</Text>
+                <Text style={styles.submitText}>Post Job</Text>
             </TouchableOpacity>
 
             

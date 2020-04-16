@@ -6,11 +6,14 @@ import {uploadProfilePic ,uploadEditProfilePic} from '../redux/stores/actions/re
 import {useSelector ,useDispatch} from 'react-redux';
 import {showMessage} from '../Globals/Globals';
 import ApiUrl from '../Globals/ApiUrl';
+import {checkuserAuthentication , logoutUser} from '../redux/stores/actions/auth_action';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 const HeaderComponent = (props) => {
 
     const user_image = useSelector(state=> state.register.user.user_image);
     console.log("img",user_image);
+    const device_token  = useSelector(state => state.auth.device_token)
     const [imageSource , setImageSource ] = useState(user_image);
     
     const user_id  = useSelector(state => props.edit == 1 ? state.register.user.id : state.register.register_id);
@@ -50,17 +53,51 @@ const HeaderComponent = (props) => {
 
                 let source = { uri: response.uri };
                 console.log("source",source)
-                setImageSource(source)
-                
+                setImageSource(source);
+                if(props.edit ==  1){
+
+                    uploadPicDispatch(checkuserAuthentication(user_id,device_token))
+                        .then(responseData => {
+
+                                if(responseData.data.error){
+                                    showMessage(0, 'Session Expired! Please Login.', 'Contact Admin', true, false);
+                                    uploadPicDispatch(logoutUser())
+                                    props.navigation.navigate("Login")
+                                    const resetAction = StackActions.reset({
+                                        index: 0,
+                                        key: 'Login',
+                                        actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                                    });
+                                    props.navigation.dispatch(resetAction);
+                                }else{
+
+                                    if(Platform.OS == 'ios'){
+
+                                        uploadPicDispatch(uploadProfilePic(user_id,response.uri,"imgae.jpg"))
+                                    
+                                      }else{
+                                        uploadPicDispatch(uploadProfilePic(user_id,response.uri,response.fileName))
+                                    
+                                      }
+
+                                }
+                        })
+
+                }else{
+
+                    
                     if(Platform.OS == 'ios'){
 
                         uploadPicDispatch(uploadProfilePic(user_id,response.uri,"imgae.jpg"))
                     
-                      }else{
+                    }else{
                         uploadPicDispatch(uploadProfilePic(user_id,response.uri,response.fileName))
                     
-                      }
-    
+                    }
+               
+
+                }
+                 
                
 			}
 		});

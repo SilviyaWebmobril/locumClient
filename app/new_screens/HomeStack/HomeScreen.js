@@ -1,7 +1,7 @@
 import React ,{ useState, useEffect } from 'react';
 import {View , Text ,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import { Card } from 'react-native-elements';
-import firebase from 'react-native-firebase';
+import firebase from 'react-native-firebase/';
 import { useDispatch, useSelector } from "react-redux";
 import {userDevicetoken,fetchJobCategories} from '../redux/stores/actions/register_user';
 import {
@@ -41,6 +41,75 @@ const HomeScreen =(props)  => {
          
           getNotificationData(message);
         });
+
+         
+        const notificationOpen = await firebase.notifications().getInitialNotification();
+
+			if (notificationOpen) {
+             const {  _body ,_data } = notificationOpen.notification;
+             console.log("_data",_data);
+             let item = JSON.parse(_data.result);
+             console.log("itemmm",item);
+                if(item !== null && item !== undefined){
+
+                    let result = {}
+                    result["id"] = item.job_detail.id //practiiontre_id
+                    result["about"] = ""
+                    result["name"] =  item.job_detail.user_name.name
+                    result["description"] = item.job_detail.job_detail.job_desc 
+                    result["experience"] = item.job_detail.job_detail.exp_required
+                    result["profession"] = ""
+                    result["contact"] = item.job_detail.user_name.mobile
+                    result["email"] = item.job_detail.user_name.email
+                    result["image"] = item.job_detail.user_name.user_image
+                    result["degree"] = item.job_detail.user_name.degree
+                    result['application_status'] = item.job_detail.application_status
+                    result["appid"] = item.job_detail.id //application_id
+                    result['fetch'] = 0 // to function fectch again
+    
+                    props.navigation.navigate('PractitionersDetails', { result: result});
+               
+                }
+            
+            }
+
+
+            notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOp) =>{
+
+               console.log("open",notificationOp);
+                if (notificationOp) {
+                    const {  _body ,_data } = notificationOp.notification;
+                    console.log("_data notificationOpenedListener",_data);
+                    // let item = JSON.parse(_data.result);
+                    // console.log("itemmm",item);
+                    //    if(item !== null && item !== undefined){
+       
+                    //        let result = {}
+                    //        result["id"] = item.job_detail.id //practiiontre_id
+                    //        result["about"] = ""
+                    //        result["name"] =  item.job_detail.user_name.name
+                    //        result["description"] = item.job_detail.job_detail.job_desc 
+                    //        result["experience"] = item.job_detail.job_detail.exp_required
+                    //        result["profession"] = ""
+                    //        result["contact"] = item.job_detail.user_name.mobile
+                    //        result["email"] = item.job_detail.user_name.email
+                    //        result["image"] = item.job_detail.user_name.user_image
+                    //        result["degree"] = item.job_detail.user_name.degree
+                    //        result['application_status'] = item.job_detail.application_status
+                    //        result["appid"] = item.job_detail.id //application_id
+                    //        result['fetch'] = 0 // to function fectch again
+           
+                    //        props.navigation.navigate('PractitionersDetails', { result: result});
+                      
+                    //    }
+                }
+    
+            })
+    
+            
+           
+            firebase.notifications().removeAllDeliveredNotifications()
+    
       }
 
 
@@ -68,78 +137,10 @@ const HomeScreen =(props)  => {
                 .android.setChannelId('Default')
                 .android.setVibrate(1000);
         }
-       console.log('FOREGROUND NOTIFICATION LISTENER: \n', notification_to_be_displayed);
-
-    //    const notification_to_be_displayed = new firebase.notifications.Notification()
-    //         .setNotificationId('notificationId')
-    //         .setTitle(notification.data.title)
-    //         .setBody(notification.data.body)
-    //         .setData(notification.data);
-
-    //         notification_to_be_displayed.android
-    //         .setChannelId('test-channel')
-    //         .android.setSmallIcon('ic_launcher');
-
+      
        firebase.notifications().displayNotification(notification_to_be_displayed);
 
-      console.log("notification.data.status",notification.data.status);
-        // if(notification.data.status == 'true'){
-
-        //     this.razorPayCheckout();
-        // }else{
-
-        //     this.props.changeAvailabilityStatus();
-        //     Alert.alert(
-        //         'Verify Address',
-        //         'Sorry for the inconvience. This address is not available ,try using another address.',
-        //         [
-             
-               
-        //         {text: 'Ok', onPress: () => console.log("ok")},
-        //         ], 
-        //         { cancelable: false }
-        //         )
-        // }
-
-        displayNotification = (notification) => {
-            console.log("on dispaly notification")
-          if (Platform.OS === 'android') {
-              const localNotification = new firebase.notifications.Notification({
-                  sound: 'default',
-                  show_in_foreground: true,
-              }).setNotificationId(notification._from)
-              .setTitle(notification._data.title)
-              .setSubtitle(notification.subtitle)
-              .setBody(notification._data.content)
-              .setData(notification.data)
-                  .android.setChannelId('notification_channel_name') // e.g. the id you chose above
-                  .android.setSmallIcon('logo') // create this icon in Android Studio
-                  .android.setColor('#D3D3D3') // you can set a color here
-                  .android.setPriority(firebase.notifications.Android.Priority.High);
-    
-              firebase.notifications()
-                  .displayNotification(localNotification)
-                  .catch(err => console.error(err));
-    
-          }
-          else if (Platform.OS === 'ios') {
-            console.log(notification);
-            const localNotification = new firebase.notifications.Notification()
-                .setNotificationId(notification._from)
-                .setTitle(notification._data.title)
-                .setSubtitle(notification.subtitle)
-                .setBody(notification._data.content)
-                .setData(notification.data)
-                .ios.setBadge(notification.ios.badge);
-    
-            firebase.notifications()
-                .displayNotification(localNotification)
-                .catch(err => console.error(err));
-    
-        }
-      }
-  
-  
+     
 
       }
 
@@ -160,15 +161,16 @@ const HomeScreen =(props)  => {
     useEffect(() => {
 
         console.log("get fcmtoken123ss");
-        createNotificationListeners();
+       
         onTokenRefreshListener();
         if(token === null){
           
             getFcmToken();
         }
-    
+        createNotificationListeners();
        
         return () => {
+            createNotificationListeners();
             onTokenRefreshListener();
         };
 

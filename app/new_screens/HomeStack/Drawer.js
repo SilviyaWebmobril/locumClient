@@ -73,11 +73,11 @@ const Drawer = (props) => {
 					?
 					<TouchableOpacity onPress={()=>{
 						props.navigation.closeDrawer()
-						props.navigation.navigate('EditProfile');
+						props.navigation.navigate('Profile');
 						//below is used to reset stacki navigator so that goes infirst screen only
 						const resetAction = StackActions.reset({
 							index: 0,
-							key: 'EditProfile',
+							key: 'Profile',
 							actions: [NavigationActions.navigate({ routeName: 'EditProfile' })],
 						});
 						props.navigation.dispatch(resetAction);
@@ -88,11 +88,11 @@ const Drawer = (props) => {
 					:
 					<TouchableOpacity onPress={()=>{
 						props.navigation.closeDrawer()
-						props.navigation.navigate('EditProfile');
+						props.navigation.navigate('Profile');
 						//below is used to reset stacki navigator so that goes infirst screen only
 						const resetAction = StackActions.reset({
 							index: 0,
-							key: 'EditProfile',
+							key: 'Profile',
 							actions: [NavigationActions.navigate({ routeName: 'EditProfile' })],
 						});
 						props.navigation.dispatch(resetAction);
@@ -185,7 +185,7 @@ const Drawer = (props) => {
 								//below is used to reset stacki navigator so that goes infirst screen only
 								const resetAction = StackActions.reset({
 									index: 0,
-									key: 'EditProfile',
+									key: 'Profile',
 									actions: [NavigationActions.navigate({ routeName: 'EditProfile' })],
 								});
 								props.navigation.dispatch(resetAction);

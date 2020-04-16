@@ -4,11 +4,18 @@ import {useDispatch , useSelector} from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import {getJobAppliedList,acceptApplication} from '../redux/stores/actions/search_job_action';
-import { checkuserAuthentication} from '../redux/stores/actions/auth_action';
+import { checkuserAuthentication,logoutUser} from '../redux/stores/actions/auth_action';
 import NetInfo from '@react-native-community/netinfo';
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
+import HeaderComponentt from '../CustomUI/HeaderComponentt';
+import {showMessage} from '../Globals/Globals';
 
 const PractitionersDetails = (props) => {
 
+	
+	const device_token  = useSelector(state => state.auth.device_token)
 	const user =  useSelector(state => state.register.user);
 	const dispatch = useDispatch();
 	const authenticated = useSelector(state =>state.auth.authenticated);
@@ -39,13 +46,25 @@ const PractitionersDetails = (props) => {
 				return;
 			} else {
 
-				dispatch(checkuserAuthentication);
-				if(authenticated){
+				dispatch(checkuserAuthentication(user.id,device_token))
+					.then(response => {
+						if(response.data.error){
+							showMessage(0, 'Session Expired! Please Login.', 'Practitioners Details', true, false);
+							dispatch(logoutUser())
+							props.navigation.navigate("Login");
+						
+							const resetAction = StackActions.reset({
+								index: 0,
+								key: 'Login',
+								actions: [NavigationActions.navigate({ routeName: 'Login' })],
+							});
+							props.navigation.dispatch(resetAction);
+						}else{
+							dispatch(acceptApplication(id, 1,props.navigation,0))
+						}
+				})
 
-					dispatch(acceptApplication(id, 1))
-				}
-
-
+				
 			}
 		});
 
@@ -60,12 +79,25 @@ const PractitionersDetails = (props) => {
 				return;
 			} else {
 
-				dispatch(checkuserAuthentication);
-				if(authenticated){
+				dispatch(checkuserAuthentication(user.id,device_token))
+					.then(response => {
+						if(response.data.error){
+							showMessage(0, 'Session Expired! Please Login.', 'Practitioners Details', true, false);
+							dispatch(logoutUser())
+							props.navigation.navigate("Login");
+						
+							const resetAction = StackActions.reset({
+								index: 0,
+								key: 'Login',
+								actions: [NavigationActions.navigate({ routeName: 'Login' })],
+							});
+							props.navigation.dispatch(resetAction);
+						}else{
+							dispatch(acceptApplication(id, 2,props.navigation,0))
+						}
+				})
 
-					dispatch(acceptApplication(id, 2))
-				}
-
+				
 
 			}
 		});
@@ -123,11 +155,10 @@ const PractitionersDetails = (props) => {
         return(<MyActivityIndicator />)
     }
 
+	
     return(
         <KeyboardAwareScrollView>
             <View style={{flex: 1,}}>
-
-           
 
 						<View style={{ marginLeft: 10, marginTop: 60, marginBottom: 10, justifyContent: 'space-between' }}>
 							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Description</Text>
@@ -178,7 +209,21 @@ const PractitionersDetails = (props) => {
 
             </View>
         </KeyboardAwareScrollView>
-    )
+	)
+	
+	
+	
 }
+
+PractitionersDetails.navigationOptions = (props) => ({
+	header :  <HeaderComponentt 
+					name={props.navigation.getParam('result')['name']} 
+					user_image={props.navigation.getParam('result')['image']} 
+					{...props} />
+})
+
+
+
+
 
 export default PractitionersDetails;

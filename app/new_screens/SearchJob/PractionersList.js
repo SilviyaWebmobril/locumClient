@@ -5,15 +5,18 @@ import {useDispatch ,useSelector}  from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import {getJobAppliedList,acceptApplication} from '../redux/stores/actions/search_job_action';
-import { checkuserAuthentication} from '../redux/stores/actions/auth_action';
+import { checkuserAuthentication,logoutUser} from '../redux/stores/actions/auth_action';
 import NetInfo from '@react-native-community/netinfo';
 import ApiUrl from '../Globals/ApiUrl';
-
-
+import {
+	StackActions, NavigationActions
+} from 'react-navigation';
+import {showMessage } from '../Globals/Globals';
 
 const PractionersList = (props) => { 
 
-    const user_id = useSelector(state => state.register.user.id);
+	const user_id = useSelector(state => state.register.user.id);
+	const device_token  = useSelector(state => state.auth.device_token)
 	const practioners_list = useSelector(state => state.search_job.applied_users);
 	console.log("list",practioners_list);
     const loading_status = useSelector(state =>state.register.loading_status);
@@ -24,15 +27,52 @@ const PractionersList = (props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        
-        dispatch(getJobAppliedList(user_id, job_id[0]));
+		
+		dispatch(checkuserAuthentication(user_id,device_token))
+			.then(response => {
+				if(response.data.error){
+					showMessage(0, 'Session Expired! Please Login.', 'Practitioners List', true, false);
+					dispatch(logoutUser())
+                    props.navigation.navigate("Login");
+                   
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Login',
+                        actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                    });
+                    props.navigation.dispatch(resetAction);
+				}else{
+					dispatch(getJobAppliedList(user_id, job_id[0]));
+				}
+			})
+       
         return () => {
             //cleanup
         }
     }, []);
 
     const fetchAgain = () => {
-        dispatch(getJobAppliedList(user_id, job_id[0]));
+
+		dispatch(checkuserAuthentication(user_id,device_token))
+			.then(response => {
+				if(response.data.error){
+
+					showMessage(0, 'Session Expired! Please Login.', 'Practitioners List', true, false);
+					dispatch(logoutUser())
+                    props.navigation.navigate("Login");
+                   
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Login',
+                        actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                    });
+                    props.navigation.dispatch(resetAction);
+				}else{
+					dispatch(getJobAppliedList(user_id, job_id[0]));
+				}
+			})
+       
+       
     }
  
 
@@ -45,52 +85,26 @@ const PractionersList = (props) => {
 				return;
 			} else {
 
-				dispatch(checkuserAuthentication);
-				if(authenticated){
+				dispatch(checkuserAuthentication(user_id,device_token))
+				.then(response => {
+					if(response.data.error){
 
-					dispatch(acceptApplication(id, 1))
-				}
+						showMessage(0, 'Session Expired! Please Login.', 'Practitioners List', true, false);
+						dispatch(logoutUser())
+						props.navigation.navigate("Login");
+					
+						const resetAction = StackActions.reset({
+							index: 0,
+							key: 'Login',
+							actions: [NavigationActions.navigate({ routeName: 'Login' })],
+						});
+						props.navigation.dispatch(resetAction);
+					}else{
+						dispatch(acceptApplication(id, 1,props.navigation,1))
+					}
+				})
 
-				// var body = new FormData();
-				// //body.append('userid', this.state.id);
-				// body.append('application_id', id);
-				// body.append("application_status", "1");
-
-
-				// fetch('http://webmobril.org/dev/locum/api/accept_application', {
-				// 	method: 'POST',
-				// 	headers: {
-				// 		'Accept': 'application/json',
-				// 		'Content-Type': 'multipart/form-data',
-				// 	},
-				// 	body: body
-
-				// }).then((response) => response.json())
-				// 	.then((responseJson) => {
-				// 		//this.setState({ loading_status: false })
-
-				// 		//	ToastAndroid.show(JSON.stringify(responseJson),ToastAndroid.LONG)
-
-				// 		if (responseJson.status === 'success') {
-
-				// 			showMessage(0, "Accepted Successfully", "Practitioner", true, false);
-				// 			//this.fetch()
-
-				// 		}
-
-
-				// 		else {
-				// 			showMessage(0, JSON.stringify(responseJson.message), "Practitioner", true, false);
-
-				// 		}
-
-				// 	}
-				// 	).catch((error) => {
-				// 		console.error(error);
-				// 	});
-
-
-
+				
 			}
 		});
 
@@ -105,55 +119,28 @@ const PractionersList = (props) => {
 				return;
 			} else {
 
-				dispatch(checkuserAuthentication);
-				if(authenticated){
+				dispatch(checkuserAuthentication(user_id,device_token))
+				.then(response => {
+					if(response.data.error){
 
-					dispatch(acceptApplication(id, 2))
-				}
+						showMessage(0, 'Session Expired! Please Login.', 'Practitioners List', true, false);
+						dispatch(logoutUser())
+						props.navigation.navigate("Login");
+					
+						const resetAction = StackActions.reset({
+							index: 0,
+							key: 'Login',
+							actions: [NavigationActions.navigate({ routeName: 'Login' })],
+						});
+						props.navigation.dispatch(resetAction);
+					}else{
+						// last parameter to check passing from list or details , to refresh the UI =  1 , 
+						dispatch(acceptApplication(id, 2,props.navigation,1))
+					}
+				})
 
-
-				// var body = new FormData();
-				// //body.append('userid', this.state.id);
-				// body.append('application_id', id);
-				// body.append("application_status", "2");
-
-
-				// fetch('http://webmobril.org/dev/locum/api/accept_application', {
-				// 	method: 'POST',
-				// 	headers: {
-				// 		'Accept': 'application/json',
-				// 		'Content-Type': 'multipart/form-data',
-				// 	},
-				// 	body: body
-
-				// }).then((response) => response.json())
-				// 	.then((responseJson) => {
-				// 		//this.setState({ loading_status: false })
-
-				// 		//	ToastAndroid.show(JSON.stringify(responseJson),ToastAndroid.LONG)
-
-				// 		if (responseJson.status === 'success') {
-				// 			// this.setState({
-				// 			// 	jobs: this.state.jobs.filter((_item) => _item.key !== prac_id)
-				// 			// });
-				// 			showMessage(0, "Removed Successfully ", "Practitioner", true, false);
-
-				// 			//this.fetch()
-
-				// 		}
-
-
-				// 		else {
-				// 			showMessage(0, JSON.stringify(responseJson.message), "Practitioner", true, false);
-
-				// 		}
-
-				// 	}
-				// 	).catch((error) => {
-				// 		console.error(error);
-				// 	});
-
-
+				
+				
 			}
 		});
 
@@ -220,7 +207,8 @@ const PractionersList = (props) => {
         result["image"] = item.user_name.user_image
         result["degree"] = item.user_name.degree
         result['application_status'] = item.application_status
-        result["appid"] = item.id //application_id
+		result["appid"] = item.id //application_id
+		result['fetch'] = 1 // to function fectch again
 
         props.navigation.navigate('PractitionersDetails', { result: result, fetch: fetchAgain });
 
