@@ -7,11 +7,16 @@ import {userDevicetoken,fetchJobCategories} from '../redux/stores/actions/regist
 import {
 	StackActions, NavigationActions
 } from 'react-navigation';
+import { showMessage } from '../Globals/Globals';
 
 
 const HomeScreen =(props)  => {
 
     const token = useSelector(state => state.auth.device_token);
+    const post_available =  useSelector(state => state.register.user.jobs_remaining)
+    const wallet_balance =  useSelector(state => state.register.user.wallet_balance)
+    console.log("wallet_balance",wallet_balance);
+    console.log("post _avail",post_available);
     const dispatch =  useDispatch();
    
     const  onTokenRefreshListener =()=>  firebase.messaging().onTokenRefresh(fcmToken => {
@@ -187,7 +192,16 @@ const HomeScreen =(props)  => {
                
            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
 							<Card containerStyle={{flex:1.5 ,height:null}}>
-								<TouchableOpacity onPress={() => props.navigation.navigate("SearchJob")}>
+								<TouchableOpacity onPress={() => {
+                                    if(post_available == 0 && wallet_balance == 0){
+
+                                        showMessage(0,"Please add money and buy packages to post a new job.", 'Profile', true, false);
+
+                                    }else{
+                                        props.navigation.navigate("SearchJob")
+                                    }
+                                  
+                                    }}>
 									<View style={{ justifyContent: 'center', alignItems: 'center' }}>
 										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/1.png')} />
 										<Text style={{fontFamily:"Roboto-Light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Add Post</Text>

@@ -5,7 +5,7 @@ import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import { TextField } from 'react-native-material-textfield';
 import NetInfo from "@react-native-community/netinfo";
 import { Dropdown } from 'react-native-material-dropdown';
-import {fetchJobCategories,fetchGrades,fetchSpecialities,submitEditProfile,getStatesList,getCitiesList} from '../redux/stores/actions/register_user';
+import {fetchBusinessTypes,fetchGrades,fetchSpecialities,submitEditProfile,getStatesList,getCitiesList} from '../redux/stores/actions/register_user';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import Geocoder from 'react-native-geocoding';
 import {showMessage} from '../Globals/Globals';
@@ -16,9 +16,9 @@ const EditProfile = (props) => {
 
     const user = useSelector(state => state.register.user);
     const device_token  = useSelector(state => state.auth.device_token)
-    const [profession_id ,setProfessionId ] = useState(user.profile_id);
+    const [profession_id ,setProfessionId ] = useState(user.bussiness_type_id);
     const [profession_label ,setProfessionLabel ] = useState("");
-    const [speciality_id ,setSpecialityId ] = useState(user.speciality_id);
+    const [speciality_id ,setSpecialityId ] = useState("");
     const [speciality_label ,setSpecialityLabel ] = useState("");
     const [ic_no ,setIcNo ] = useState(user.owner_ic_no); // owner ic no
     const [degree ,setDegree ] = useState(user.degree);
@@ -27,11 +27,13 @@ const EditProfile = (props) => {
     const [address ,setAddress ] = useState(user.address);
     const [current_work ,setCurrentWork ] = useState(user.current_work);
     const [description ,setDescription ] = useState(user.description);
-    const [license ,setLicense ] = useState(user.license);
+    const [license ,setLicense ] = useState("");
     const grades  =  useSelector(state => state.register.grades);
-    const [grades_id,setGrade] = useState(user.grade);
+    const [grades_id,setGrade] = useState("");
     const [grades_label,setGradeLabel] = useState("");
-    const profession_categories =  useSelector(state => state.register.profession_categories);
+
+    // business type
+    const profession_categories =  useSelector(state => state.register.business_type);
     const specialities  = useSelector(state => state.register.specialities);
 
     const [med_pc_id , setMedPcId] = useState(user.med_pc_id);
@@ -70,78 +72,89 @@ const EditProfile = (props) => {
                 props.navigation.navigate("NoNetwork");
                 return;
             }else{
-                dispatch(fetchJobCategories())
+
+                dispatch(fetchBusinessTypes())
                     .then(response => {
 
                         if(response ==  1){
-                            console.log("hello response is ",response);
+
                             profession_categories.forEach(element => {
 
                                 if(element.value  == profession_id){
                                     
                                     setProfessionLabel(element.label);
+                                    dispatch(getStatesList())
+                                    .then(response => {
+                                        if(response ==  1){
+
+                                            get_states_list.map(element => {
+            
+                                                if(element.value == state_id){
+                                                    setStateLabel(element.label);
+                                                    dispatch(getCitiesList(state_id))
+                                                        .then(response => {
+
+                                                            if(response ==  1){
+                                                                get_cities_list.forEach(ele => {
+
+                                                                    if(ele.value  == city_id){
+                                                        
+                                                                        // setCityId(ele.value);
+                                                                        setCityLabel(ele.label)
+                                                                    
+                                                                    }
+                                                                });
+                                                            }else{
+                                                                setCityLabel(element.label);
+                                                            }
+
+                                                    })
+                                            
+                                                   
+                                                }
+                                            });
+
+                                            
+                                        }
+                                       
+                                    })
                                     
                                 }
                             });
-                            dispatch(fetchGrades())
-                                .then(response =>{
-                                    if(response ==  1){
 
-                                        grades.forEach(element => {
-                                            console.log("ele-- grades",element);
-                                            if(element.value == grades_id) {
-                                            
-                                                setGradeLabel(element.label)
-                                            }
-                                        });
-                                        dispatch(getStatesList())
-                                            .then(response => {
-                                                if(response ==  1){
-                                                    get_states_list.map(element => {
-                    
-                                                        if(element.value == state_id){
-                                                            setStateLabel(element.label);
-                                                           
-                                                        }
-                                                    });
-                                                    dispatch(fetchSpecialities(profession_id))
-                                                        .then(response =>{
-
-                                                            if(response == 1 ){
-                                                                specialities.forEach(ele => {
-
-                                                                    if(ele.value  == speciality_id){
-                                                                       
-                                                                        setSpecialityLabel(ele.label)
-                                                                    }
-                                                                });
-                                                                dispatch(getCitiesList(state_id))
-                                                                    .then(response => {
-
-                                                                        if(response ==  1){
-                                                                            get_cities_list.forEach(ele => {
-
-                                                                                if(ele.value  == city_id){
-                                                                    
-                                                                                    // setCityId(ele.value);
-                                                                                    setCityLabel(ele.label)
-                                                                                   
-                                                                                }
-                                                                            });
-                                                                        }else{
-                                                                            setCityLabel(state_label);
-                                                                        }
-
-                                                                    })
-                                                            }
-                                                        })
-                                                }
-                                               
-                                            })
-                                    }
-                                })
                         }
+                      
+
                     })
+                // dispatch(fetchJobCategories())
+                //     .then(response => {
+
+                //         if(response ==  1){
+                //             console.log("hello response is ",response);
+                //             profession_categories.forEach(element => {
+
+                //                 if(element.value  == profession_id){
+                                    
+                //                     setProfessionLabel(element.label);
+                                    
+                //                 }
+                //             });
+                //             dispatch(fetchGrades())
+                //                 .then(response =>{
+                //                     if(response ==  1){
+
+                //                         grades.forEach(element => {
+                //                             console.log("ele-- grades",element);
+                //                             if(element.value == grades_id) {
+                                            
+                //                                 setGradeLabel(element.label)
+                //                             }
+                //                         });
+                                       
+                //                     }
+                //                 })
+                //         }
+                //     })
                 
             }
         });
@@ -151,56 +164,56 @@ const EditProfile = (props) => {
     },[setProfessionId]);
 
 
-    const onProfessionChangeListener = (id) => {
+    // const onProfessionChangeListener = (id) => {
 
-        profession_categories.forEach(element => {
+    //     profession_categories.forEach(element => {
 
-            if(element.value  === id){
+    //         if(element.value  === id){
                 
-                setProfessionId(element.value);
-                setProfessionLabel(element.label);
+    //             setProfessionId(element.value);
+    //             setProfessionLabel(element.label);
                 
-                NetInfo.isConnected.fetch().then(isConnected => {
+    //             // NetInfo.isConnected.fetch().then(isConnected => {
 
-                    if(!isConnected){
-                        props.navigation.navigate("NoNetwork");
-                        return;
-                    }else{
-                        setSpecialityLabel("");
-                        setSpecialityId("");
-                        dispatch(fetchSpecialities(id));
-                    }
-                });
+    //             //     if(!isConnected){
+    //             //         props.navigation.navigate("NoNetwork");
+    //             //         return;
+    //             //     }else{
+    //             //         setSpecialityLabel("");
+    //             //         setSpecialityId("");
+    //             //         dispatch(fetchSpecialities(id));
+    //             //     }
+    //             // });
              
-            }
-        });
+    //         }
+    //     });
 
         
-    }
+    // }
 
     
 
-    const onSpecialityChangeListener = (id) => {
+    // const onSpecialityChangeListener = (id) => {
 
-        specialities.forEach(ele => {
+    //     specialities.forEach(ele => {
 
-            if(ele.value  == id){
+    //         if(ele.value  == id){
 
-                setSpecialityId(id);
-                setSpecialityLabel(ele.label)
-            }
-        })
-    }
+    //             setSpecialityId(id);
+    //             setSpecialityLabel(ele.label)
+    //         }
+    //     })
+    // }
 
-    const onGradeChangeListener = (id) => {
+    // const onGradeChangeListener = (id) => {
 
-        grades.forEach(element => {
-            if(element.value == id) {
-                setGrade(id);
-                setGradeLabel(element.label)
-            }
-        })
-    }
+    //     grades.forEach(element => {
+    //         if(element.value == id) {
+    //             setGrade(id);
+    //             setGradeLabel(element.label)
+    //         }
+    //     })
+    // }
 
     const onStateChangeListener = (id) => {
         
@@ -268,36 +281,74 @@ const EditProfile = (props) => {
 
 			return false
 		}
-		else if (speciality_id.length === 0) {
+		// else if (speciality_id.length === 0) {
 
-			showMessage(0, 'Enter your specialities', 'Profile', true, false);
+		// 	showMessage(0, 'Enter your specialities', 'Profile', true, false);
 
-			return false
-		}
-		else if (grades_id.length === 0) {
+		// 	return false
+		// }
+		// else if (grades_id.length === 0) {
 
-			showMessage(0, 'Enter your grades', 'Profile', true, false);
+		// 	showMessage(0, 'Enter your grades', 'Profile', true, false);
 
-			return false
-		}
+		// 	return false
+		// }
 		// else if (degree.length === 0) {
 
 		// 	showMessage(0, 'Enter  your degree', 'Profile', true, false);
 
 		// 	return false;
+        // }
+        else if (state_id == "") {
+
+			showMessage(0, 'Please Select State', 'Profile', true, false);
+
+			return false;
+		}
+
+		else if (street1.length === 0) {
+
+			showMessage(0, 'Enter  Street 1', 'Profile', true, false);
+
+			return false;
+        }
+
+        else if (street2.length === 0) {
+
+			showMessage(0, 'Enter  Street 2', 'Profile', true, false);
+
+			return false;
+        }
+
+        else if (post_code == "") {
+
+			showMessage(0, 'Please enter postcode', 'Profile', true, false);
+
+			return false;
+        }
+        
+        else if (year_of_operation == "") {
+
+			showMessage(0, 'Please enter year of operation', 'Profile', true, false);
+
+			return false;
+        }
+        else if (owner_name == "") {
+
+			showMessage(0, 'Please enter Owner Name', 'Profile', true, false);
+
+			return false;
+		}
+
+
+
+
+		// else if (license.toString().trim().length === 0) {
+
+		// 	showMessage(0, 'Enter your license number', 'Profile', true, false);
+
+		// 	return false;
 		// }
-		else if (user_address.length === 0) {
-
-			showMessage(0, 'Enter  your Adrress', 'Profile', true, false);
-
-			return false;
-		}
-		else if (license.toString().trim().length === 0) {
-
-			showMessage(0, 'Enter your license number', 'Profile', true, false);
-
-			return false;
-		}
 		else if (ic_no.toString().trim().length === 0) {
 
 			showMessage(0, 'Enter your IC number', 'Profile', true, false);
@@ -589,7 +640,7 @@ const EditProfile = (props) => {
 
                 />
 
-                <TextField
+                {/* <TextField
                     labelPadding={0}
                     labelHeight={15}
                     fontSize={14}
@@ -598,7 +649,7 @@ const EditProfile = (props) => {
                     value={license}
                     editable={false}
                     onChangeText={(license) => setLicense(license)}
-                />
+                /> */}
                  <TextField
                     labelPadding={0}
                     labelHeight={15}

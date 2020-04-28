@@ -224,7 +224,7 @@ const UploadDocuments = (props) => {
                                     containerStyle={styles.buttonBox}>
                                      {file_name_one == "" 
                                      ?
-                                        <Text style={styles.buttonBoxText}> File Upload 1</Text>
+                                        <Text style={styles.buttonBoxText}>Upload IC Document</Text>
                                      :      
                                         <Text style={styles.buttonBoxText}>{file_name_one}</Text>
                                      }   
@@ -246,7 +246,7 @@ const UploadDocuments = (props) => {
                                     containerStyle={styles.buttonBox}>
                                      {file_name_two == "" 
                                      ?
-                                        <Text style={styles.buttonBoxText}> File Upload 2</Text>
+                                        <Text style={styles.buttonBoxText}>Upload APC Document</Text>
                                      :      
                                         <Text style={styles.buttonBoxText}>{file_name_two}</Text>
                                      }   
@@ -273,7 +273,7 @@ const UploadDocuments = (props) => {
                                         containerStyle={styles.buttonBox}>
                                         {file_name_three == "" 
                                         ?
-                                            <Text style={styles.buttonBoxText}> File Upload 3</Text>
+                                            <Text style={styles.buttonBoxText}>Upload Other Document</Text>
                                         :      
                                             <Text style={styles.buttonBoxText}>{file_name_three}</Text>
                                         }   
@@ -294,7 +294,7 @@ const UploadDocuments = (props) => {
                                     containerStyle={styles.buttonBox}>
                                     {file_name_four == "" 
                                     ?
-                                        <Text style={styles.buttonBoxText}> File Upload 4</Text>
+                                        <Text style={styles.buttonBoxText}>Upload Other Document</Text>
                                     :      
                                         <Text style={styles.buttonBoxText}>{file_name_four}</Text>
                                     }   

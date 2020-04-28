@@ -350,7 +350,7 @@ export default  (state = initialState ,action) => {
                 address :address,
                 degree : degree,
                 mobile : mobile,
-                profile_id : user_data1.profession.id,
+                bussiness_type_id : user_data1.bussiness_type.id,
                 speciality_id :user_data1.speciality,
                 hourly_rate: hourly_rate,
                 monthly_rate : monthly_rate,

@@ -529,7 +529,7 @@ return dispatch => {
     formData.append("city",city_id);
     formData.append('latitude', lat);
     formData.append('longitude', lng);
-    formData.append('profession', profession_id);
+    formData.append('bussiness_type', profession_id);
     formData.append('mobile', mobile);
     //formData.append('degree', degree)
     formData.append('owner_ic_no', ic_no); // owner_ic_no

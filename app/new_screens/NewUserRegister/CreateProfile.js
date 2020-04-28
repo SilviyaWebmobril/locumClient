@@ -215,6 +215,13 @@ const CreateProfile = (props,navigation) => {
 		// 	return false;
         // }
         
+        else if (state_id == "") {
+
+			showMessage(0, 'Please Select State', 'Profile', true, false);
+
+			return false;
+		}
+
         
 		else if (street1.length === 0) {
 
@@ -266,13 +273,7 @@ const CreateProfile = (props,navigation) => {
         }
         
          
-        else if (state_id == "") {
-
-			showMessage(0, 'Please Select State', 'Profile', true, false);
-
-			return false;
-		}
-
+      
 
         // else if (city_id == "") {
 
