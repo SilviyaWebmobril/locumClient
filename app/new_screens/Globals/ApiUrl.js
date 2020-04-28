@@ -12,6 +12,8 @@ export default  {
 
     get_city : 'city',
 
+    clinic_types : 'clinic_types',
+
     get_job_categories : "get_job_categories",
 
     grades_list:"grades_list",
@@ -20,9 +22,14 @@ export default  {
 
     update_profile_pic : "update_profile_pic",
 
-    create_profile : "update_pro_profile",
+    // not using this
+   /// create_profile : "update_pro_profile",
+   create_profile : "update_clinic_profile",
 
-    edit_profile : 'edit_profile_pro',
+   // not using this
+   // edit_profile : 'edit_profile_pro',
+    edit_profile : 'edit_profile_clinic',
+
     upload_documents :"upload_documents",
 
     check_token : "checktoken",
@@ -30,9 +37,15 @@ export default  {
     post_job : "post_job" ,
     //search_job :"search_job",
 
+    edit_job_post : "edit_job_post",
+
     buy_package : "get_package",
 
+    // not using this api
     apply_coupons :"apply_promo",
+
+    // using this one
+    apply_promo_new :"apply_promo_new",
     
     transaction_history : "my_purchased_packages",
 
@@ -56,5 +69,9 @@ export default  {
 
     // accept or reject  // 1-accept ot 2-reject
     accept_application : "accept_application",
+
+    cancel_job_posting : "cancel_posting",
+
+    job_detail : "job_detail" ,
 
 }

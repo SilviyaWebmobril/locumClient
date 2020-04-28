@@ -84,13 +84,13 @@ const TransactionList  = () => {
                                 </View>
                                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                                     <Text style={{ fontFamily:'roboto-bold', alignSelf: "flex-end", fontSize: 15,color:"grey" }}>Package Price</Text>
-                                    <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>$ {item.package.amt}</Text>
+                                    <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>MYR  {item.package.amt}</Text>
                                 </View>
 
                                 <View style={{ width: "100%", height: 1, backgroundColor: "#808080", marginBottom: 5 }}></View>
                                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
                                     <Text style={{ fontFamily:'roboto-light', alignSelf: "flex-end", fontSize: 15, color: 'grey', fontWeight: "bold" }}>Total</Text>
-                                    <Text style={{ fontFamily:'roboto-light', color: 'grey', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>$ {item.package.amt}</Text>
+                                    <Text style={{ fontFamily:'roboto-light', color: 'grey', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>MYR  {item.package.amt}</Text>
                                 </View>
                                 {item.coupon !== null 
                                 ?
@@ -98,7 +98,7 @@ const TransactionList  = () => {
                                         ?
                                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                                             <Text style={{ fontFamily:'roboto-light', alignSelf: "flex-end", fontSize: 15, color: 'grey', }}>Coupon ({item.coupon.name})</Text>
-                                            <Text style={{ fontFamily:'roboto-light', color: 'grey', alignSelf: "flex-end",  fontSize: 15 }}> -$ {item.coupon.price}</Text>
+                                            <Text style={{ fontFamily:'roboto-light', color: 'grey', alignSelf: "flex-end",  fontSize: 15 }}> -MYR  {item.coupon.price}</Text>
                                         </View>
                                         :
                                         <View/>
@@ -110,7 +110,7 @@ const TransactionList  = () => {
                                 
                                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                                     <Text style={{ fontFamily:'roboto-light', alignSelf: "flex-end", fontSize: 15, color: 'black',  }}>Paid By Wallet</Text>
-                                    <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.purchased_using == 2 ? '$ 0' : '$ '+item.amt}</Text>
+                                    <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', alignSelf: "flex-end", fontWeight: "bold", fontSize: 15 }}>{item.purchased_using == 2 ? 'MYR  0' : 'MYR  '+item.amt}</Text>
                                 </View>
                                 
 

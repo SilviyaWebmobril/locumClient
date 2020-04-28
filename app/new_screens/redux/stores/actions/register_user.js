@@ -13,7 +13,9 @@ import {REGISTER_USER_RESPONSE,
     JOB_CATEGORIES,
     GET_CITIES,
     GET_STATES,
-    HIDE_SPINNER} from '../../type';
+    HIDE_SPINNER,
+    BUSINESS_TYPES,
+    UPDATE_WALLET_BALANCE} from '../../type';
 import axios from 'axios';
 import ApiUrl from '../../../Globals/ApiUrl';
 import { showMessage } from '../../../Globals/Globals';
@@ -54,6 +56,8 @@ export const getStatesList = () => (dispatch) =>
                     })
                 }
 
+                console.log("i ansjdbdhb")
+
                 resolve(1);
                
             })
@@ -86,6 +90,7 @@ export const getCitiesList = (state_id) => (dispatch) =>
         axios.get(ApiUrl.base_url+ApiUrl.get_city+"?state_id="+state_id)
             .then(response => {
 
+                console.log("resonse on cities",response.data);
                 if(!response.data.error){
 
                     let city_list =[] ;
@@ -101,14 +106,21 @@ export const getCitiesList = (state_id) => (dispatch) =>
                     dispatch({
                         type:GET_CITIES,
                         cities: city_list
-                    })
+                    });
+
+                    if(response.data.data.length > 0){
+                      //  console.log("length",response.data.data.length)
+                        resolve(1)
+                    }else{
+                        resolve(0)
+                    }
     
                 }else{
                     dispatch( {
                         type:RESPONSE_ERROR,
                     })
                 }
-                resolve(1)
+                
                
             })
             .catch(error => {
@@ -197,6 +209,60 @@ export const userRegister  = (name,email,mobile,password,navigation) => {
 
     
 }
+
+export const fetchBusinessTypes =  () => (dispatch) => 
+
+    new Promise(function(resolve){
+
+
+        dispatch({
+            type:SHOW_LOADING,
+        });
+
+        axios.post(ApiUrl.base_url+ApiUrl.clinic_types)
+            .then(response => {
+
+
+                if(response.data.status === 'success'){
+
+                    console.log("BUSINESS_TYPES",response.data)
+
+                    let business_type =[] ;
+                    let new_obj;
+                   response.data.result.forEach(element => {
+
+                    new_obj = Object.assign({}, {label:element.name,value :element.id });
+                    business_type.push(new_obj);
+                       
+                   });
+                   
+                    dispatch({
+                        type:BUSINESS_TYPES,
+                        business_type:business_type
+                    })
+                    resolve(1);
+                }else{
+                    dispatch({
+                         type:RESPONSE_ERROR,
+                    })
+                }
+
+               
+
+            })
+            .catch(error => {
+
+                dispatch({
+                    type:RESPONSE_ERROR,
+               })
+                showMessage(0,'Something went wrong. Please try again later !', 'Create Profile', true, false);
+            })
+
+
+
+
+    })
+
 
 export const fetchJobCategories =  () => (dispatch) => 
 
@@ -359,7 +425,7 @@ export const fetchSpecialities =  (profession_id) => (dispatch) =>
     })
 
 export const submitCreateProfile1 = (user_id,name,profession_val,mobile,ic_no,specialities_val,license,grades_val,
-    address,description,lat,long,state_id,city_id,navigation) => {
+    street1,street2,post_code,year_of_operation,med_pc_id,roc_no,owner_name,description,lat,long,state_id,city_id,navigation) => {
 
     return dispatch => {
 
@@ -375,10 +441,10 @@ export const submitCreateProfile1 = (user_id,name,profession_val,mobile,ic_no,sp
         formData.append("city",city_id);
         formData.append('latitude', lat);
         formData.append('longitude', long);
-        formData.append('profession', profession_val);
+        formData.append('bussiness_type', profession_val);
         formData.append('mobile', mobile);
         //formData.append('degree', degree)
-        formData.append('ic_no', ic_no);
+        formData.append('owner_ic_no', ic_no);
         formData.append('speciality', specialities_val);
         formData.append('license', license);
         formData.append('grade', grades_val)
@@ -387,16 +453,23 @@ export const submitCreateProfile1 = (user_id,name,profession_val,mobile,ic_no,sp
 
         //new
 
-        formData.append('address', address);
+        formData.append('location', "");
         //formData.append('current_work', current_work);
-        formData.append('description', description)
+        formData.append('description', description);
+        formData.append("street_1",street1);
+        formData.append("street_2",street2);
+        formData.append("directors_name",owner_name);
+        formData.append("post_code",post_code);
+        formData.append("year_of_operation",year_of_operation);
+        formData.append("med_pc_id",med_pc_id);
+        formData.append("roc_no",roc_no);
          
         console.log("form data...",formData);
          
         axios.post(ApiUrl.base_url + ApiUrl.create_profile,formData,)
         .then(response => {
   
-           
+           console.log("response on create ", response.data.result)
           if(response.data.status === "success" ){
   
               
@@ -420,6 +493,7 @@ export const submitCreateProfile1 = (user_id,name,profession_val,mobile,ic_no,sp
        
         }).catch(error => {
   
+            console.log("error...",error);
           showMessage(0,'Something went wrong. Please try again later !', 'Create Profile', true, false);
   
           dispatch( {
@@ -434,8 +508,11 @@ export const submitCreateProfile1 = (user_id,name,profession_val,mobile,ic_no,sp
 
 }
 
-export const submitEditProfile = (user_id,name,profession_id,mobile,ic_no,speciality_id,license,grades_id,
-    user_address,description,lat ,lng,state_id, city_id,weekly_rate,monthly_rate,hourly_rate,navigation) => {
+// add street1 , street2
+export const submitEditProfile = (user_id,name,profession_id,speciality_id,grades_id,
+    mobile,state_id,city_id,street1,street2,post_code,year_of_operation,med_pc_id,roc_no,license,owner_name,ic_no,
+description,lat ,lng,weekly_rate,monthly_rate,hourly_rate,
+    navigation) => {
 
 return dispatch => {
 
@@ -455,7 +532,7 @@ return dispatch => {
     formData.append('profession', profession_id);
     formData.append('mobile', mobile);
     //formData.append('degree', degree)
-    formData.append('ic_no', ic_no);
+    formData.append('owner_ic_no', ic_no); // owner_ic_no
     formData.append('speciality', speciality_id);
     formData.append("weekly_rate",weekly_rate);
     formData.append("hourly_rate",hourly_rate);
@@ -468,9 +545,16 @@ return dispatch => {
 
     //new
 
-    formData.append('location', user_address);
+    //formData.append('location', user_address);
     //formData.append('current_work', current_work);
-    formData.append('description', description)
+    formData.append("street_1",street1);
+    formData.append("street_2",street2);
+    formData.append('description', description);
+    // formData.append("med_pc_id",med_pc_id);
+    // formData.append("roc_no",roc_no);
+    formData.append("directors_name",owner_name);
+    formData.append("post_code",post_code);
+    formData.append("year_of_operation",year_of_operation);
      
     console.log("form data...",formData);
      
@@ -774,6 +858,13 @@ export const uploadProfilePic = (user_id,picUri ,picName) => {
 
  }
 
+ export const updateWalletBalance = (bal) => {
+
+    return {
+        type:UPDATE_WALLET_BALANCE,
+        wallet_balance : bal
+    }
+}
 
  export const showSpinner = () => {
 

@@ -74,7 +74,7 @@ const Wallet = (props) => {
                                         <Text style={{ fontFamily:'Roboto-Light', fontSize: 15, color: 'black', fontWeight: 'bold' }}>Date : {item.created_at.split(" ")[0]}</Text>
 
 
-                                        <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', fontSize: 15 }}>${item.amt}</Text>
+                                        <Text style={{ fontFamily:'roboto-light', color: '#4C74E6', fontSize: 15 }}>MYR {item.amt}</Text>
                                     </View>
                                 </Card>
                             </View>

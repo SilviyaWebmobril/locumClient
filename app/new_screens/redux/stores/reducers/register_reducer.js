@@ -16,6 +16,7 @@ const initialState = {
     device_token:null,
     states_list:[],
     cities_list:[],
+    business_type : []
 
 }
 
@@ -78,6 +79,16 @@ export default  (state = initialState ,action) => {
                 specialities:fetch_specialities,
                 loading_status:false
             }
+        case ActionTypes.BUSINESS_TYPES :
+
+            let business_type ;
+            business_type = [...action.business_type];
+            
+            return {
+                ...state,
+                business_type:business_type,
+                loading_status:false
+            }
         case ActionTypes.CREATE_PROFILE :
             let user_data1 = action.result_user;
             let exist_user_data = {...state.user};
@@ -85,7 +96,8 @@ export default  (state = initialState ,action) => {
            let name , email , address, degree , mobile ,hourly_rate, weekly_rate, monthly_rate,daily_rate, grade , longitude,
            latitude ,city_id,state_id,location_preference,preference_one_city,preference_one_state,preference_two_city,preference_two_state,
            experience,userdoc_1,userdoc_2,userdoc_3,userdoc_4,user_image ,license,ic_no, current_work,wallet_balance,jobs_remaining,
-           email_verify,description,document_upload_status, profile_upload_status;
+           email_verify,description,document_upload_status, profile_upload_status,street1,street2,
+           med_pc_id,roc_no,directors_name,owner_ic_no,post_code,year_of_operation;
            if(user_data1.name !== null){
                name = user_data1.name;
            }else{
@@ -238,8 +250,8 @@ export default  (state = initialState ,action) => {
                 license = "";
             }
 
-            if(user_data1.ic_no !== null){
-                ic_no =user_data1.ic_no;
+            if(user_data1.owner_ic_no !== null){
+                ic_no =user_data1.owner_ic_no;
             }else{
                 ic_no = "";
             }
@@ -282,6 +294,54 @@ export default  (state = initialState ,action) => {
             }else{
                 profile_upload_status = "";
             }
+
+            if(user_data1.med_pc_id !== null){
+                med_pc_id = user_data1.med_pc_id;
+            }else{
+                med_pc_id = "";
+            }
+            
+            if(user_data1.roc_no !== null){
+                roc_no = user_data1.roc_no;
+            }else{
+                user_data1.roc_no = "";
+            }
+
+            if(user_data1.directors_name !== null){
+                directors_name = user_data1.directors_name;
+            }else{
+                directors_name = "";
+            }
+
+            if(user_data1.owner_ic_no !== null){
+                owner_ic_no =  user_data1.owner_ic_no;
+            }else{
+                owner_ic_no = "";
+            }
+
+            if(user_data1.post_code !== null){
+                post_code = user_data1.post_code;
+            }else{
+                post_code = "";
+            }
+
+            if(user_data1.year_of_operation !== null){
+                year_of_operation = user_data1.year_of_operation;
+            }else{
+                year_of_operation = "";
+            }
+
+            if(user_data1.street_2 !== null){
+                street2 = user_data1.street_2;
+            }else{
+                street2 = "";
+            }
+            if(user_data1.street_1 !== null){
+                street1 = user_data1.street_1;
+            }else{
+                street1 = "";
+            }
+
             Object.assign(exist_user_data ,{
 
                 id : user_data1.id,
@@ -324,7 +384,15 @@ export default  (state = initialState ,action) => {
                 status : user_data1.status,
                 description : description,
                 document_upload_status : document_upload_status,
-                profile_upload_status : profile_upload_status
+                profile_upload_status : profile_upload_status,
+                med_pc_id : med_pc_id,
+                roc_no : roc_no,
+                year_of_operation : year_of_operation,
+                directors_name : directors_name,
+                owner_ic_no :owner_ic_no,
+                post_code:post_code,
+                street1 : street1,
+                street2: street2
                 
             });
             console.log("user data exist", exist_user_data);
@@ -371,6 +439,15 @@ export default  (state = initialState ,action) => {
                 ...state,
                 user :{...user_ex}
             }}
+        case ActionTypes.UPDATE_WALLET_BALANCE :
+            { let user_ex = {...state.user};
+                let last_amt = user_ex.wallet_balance;
+                user_ex.wallet_balance = parseFloat(last_amt) + parseFloat(action.wallet_balance);
+            
+                return {
+                    ...state,
+                    user :{...user_ex}
+                }}
         case ActionTypes.GET_STATES :
         
             return {

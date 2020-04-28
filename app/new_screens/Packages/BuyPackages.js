@@ -44,7 +44,7 @@ const BuyPackages = (props) => {
           }
           console.log("obj",obj);
           setChosenPackagePrice(amount);
-          props.navigation.navigate("ApplyCoupon", {result:{...obj},checkcouponvalidity: checkcoupoun }) 
+          props.navigation.navigate("ApplyCoupon", {result:{...obj}}) 
         //   const resetAction = StackActions.reset({
         //     index: 0,
         //     key: 'ApplyCoupon',
@@ -122,7 +122,7 @@ const BuyPackages = (props) => {
       
                       console.log("wallet",user.wallet_balance);
                       if (parseFloat(user.wallet_balance) <= 0 || parseFloat(user.wallet_balance) <  parseFloat(net_price) ) {
-                        props.navigation.navigate("AddMoney", { buy_package: 1, result: obj,payAgain:buyNowHandler })
+                        props.navigation.navigate("AddMoney")
                         const resetAction = StackActions.reset({
                           index: 0,
                           key: 'AddMoney',
@@ -181,10 +181,26 @@ const BuyPackages = (props) => {
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
 
                       <Text style={{  fontFamily:'roboto-light',color: 'black', fontSize: 15, marginBottom: 5, }}>Cost </Text>
-                      <Text style={{ fontFamily:'roboto-bold', marginBottom: 5 }}> $ {item.amt}</Text>
+                      <Text style={{ fontFamily:'roboto-bold', marginBottom: 5 }}> MYR {item.amt}</Text>
                     </View>
 
-                    {applied_coupon_status
+                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                        {(item.coupons.length > 0 && item.coupons !== null) 
+                        ?
+                        <TouchableOpacity onPress={()=>applyPromoHandler(item.id, item.amt , item.jobs_count)}>
+                          <Text style={{ fontFamily:'roboto-bold', color: '#4C74E6', alignSelf: "flex-start", fontSize: 12 }}>APPLY COUPON</Text>
+                        </TouchableOpacity>
+                        :
+                        <View/>
+                        }
+                        
+                        <TouchableOpacity onPress={()=>buyNowHandler(item.id,item.amt , item.jobs_count,"")}>
+                          <Text style={{ fontFamily:'roboto-bold', color: '#4C74E6', alignSelf: "flex-end", fontSize: 12 }}>BUY NOW</Text>
+                        </TouchableOpacity>
+
+                      </View>
+
+                    {/* {applied_coupon_status
                     ?
                       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         
@@ -229,7 +245,7 @@ const BuyPackages = (props) => {
                       </View>
                      )
                     
-                    }
+                    } */}
                   
                   </Card>
                

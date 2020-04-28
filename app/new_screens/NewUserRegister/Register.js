@@ -140,18 +140,24 @@ const Register = (props) => {
                     }} />
 
 
-                <View style={{ width: Dimensions.get('window').width * 0.9,alignSelf:'center'}}>
+                <View style={{ width: Dimensions.get('window').width * 0.9,alignSelf:'center',marginTop:20}}>
 
                     <TextField
-                        style={{ width: '100%', alignSelf: "center",marginTop:10 }}
-                        label='Name'
-                        maxLength={17}
+                        labelPadding={0}
+                        labelHeight={15}
+                        fontSize={14}
+                        style={{ width: '100%', alignSelf: "center",}}
+                        label='Clinic / Hospital Name'
+                        maxLength={100}
                         value={name}
                         onChangeText={(name) => setName( name )}
                     />
 
                     <TextField
-                        style={{ width: '100%', alignSelf: "center" ,marginTop:10}}
+                        labelPadding={0}
+                        labelHeight={20}
+                        fontSize={14}
+                        style={{ width: '100%', alignSelf: "center" ,}}
                         label='Email'
                         value={email}
                         onChangeText={(email) => setEmail(email.trim())}
@@ -159,7 +165,10 @@ const Register = (props) => {
 
 
                     <TextField
-                        style={{ width: '100%', alignSelf: "center",marginTop:10 }}
+                        labelPadding={0}
+                        labelHeight={20}
+                        fontSize={14}
+                        style={{ width: '100%', alignSelf: "center", }}
                         label='Mobile no.'
                         maxLength={14}
                         keyboardType='numeric'
@@ -169,7 +178,10 @@ const Register = (props) => {
                     />
 
                     <PasswordInputText
-                        style={{ width: '100%', alignSelf: "center" ,}}
+                        labelPadding={0}
+                        
+                        fontSize={14}
+                        style={{ width: '100%', alignSelf: "center" ,marginTop:0}}
                         label='Password'
                         maxLength={25}
                         value={password}

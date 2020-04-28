@@ -15,9 +15,10 @@ import {
 	StackActions, NavigationActions
 } from 'react-navigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import {editJobPost,editPostJostDetails} from '../redux/stores/actions/search_job_action';
 import Geocoder from 'react-native-geocoding';
 
-const SearchJob = (props) => {
+const EditJobPost = (props) => {
 
 
         const  getFormattedDate = (date) => {
@@ -50,13 +51,14 @@ const SearchJob = (props) => {
      { label : 'Day', value : 2}
     ];
     const [select_hour_day ,setHourOrDay ] = useState(1)
-    const authenticated = useSelector(state => state.auth.authenticated);
+    const post_id =  useState(props.navigation.getParam('job_id'));
 
     const [description ,setDescription] = useState("");
     const [from_time , setfromTime ] = useState("");
     const [date , setDate ] = useState(getFormattedDate(new Date) );
     const [to_time , setToTime] = useState("");
 
+    const user = useSelector(state => state.register.user);
     let get_states_list = useSelector(state => state.register.states_list);
     let get_cities_list = useSelector(state => state.register.cities_list);
     const [state_id ,setStateId ] = useState("");
@@ -65,21 +67,113 @@ const SearchJob = (props) => {
     const [city_id , setCityId] = useState("");
 
     const dispatch = useDispatch();
-    const user_id = useSelector(state=>  state.auth.user_id);
+    // const user_id = useSelector(state=>  state.auth.user_id);
 
     useEffect(() => {
 
-        dispatch(fetchJobCategories());
-         // fetch state and cities
-         dispatch(getStatesList())
-         .then(response => {
-             if(response ==  1){
-                 
-             }
-             
-         })
+     
+        dispatch(editPostJostDetails(user.id,post_id))
+          .then(response => {
+
+            
+            if(response.data.status == 'success'){
+
+              let postResponse  = response.data.data;
+
+              console.log("posr Response",postResponse);
+              setDescription(postResponse.job_desc);
+              setJobScope(postResponse.job_scope);
+              setclinicRequirements(postResponse.clinic_requirement);
+              setRMhour(postResponse.rm_hour);
+              setHourOrDay(postResponse.dayorhour);
+              setDate(postResponse.required_date);
+              setfromTime(postResponse.from_time);
+              setToTime(postResponse.to_time);
+              setFullAddress(postResponse.job_location)
+
+              dispatch(fetchJobCategories())
+                .then(responseCategories => {
+
+                    let profession_id =  postResponse.profile.id;
+                    /// setting profession
+                    if(responseCategories == 1){
+                      profession_categories.map(element => {
+
+                        if(element.value ==  profession_id){
+                          setDropdownId(profession_id);
+                          setDropdownLabel(element.label)
+                        }
+                      })
+
+                      // fetch state and cities
+                      dispatch(getStatesList())
+                          .then(response => {
+                              if(response ==  1){
+                                console.log("state id",postResponse.state);
+                                  get_states_list.map(element => {
+  
+                                      if(element.value == postResponse.state.id){
+                                          setStateLabel(element.label);
+                                          setStateId(postResponse.state.id)
+                                          
+                                      }
+                                  });
+                                  dispatch(getCitiesList(postResponse.state.id))
+                                    .then(response => {
+
+                                      console.log("city list",response);
+                                        if(response ==  1){
+                                            get_cities_list.forEach(ele => {
+
+                                                if(ele.value  == postResponse.city.id){
+                                    
+                                                    // setCityId(ele.value);
+                                                    setCityLabel(ele.label)
+                                                    setCityId(ele.value)
+                                                    
+                                                }
+                                            });
+                                        }else{
+                                            setCityLabel(postResponse.state.name);
+                                        }
+
+                                    })
+                                  
+                              }
+                              
+                          })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    }
+
+                })
+
+
+            }
+
+
+          })
+          .catch(error => {
+
+            console.log("error",error);
+
+          })
+        
        
     },[]);
+
 
     const onStateChangeListener = (id) => {
         
@@ -127,6 +221,8 @@ const SearchJob = (props) => {
       }else{
           setCityLabel(state_label);
       }
+
+    
 
   }
 
@@ -191,25 +287,7 @@ const SearchJob = (props) => {
         if(parseInt(dropdown_value_id) < 1){
            
             showMessage(0,'You must select Job Profile', 'Search Job', true, false);
-            return false
-        }
-
-        else if(!state_id){
-          showMessage(0,'You must select a State', 'Search Job', true, false);
-         
-          return false
-        }
-
-        else if(!city_id){
-          showMessage(0,'You must select a City', 'Search Job', true, false);
-         
-          return false
-        }
-        else if(!fulladdress){
-
-          showMessage(0,'You must enter a location', 'Search Job', true, false);
-         
-          return false
+            return false;
         }
        
         else if (description.toString().length === 0) {
@@ -219,7 +297,7 @@ const SearchJob = (props) => {
           return false
       }else if(rm_hour.length === 0 ){
 
-        showMessage(0,'You must enter a Rates in RM', 'Search Job', true, false);
+        showMessage(0,'You must enter a RM Hour', 'Search Job', true, false);
 
         return false
 
@@ -234,14 +312,14 @@ const SearchJob = (props) => {
     }
 
     
-    const searchJob = () => {
+    const searchJobUpdate = () => {
 
         if(isValid()){
             NetInfo.isConnected.fetch().then(isConnected => {
 
                 if(isConnected){
 
-                  dispatch(checkuserAuthentication(user_id,device_token))
+                  dispatch(checkuserAuthentication(user.id,device_token))
                     .then(response => {
                       if(response.data.error){
                         showMessage(0, 'Session Expired! Please Login.', 'Search Job', true, false);
@@ -256,6 +334,8 @@ const SearchJob = (props) => {
                         props.navigation.dispatch(resetAction);
                       }else{
 
+                        // get here the latitude and longitude by city id
+                       console.log("city",city_label)
                         Geocoder.init("AIzaSyDBxQEvhACIZ73YCvPF9fI7A2l6lULic0E");
                         Geocoder.from(fulladdress)
                         .then(json => {
@@ -263,8 +343,34 @@ const SearchJob = (props) => {
                             console.log(json);
                             console.log("location",location);
 
-                        dispatch(searchRequestedJobs(user_id ,dropdown_value_id,state_id,city_id,fulladdress,location.lat,location.lng,date,description,from_time,to_time,props.navigation,wallet_balance,job_scope,clinic_requirements,rm_hour,select_hour_day));
-                        });
+                            dispatch(editJobPost(user.id,post_id[0],dropdown_value_id,state_id,city_id,fulladdress,location.lat,location.lng,
+                              date,description,from_time,to_time,props.navigation,
+                              wallet_balance,job_scope,clinic_requirements,rm_hour,select_hour_day))
+                                .then(response => {
+
+                                  if(response.data.status == 'success'){
+
+                                    props.navigation.state.params.updateValues(response.data.result)
+                                      props.navigation.goBack()
+                                  }
+
+                                    
+                                })
+                        })
+                        .catch(error => 
+                          {
+                              console.log("er",error)  
+                                      showMessage(0, 'Please Enter valid Address', 'Edit Profile', true, false);
+              
+                          }
+                          
+                      );
+
+
+
+
+                       
+                        
                       }
                   })
 
@@ -381,31 +487,18 @@ const SearchJob = (props) => {
         <View style={styles.container}>
 
           <Dropdown
-               labelPadding={0}
-               labelHeight={15}
-               fontSize={14}
+              labelPadding={0}
+              labelHeight={15}
+              fontSize={14}
               label='Select Job Profile'
               data={profession_categories}
               value={dropdown_label}
               onChangeText={(value) => { onChangeTextPress(value) }}
           />
-       
-            {/* <TextField
-              style={{ width: '100%' }}
-              label='Experience'
-              maxLength={5}
-              keyboardType='numeric'
-              textContentType='telephoneNumber'
-              value={experience}
-              onChangeText={(experience) => {
-                  var a = experience.replace(/[^0-9.]/g, '')
-                  setExperience(a)
-              }}
-          /> */}
            <Dropdown
-                 labelPadding={0}
-                 labelHeight={15}
-                 fontSize={14}
+                labelPadding={0}
+                labelHeight={15}
+                fontSize={14}
                 label='Select States'
                 data={get_states_list}
                 value={state_label}
@@ -421,11 +514,11 @@ const SearchJob = (props) => {
                 value={city_label}
                 onChangeText={(value) => { onCityChangeListener(value) }} // passing id here
             />
-
           <TextField
               labelPadding={0}
               labelHeight={15}
               fontSize={14}
+              style={{ width: '100%' }}
               label='Location'
               onFocus={() => {
                 
@@ -434,22 +527,35 @@ const SearchJob = (props) => {
               value={fulladdress}
               onChangeText={(fulladdress) => setFullAddress(fulladdress)}
           />
+          {/* <TextField
+              style={{ width: '100%' }}
+              label='Experience'
+              maxLength={5}
+              keyboardType='numeric'
+              textContentType='telephoneNumber'
+              value={experience}
+              onChangeText={(experience) => {
+                  var a = experience.replace(/[^0-9.]/g, '')
+                  setExperience(a)
+              }}
+          /> */}
+
           <TextField
               labelPadding={0}
               labelHeight={15}
               fontSize={14}
+              style={{ width: '100%' }}
               label='Description'
-              inputContainerStyle={{marginTop:2}}
-              labelPadding={2}
               value={description}
               multiline={true}
               onChangeText={(description) => setDescription(description)}
             />
 
             <TextField
-                labelPadding={0}
-                labelHeight={15}
-                fontSize={14}
+              labelPadding={0}
+              labelHeight={15}
+              fontSize={14}
+              style={{ width: '100%' }}
               label='Job Scope'
               value={job_scope}
               multiline={true}
@@ -460,18 +566,20 @@ const SearchJob = (props) => {
               labelPadding={0}
               labelHeight={15}
               fontSize={14}
+              style={{ width: '100%' }}
               label='Hospital / Clinic Requirements'
               value={clinic_requirements}
               multiline={true}
               onChangeText={(value) => setclinicRequirements(value)}
             />
             <TextField
-                 labelPadding={0}
-                 labelHeight={15}
-                 fontSize={14}
-                label='Rates in RM'
+                labelPadding={0}
+                labelHeight={15}
+                fontSize={14}
+                style={{width:"100%"}}
+                label='RM Hour'
                 value={rm_hour}
-                keyboardType={"numeric"}
+                multiline={true}
                 onChangeText={(value) => setRMhour(value)}
               />
            
@@ -575,7 +683,7 @@ const SearchJob = (props) => {
 
 
           <TouchableOpacity
-              onPress={searchJob}
+              onPress={searchJobUpdate}
               style={styles.submitButton}>
               <Text style={styles.submitText}>Post Job</Text>
           </TouchableOpacity>
@@ -593,10 +701,7 @@ const SearchJob = (props) => {
 const  styles = StyleSheet.create({
 
     container :{ 
-     paddingLeft: 15,
-     paddingRight:15,
-     paddingTop:10,
-     paddingBottom:20
+     padding:15,
       
     
     },
@@ -657,4 +762,4 @@ const  styles = StyleSheet.create({
 		},
 })
 
-export default SearchJob;
+export default EditJobPost;

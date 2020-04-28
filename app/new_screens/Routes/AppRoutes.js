@@ -30,7 +30,7 @@ import FrequentlyAskedQues from '../FAQ/FrequentlyAskedQues';
 import ContactAdmin from '../ContactAdmin/ContactAdmin';
 import PractionersList  from '../SearchJob/PractionersList';
 import PractitionersDetails from '../SearchJob/PractitionersDetails';
-
+import EditJobPost from '../SearchJob/EditJobPost';
 
 
 const CreateProfileStack =  createStackNavigator({
@@ -93,9 +93,15 @@ const CreateProfileStack =  createStackNavigator({
      JobList: { screen: JobList,
       navigationOptions:{
         header : props => <MyHeader {...props} title="Jobs" value={0}/>
-      }
-    
+      },
+      
      },
+     EditJobPost: { screen: EditJobPost,
+      navigationOptions:{
+        header : props => <MyHeader {...props} title="Edit Job Post" value={0}/>
+      }
+    },
+  
     // //  TransferJob: { screen: TransferJob },
      JobDetails: { screen: JobDetails,
       navigationOptions:{

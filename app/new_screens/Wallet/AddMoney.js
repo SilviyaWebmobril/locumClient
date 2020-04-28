@@ -10,6 +10,7 @@ import { checkuserAuthentication,logoutUser } from '../redux/stores/actions/auth
 import {
 	StackActions, NavigationActions
 } from 'react-navigation';
+import { updateWalletBalance } from '../redux/stores/actions/register_user';
 
 const AddMoney = (props) => {
 
@@ -120,31 +121,42 @@ const AddMoney = (props) => {
         
                       showMessage(1, responseJson.message, 'Add Money', true, false);
         
+                      dispatch(updateWalletBalance(data.amount));
+                      props.navigation.navigate('Wallet');
+                      const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Wallet',
+                        actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
+                      });
+                      props.navigation.dispatch(resetAction);
+
+
+                      // making it simple just add a money if paclkage is greater than wallet
+
+                      // if (props.navigation.getParam('buy_package') == 1) {
         
-                      if (props.navigation.getParam('buy_package') == 1) {
-        
-                        var result = props.navigation.getParam('result');
-                        var price = result["price"];
-                        var packageid = result["package_id"];
-                        var count = result['job_count'];
-                        var coupon = result['coupon_applied'];
-                        props.navigation.state.params.payAgain(packageid, price, count,coupon);
-                        props.navigation.pop();
+                      //   var result = props.navigation.getParam('result');
+                      //   var price = result["price"];
+                      //   var packageid = result["package_id"];
+                      //   var count = result['job_count'];
+                      //   var coupon = result['coupon_applied'];
+                      //   props.navigation.state.params.payAgain(packageid, price, count,coupon);
+                      //   props.navigation.pop();
         
         
         
-                      } else {
+                      // } else {
         
-                        props.navigation.navigate('Wallet');
-                        const resetAction = StackActions.reset({
-                          index: 0,
-                          key: 'Wallet',
-                          actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
-                        });
-                        props.navigation.dispatch(resetAction);
+                      //   props.navigation.navigate('Wallet');
+                      //   const resetAction = StackActions.reset({
+                      //     index: 0,
+                      //     key: 'Wallet',
+                      //     actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
+                      //   });
+                      //   props.navigation.dispatch(resetAction);
         
         
-                      }
+                      // }
         
         
         

@@ -78,8 +78,8 @@ const HomeScreen =(props)  => {
 
                console.log("open",notificationOp);
                 if (notificationOp) {
-                    const {  _body ,_data } = notificationOp.notification;
-                    console.log("_data notificationOpenedListener",_data);
+                  //  const {  _body ,_data } = notificationOp.notification;
+                    //console.log("_data notificationOpenedListener",_data);
                     // let item = JSON.parse(_data.result);
                     // console.log("itemmm",item);
                     //    if(item !== null && item !== undefined){
@@ -231,7 +231,7 @@ const HomeScreen =(props)  => {
 								<TouchableOpacity onPress={() => props.navigation.navigate("ContactAdmin")}>
 									<View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
 										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/4.png')} />
-										<Text style={{fontFamily:"roboto-light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Contact</Text>
+										<Text style={{fontFamily:"roboto-light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Feedback</Text>
 									</View>
 								</TouchableOpacity>
 							</Card>
