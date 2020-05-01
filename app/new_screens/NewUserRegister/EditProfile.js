@@ -5,7 +5,7 @@ import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import { TextField } from 'react-native-material-textfield';
 import NetInfo from "@react-native-community/netinfo";
 import { Dropdown } from 'react-native-material-dropdown';
-import {fetchBusinessTypes,fetchGrades,fetchSpecialities,submitEditProfile,getStatesList,getCitiesList} from '../redux/stores/actions/register_user';
+import {fetchBusinessTypes,fetchGrades,fetchSpecialities,submitEditProfile,getStatesList,getCitiesList, showSpinner, hideSpinner} from '../redux/stores/actions/register_user';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import Geocoder from 'react-native-geocoding';
 import {showMessage} from '../Globals/Globals';
@@ -38,6 +38,7 @@ const EditProfile = (props) => {
 
     const [med_pc_id , setMedPcId] = useState(user.med_pc_id);
     const [roc_no , setRocNo] = useState(user.roc_no);
+    console.log("roc_no",roc_no);
     const [owner_name , setOwnerName] = useState(user.directors_name); // directors name
     const [post_code , setPostCode] = useState(user.post_code);
     const [year_of_operation , setYearOfOperation] = useState(user.year_of_operation); // years of establishment
@@ -164,32 +165,32 @@ const EditProfile = (props) => {
     },[setProfessionId]);
 
 
-    // const onProfessionChangeListener = (id) => {
+    const onProfessionChangeListener = (id) => {
 
-    //     profession_categories.forEach(element => {
+        profession_categories.forEach(element => {
 
-    //         if(element.value  === id){
+            if(element.value  === id){
                 
-    //             setProfessionId(element.value);
-    //             setProfessionLabel(element.label);
+                setProfessionId(element.value);
+                setProfessionLabel(element.label);
                 
-    //             // NetInfo.isConnected.fetch().then(isConnected => {
+                // NetInfo.isConnected.fetch().then(isConnected => {
 
-    //             //     if(!isConnected){
-    //             //         props.navigation.navigate("NoNetwork");
-    //             //         return;
-    //             //     }else{
-    //             //         setSpecialityLabel("");
-    //             //         setSpecialityId("");
-    //             //         dispatch(fetchSpecialities(id));
-    //             //     }
-    //             // });
+                //     if(!isConnected){
+                //         props.navigation.navigate("NoNetwork");
+                //         return;
+                //     }else{
+                //         setSpecialityLabel("");
+                //         setSpecialityId("");
+                //         dispatch(fetchSpecialities(id));
+                //     }
+                // });
              
-    //         }
-    //     });
+            }
+        });
 
         
-    // }
+    }
 
     
 
@@ -329,7 +330,7 @@ const EditProfile = (props) => {
         
         else if (year_of_operation == "") {
 
-			showMessage(0, 'Please enter year of operation', 'Profile', true, false);
+			showMessage(0, 'Please enter year of establishment', 'Profile', true, false);
 
 			return false;
         }
@@ -392,9 +393,11 @@ const EditProfile = (props) => {
         if(isValid()){
 
             console.log("user",user_address);
+            dispatch(showSpinner())
             Geocoder.init("AIzaSyDBxQEvhACIZ73YCvPF9fI7A2l6lULic0E");
             Geocoder.from(street1)
             .then(json => {
+                dispatch(hideSpinner())
                 var location = json.results[0].geometry.location;
                 console.log(json);
                 console.log("location",location);
@@ -605,6 +608,7 @@ const EditProfile = (props) => {
                     style={{ alignSelf: 'center',}}
                     label='Postcode'
                     value={post_code}
+                    keyboardType="numeric"
                     onChangeText={(value) => setPostCode(value)}
                 />
                 <TextField
@@ -612,6 +616,7 @@ const EditProfile = (props) => {
                     labelHeight={15}
                     fontSize={14}
                     maxLength={4}
+                    keyboardType="numeric"
                     style={{ alignSelf: 'center', }}
                     label='Year Of Establishment'
                     value={year_of_operation}

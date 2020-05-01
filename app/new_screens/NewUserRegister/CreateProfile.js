@@ -192,7 +192,7 @@ const CreateProfile = (props,navigation) => {
 
 		if (profession_id.length === 0) {
 
-			showMessage(0, 'Enter your profession', 'Profile', true, false);
+			showMessage(0, 'Select Business Type', 'Profile', true, false);
 
 			return false
 		}
@@ -539,6 +539,7 @@ const CreateProfile = (props,navigation) => {
                                 labelHeight={15}
                                 maxLength={6}
                                 fontSize={14}
+                                keyboardType="numeric"
                                 style={{ alignSelf: 'center',}}
                                 label='Postcode'
                                 value={post_code}
@@ -549,6 +550,7 @@ const CreateProfile = (props,navigation) => {
                                 labelHeight={15}
                                 fontSize={14}
                                 maxLength={4}
+                                keyboardType="numeric"
                                 style={{ alignSelf: 'center', }}
                                 label='Year Of Establishment'
                                 value={year_of_operation}
@@ -630,6 +632,7 @@ const CreateProfile = (props,navigation) => {
                                 labelHeight={15}
                                 fontSize={14}
                                 multiline={true}
+                                maxLength={150}
                                 style={{ alignSelf: 'center', }}
                                 label='Description'
                                 value={description}

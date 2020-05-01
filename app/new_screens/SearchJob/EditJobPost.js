@@ -81,9 +81,14 @@ const EditJobPost = (props) => {
               let postResponse  = response.data.data;
 
               console.log("posr Response",postResponse);
-              setDescription(postResponse.job_desc);
-              setJobScope(postResponse.job_scope);
-              setclinicRequirements(postResponse.clinic_requirement);
+               setDescription(postResponse.job_desc);
+              if(postResponse.job_scope !== null){
+                setJobScope(postResponse.job_scope);
+              }
+              if(postResponse.clinic_requirement !== null){
+                setclinicRequirements(postResponse.clinic_requirement);
+              }
+              
               setRMhour(postResponse.rm_hour);
               setHourOrDay(postResponse.dayorhour);
               setDate(postResponse.required_date);
@@ -548,6 +553,7 @@ const EditJobPost = (props) => {
               label='Description'
               value={description}
               multiline={true}
+              maxLength={150}
               onChangeText={(description) => setDescription(description)}
             />
 
@@ -559,6 +565,7 @@ const EditJobPost = (props) => {
               label='Job Scope'
               value={job_scope}
               multiline={true}
+              maxLength={300}
               onChangeText={(value) => setJobScope(value)}
             />
 
@@ -570,6 +577,7 @@ const EditJobPost = (props) => {
               label='Hospital / Clinic Requirements'
               value={clinic_requirements}
               multiline={true}
+              maxLength={300}
               onChangeText={(value) => setclinicRequirements(value)}
             />
             <TextField
@@ -577,7 +585,7 @@ const EditJobPost = (props) => {
                 labelHeight={15}
                 fontSize={14}
                 style={{width:"100%"}}
-                label='RM Hour'
+                label='Rates in RM'
                 value={rm_hour}
                 multiline={true}
                 onChangeText={(value) => setRMhour(value)}

@@ -49,7 +49,14 @@ const TransactionList  = () => {
         return <MyActivityIndicator /> 
     }
 
-
+    const ListEmpty = () => {
+        return (
+          //View to show when list is empty
+          <View style={styles.MainContainer}>
+            <Text style={{ textAlign: 'center',fontFamily:'roboto-bold',fontSize:15 ,margin:10,color:"grey"}}>No Transactions Found</Text>
+          </View>
+        );
+      };
     return(
         <ScrollView>
 
@@ -60,6 +67,7 @@ const TransactionList  = () => {
                         data={transactionsList}
                         showsVerticalScrollIndicator={true}
                         scrollEnabled={false}
+                        ListEmptyComponent={() => ListEmpty()}
                         renderItem={({ item }) =>
 
 

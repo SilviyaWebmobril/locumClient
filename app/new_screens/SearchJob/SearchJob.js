@@ -443,6 +443,7 @@ const SearchJob = (props) => {
               labelPadding={2}
               value={description}
               multiline={true}
+              maxLength={150}
               onChangeText={(description) => setDescription(description)}
             />
 
@@ -453,6 +454,7 @@ const SearchJob = (props) => {
               label='Job Scope'
               value={job_scope}
               multiline={true}
+              maxLength={300}
               onChangeText={(value) => setJobScope(value)}
             />
 
@@ -463,6 +465,7 @@ const SearchJob = (props) => {
               label='Hospital / Clinic Requirements'
               value={clinic_requirements}
               multiline={true}
+              maxLength={300}
               onChangeText={(value) => setclinicRequirements(value)}
             />
             <TextField

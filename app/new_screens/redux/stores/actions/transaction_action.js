@@ -44,7 +44,7 @@ export const transcationHistory = (user_id) => {
                 }
                 else {
 
-                    showMessage(0, response.message, 'Transactions', true, false);
+                    showMessage(0, response.data.message, 'Transactions', true, false);
 
                 }
 

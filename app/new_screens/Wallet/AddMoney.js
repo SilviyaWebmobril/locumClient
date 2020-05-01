@@ -301,7 +301,7 @@ const AddMoney = (props) => {
           <TextField
             style={{ width: '100%' }}
             onBlur={()=>{onFocusKeyboard}}
-            label='Enter Amount '
+            label='Enter Amount (RM)'
             value={amount}
             keyboardType='numeric'
             maxLength={8}
@@ -319,7 +319,7 @@ const AddMoney = (props) => {
             //  onPress={()=>{Keyboard.dismiss(); this.paypal()}}
             onPress={()=>pay()}
             style={styles.submitButton}>
-            <Text style={styles.submitText}>Add</Text>
+            <Text style={styles.submitText}>Add </Text>
           </TouchableOpacity>
 
         </View>

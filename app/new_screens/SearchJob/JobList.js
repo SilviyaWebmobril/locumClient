@@ -91,7 +91,7 @@ const JobList = (props) => {
 							renderItem={({ item,index }) =>
 
 								
-                                    <View style={{ borderColor:'#ececec',width:"95%",borderRadius:2,marginTop:5,marginBottom:5,  elevation:2,padding:1,alignSelf:"center"}}
+                                    <View style={{ borderColor:'#ececec',width:"95%",borderRadius:2,marginTop:5,marginBottom:5,  elevation:2,padding:1,alignSelf:"center",margin:5}}
                                     >
                                      <TouchableOpacity style={{alignSelf:"center",flexDirection:"row"}} onPress={()=> {
                                         console.log("it",index);

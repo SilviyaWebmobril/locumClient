@@ -193,6 +193,7 @@ const HomeScreen =(props)  => {
            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
 							<Card containerStyle={{flex:1.5 ,height:null}}>
 								<TouchableOpacity onPress={() => {
+                                    
                                     if(post_available == 0 && wallet_balance == 0){
 
                                         showMessage(0,"Please add money and buy packages to post a new job.", 'Profile', true, false);
