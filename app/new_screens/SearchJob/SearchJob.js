@@ -200,11 +200,11 @@ const SearchJob = (props) => {
           return false
         }
 
-        else if(!city_id){
-          showMessage(0,'You must select a City', 'Search Job', true, false);
+        // else if(!city_id){
+        //   showMessage(0,'You must select a City', 'Search Job', true, false);
          
-          return false
-        }
+        //   return false
+        // }
         else if(!fulladdress){
 
           showMessage(0,'You must enter a location', 'Search Job', true, false);

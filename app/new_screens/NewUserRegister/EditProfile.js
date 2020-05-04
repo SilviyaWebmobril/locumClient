@@ -435,6 +435,7 @@ const EditProfile = (props) => {
             })
             .catch(error => 
                 {
+                    dispatch(hideSpinner())
                     console.log("er",error)  
                             showMessage(0, 'Please Enter valid Address', 'Edit Profile', true, false);
     

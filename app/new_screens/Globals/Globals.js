@@ -45,7 +45,7 @@ export const getday = (date) =>{
 
   let  day = new Date(date);
 
-  return day.getDate()+"th";
+  return day.getDate();
 }
 
 export  const getWeekday = (date) => {

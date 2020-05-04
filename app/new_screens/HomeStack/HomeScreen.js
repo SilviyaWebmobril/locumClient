@@ -13,6 +13,7 @@ import { showMessage } from '../Globals/Globals';
 const HomeScreen =(props)  => {
 
     const token = useSelector(state => state.auth.device_token);
+    const verify = useSelector(state => state.register.user.verify);
     const post_available =  useSelector(state => state.register.user.jobs_remaining)
     const wallet_balance =  useSelector(state => state.register.user.wallet_balance)
     console.log("wallet_balance",wallet_balance);
@@ -193,11 +194,15 @@ const HomeScreen =(props)  => {
            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
 							<Card containerStyle={{flex:1.5 ,height:null}}>
 								<TouchableOpacity onPress={() => {
-                                    
-                                    if(post_available == 0 && wallet_balance == 0){
 
-                                        showMessage(0,"Please add money and buy packages to post a new job.", 'Profile', true, false);
+                                   if(wallet_balance == 0 && post_available == 0){
 
+                                        showMessage(0,"Please add money and buy packages to post a new job.", 'Home', true, false);
+
+                                    }else if(post_available == 0){
+
+                                        showMessage(0,"Please buy packages to post a new job.", 'Home', true, false);
+                
                                     }else{
                                         props.navigation.navigate("SearchJob")
                                     }

@@ -24,7 +24,7 @@ const PractitionersDetails = (props) => {
     const about  = useState(props.navigation.getParam('result')['about']);
     const name = useState(props.navigation.getParam('result')['name']);
 	const description = useState(props.navigation.getParam('result')['description']);
-	console.log("des",description);
+	console.log("des",props.navigation.getParam('result')['mmc_no']);
     const experience = useState(props.navigation.getParam('result')['experience']);
     const profession  = useState(props.navigation.getParam('result')['profession']);
     const contact = useState(props.navigation.getParam('result')['contact']);
@@ -158,31 +158,76 @@ const PractitionersDetails = (props) => {
 	
     return(
         <KeyboardAwareScrollView>
-            <View style={{flex: 1,}}>
-
-						<View style={{ marginLeft: 10, marginTop: 60, marginBottom: 10, justifyContent: 'space-between' }}>
-							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Description</Text>
-							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{description}</Text>
+            <View style={{flex: 1,marginLeft:10,marginTop:20}}>
+						<View style={{ margin: 5, justifyContent: 'space-between' ,marginTop:20}}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Email ID</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{email}</Text>
 						</View>
-
-						<View style={{ margin: 8, justifyContent: 'space-between', }}>
-							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Qualifications</Text>
-							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{degree}</Text>
-						</View>
-
-
-						<View style={{ margin: 8, justifyContent: 'space-between' }}>
-							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Experience</Text>
-							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{experience}</Text>
-						</View>
-
-						<View style={{ margin: 8, justifyContent: 'space-between' }}>
+						<View style={{ margin: 5, justifyContent: 'space-between' }}>
 							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Contact</Text>
 							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{contact}</Text>
 						</View>
-						<View style={{ margin: 8, justifyContent: 'space-between' }}>
-							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Email ID</Text>
-							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 17 }}>{email}</Text>
+						
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Profession</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['profession']}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Speciality</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['speciality']}</Text>
+						</View>
+
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Qualifications</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{degree}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Country</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>Malaysia</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>State</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['state']}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>City</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['city']}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Street 1</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['street_1']}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Street 2</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['street_2']}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Postcode</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['post_code']}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between', }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>MMC/MDC/NBM/PBM Number</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['mmc_no']}</Text>
+						</View>
+
+						<View style={{ margin: 5, justifyContent: 'space-between' }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Valid APC Number</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['apc_no']}</Text>
+						</View>
+
+						<View style={{ margin: 5, justifyContent: 'space-between' }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>IC Number</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{props.navigation.getParam('result')['ic_no']}</Text>
+						</View>
+						<View style={{ margin: 5, justifyContent: 'space-between' }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Experience</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{experience}</Text>
+						</View>
+					
+
+						<View style={{ marginLeft: 10, marginTop: 0, marginBottom: 10, justifyContent: 'space-between' }}>
+							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Description</Text>
+							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{description}</Text>
 						</View>
 
 						{application_status[0] == 0

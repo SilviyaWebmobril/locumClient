@@ -143,8 +143,8 @@ const JobDetails =(props) => {
                 <View style={styles.viewRow}>
                     {/* <Image source={require('../assets/clinic/clock2.png')}  style={styles.imageStyle} /> */}
                     {/* <View style={{flexDirection:'row'}}> */}
-                        <Text style={styles.textHeading}>RM Hour</Text>
-                        <Text style={styles.textSubheading}>: {rm_hour} / {dayorhour  == 1 ? "Hour" : "Day"}</Text>
+                        <Text style={styles.textHeading}>Rates</Text>
+                        <Text style={styles.textSubheading}>: RM {rm_hour} / {dayorhour  == 1 ? "Hour" : "Day"}</Text>
                     {/* </View> */}
                 </View>
                 
@@ -165,21 +165,20 @@ const JobDetails =(props) => {
                     {/* </View> */}
                     
                 </View>
+                {city[0] !== ""
+                    ?
                 <View style={styles.viewRow}>
-                    
-                    {/* <View style={{flexDirection:'row'}}> */}
-                    {/* <Image source={require('../assets/clinic/map.png')}  style={styles.imageStyle} /> */}
+                   
                         <Text style={styles.textHeading}>City</Text>
                         
-                    {/* </View> */}
-                    {city[0] == ""
-                    ?
-                    <Text style={styles.textSubheading} >: {state}</Text>
-                    :
+                   
                     <Text style={styles.textSubheading} >: {city}</Text>
-                    }
+                    
                    
                 </View>
+                :
+                <View/>
+                }
                 {(from[0] !== "" && to[0] !== "")
                 ?
                 <View style={[styles.viewRow,{justifyContent:'space-between',alignItems:"center",flex:1}]}>

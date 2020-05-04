@@ -354,10 +354,11 @@ const CreateProfile = (props,navigation) => {
                         })
                         .catch(error => 
                             {
+                                dispatch(hideSpinner())
                                 console.log("er",error);
                                 if(error.origin.results.length  <= 0 )
                                 {
-                                    showMessage(0, 'Please Enter valid Address', 'Profile', true, false);
+                                    showMessage(0, 'Please Enter valid Street 1', 'Profile', true, false);
 
                                 }
 

@@ -208,6 +208,18 @@ const PractionersList = (props) => {
         result["degree"] = item.user_name.degree
         result['application_status'] = item.application_status
 		result["appid"] = item.id //application_id
+		result['mmc_no'] = item.user_name.mmc_no,
+		result['apc_no'] = item.user_name.apc_no,
+		result['ic_no'] = item.user_name.ic_no,
+		result['street_1'] = item.user_name.street_1,
+		result['street_2'] = item.user_name.street_2,
+		result['city'] = item.user_name.city.name,
+		result['state'] = item.user_name.state.name,
+		result['profession'] = item.user_name.profession.name,
+		result['speciality'] = item.user_name.speciality.name,
+		result['post_code'] = item.user_name.post_code,
+		//result['street_2'] = item.user_name.street_2,
+		
 		result['fetch'] = 1 // to function fectch again
 
         props.navigation.navigate('PractitionersDetails', { result: result, fetch: fetchAgain });
