@@ -100,7 +100,7 @@ const PractionersList = (props) => {
 						});
 						props.navigation.dispatch(resetAction);
 					}else{
-						dispatch(acceptApplication(id, 1,props.navigation,1))
+						dispatch(acceptApplication(id, job_id[0], 1,props.navigation,1))
 					}
 				})
 

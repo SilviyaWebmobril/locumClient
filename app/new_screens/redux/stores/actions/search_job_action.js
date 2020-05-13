@@ -379,7 +379,7 @@ export const getJobAppliedList = (user_id, job_id) => {
 } 
 
 // list to check if coming from list or details to update the UI
-export const acceptApplication = (id , status,navigation , list) => {
+export const acceptApplication = (id,job_id , status,navigation , list) => {
 
     return dispatch => {
 
@@ -395,6 +395,7 @@ export const acceptApplication = (id , status,navigation , list) => {
 
         let formData = new FormData();
         formData.append("application_id" ,id);
+        formData.append("job_id" ,id);
         formData.append("application_status",status) ;
 
         Axios.post(ApiUrl.base_url+ApiUrl.accept_application,formData)
