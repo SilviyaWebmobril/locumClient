@@ -135,7 +135,7 @@ const PractionersList = (props) => {
 						props.navigation.dispatch(resetAction);
 					}else{
 						// last parameter to check passing from list or details , to refresh the UI =  1 , 
-						dispatch(acceptApplication(id, 2,props.navigation,1))
+						dispatch(acceptApplication(id,job_id[0], 2,props.navigation,1))
 					}
 				})
 

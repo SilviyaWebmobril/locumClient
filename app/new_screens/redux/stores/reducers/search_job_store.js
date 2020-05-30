@@ -156,10 +156,23 @@ export default ( state = initialState  , action ) => {
             {
                 let applied_users1 =  [...state.applied_users];
                 applied_users1.map(element => {
-                    if(element.id  ==  action.id){
-                        element.application_status  = action.change_application_status
-                        
+                    if(action.change_application_status == 1){
+
+                        if(element.id  ==  action.id){
+                            element.application_status  = 1
+                            
+                        }else{
+                            element.application_status = 2;
+                        }
+                    }else{
+
+                        if(element.id  ==  action.id){
+                            element.application_status  = 2
+                            
+                        }
+
                     }
+                   
                 });
 
             

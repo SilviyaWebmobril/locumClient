@@ -36,6 +36,10 @@ target 'LocumClinic' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
   target 'LocumClinicTests' do
     inherit! :search_paths
     # Pods for testing

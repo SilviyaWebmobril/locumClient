@@ -395,7 +395,7 @@ export const acceptApplication = (id,job_id , status,navigation , list) => {
 
         let formData = new FormData();
         formData.append("application_id" ,id);
-        formData.append("job_id" ,id);
+        formData.append("job_id" ,job_id);
         formData.append("application_status",status) ;
 
         Axios.post(ApiUrl.base_url+ApiUrl.accept_application,formData)
@@ -408,11 +408,21 @@ export const acceptApplication = (id,job_id , status,navigation , list) => {
            console.log("res.. ",response.data);
             if(response.data.status == 'success'){
 
-                dispatch({
-                    type:ActionTypes.CHANGE_APPLICATION_STATUS_USER,
-                    change_application_status : status,
-                    id : id
-                });
+                if(status == 1){
+
+                    dispatch({
+                        type:ActionTypes.CHANGE_APPLICATION_STATUS_USER,
+                        change_application_status : 1,
+                        id : id
+                    });
+                }else{
+                    dispatch({
+                        type:ActionTypes.CHANGE_APPLICATION_STATUS_USER,
+                        change_application_status : 2,
+                        id : id
+                    });
+                }
+               
 
                 if(list === 0){
                     if(navigation.getParam('result')['fetch'] == 0){
