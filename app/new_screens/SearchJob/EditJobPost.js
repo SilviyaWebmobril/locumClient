@@ -23,8 +23,6 @@ const EditJobPost = (props) => {
 
         const  getFormattedDate = (date) => {
 
-        console.log("get foramt date",date);
-    
         var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
         return date.getFullYear() + "-" + (date.getMonth()+1) + "-" +date.getDate();
@@ -126,17 +124,21 @@ const EditJobPost = (props) => {
                                   dispatch(getCitiesList(postResponse.state.id))
                                     .then(response => {
 
-                                      console.log("city list",response);
+                                     
                                         if(response ==  1){
                                             get_cities_list.forEach(ele => {
 
+                                              if(postResponse.city !== null ){
+                                                
                                                 if(ele.value  == postResponse.city.id){
                                     
-                                                    // setCityId(ele.value);
-                                                    setCityLabel(ele.label)
-                                                    setCityId(ele.value)
-                                                    
+                                                  // setCityId(ele.value);
+                                                  setCityLabel(ele.label)
+                                                  setCityId(ele.value)
+                                                  
                                                 }
+                                              }
+                                                
                                             });
                                         }else{
                                             setCityLabel(postResponse.state.name);

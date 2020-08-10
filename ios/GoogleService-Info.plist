@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>617855332946-3ts528kjdloir7fiscquh39f6svfgf8v.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.617855332946-3ts528kjdloir7fiscquh39f6svfgf8v</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>617855332946-thhof2nd74cbf8s89kr1d7s18a21h94u.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAiNipWCZ4KqqGY-Ekj37wCMugjGnzsMYA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>617855332946</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.loumclinic</string>
+	<key>PROJECT_ID</key>
+	<string>locumclinic-262708</string>
+	<key>STORAGE_BUCKET</key>
+	<string>locumclinic-262708.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:617855332946:ios:55316b5a548c08ad38258b</string>
+	<key>DATABASE_URL</key>
+	<string>https://locumclinic-262708.firebaseio.com</string>
+</dict>
+</plist>

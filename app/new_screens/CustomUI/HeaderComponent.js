@@ -1,5 +1,5 @@
 import React , { useState , useEffect} from 'react';
-import {View ,Text, Image,TouchableOpacity,StyleSheet, Dimensions ,Platform} from 'react-native';
+import {View ,Text, Image,TouchableOpacity,StyleSheet, Dimensions ,Platform,SafeAreaView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from "react-native-image-picker";
 import {uploadProfilePic ,uploadEditProfilePic} from '../redux/stores/actions/register_user';
@@ -42,6 +42,7 @@ const HeaderComponent = (props) => {
 				console.log('User cancelled photo picker');
 			}
 			else if (response.error) {
+                console.log(response.error);
 				showMessage(1, 'Cancelled', 'Profile', true, false);
 
 			}
@@ -105,6 +106,13 @@ const HeaderComponent = (props) => {
    
     return (
        
+            <>
+             <LinearGradient   
+                colors= {["#4E73E6","#9456CE"]}
+                start= {{x: 0.0, y: 0.5}}
+                end= {{ x: 0.6, y: 0.4 }} >
+            <SafeAreaView  />
+            </LinearGradient>
             <LinearGradient   
                 style={{ height:150, }}
                 colors= {["#4E73E6","#9456CE"]}
@@ -135,7 +143,9 @@ const HeaderComponent = (props) => {
                         </View>
                         :
                         <TouchableOpacity style={styles.fab} onPress={selectPhotoTapped}>
-                            <Image source={require("../assets/doctor/avatar1.png")} style={styles.imageStyle} />
+                            <View style={styles.buttonView}>
+                             <Image source={require("../assets/doctor/avatar1.png")} style={styles.imageStyle} />
+                            </View>
                         </TouchableOpacity>
                         )
                     
@@ -169,6 +179,7 @@ const HeaderComponent = (props) => {
                   
               </React.Fragment>
             </LinearGradient>
+            </>
        
     )
 
@@ -195,6 +206,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor:'white',
+        zIndex:100
+       
       },
      
     TouchableOpacityStyle: {
@@ -205,8 +218,11 @@ const styles = StyleSheet.create({
       },
      
       imageStyle: {
-        position: 'absolute',
-       
+        // position: 'absolute',
+        // shadowColor: '#000',
+        // shadowOpacity: 0.2,
+        // shadowOffset: { height: 1 },
+        // top: 0,
         width: 100,
         height: 100,
         borderRadius:50,
@@ -223,7 +239,13 @@ const styles = StyleSheet.create({
         marginBottom:10,
         color:'white',
         fontFamily:'roboto-bold'
-    }
+    },
+    buttonView: {
+        position: "absolute",
+        right: 0,
+        top: 0
+      },                        
+
 
 })
 

@@ -21,6 +21,7 @@ const Wallet = (props) => {
 
     useEffect(()=> {
 
+      
         dispatch(checkuserAuthentication(user_id,device_token))
             .then(response => {
 

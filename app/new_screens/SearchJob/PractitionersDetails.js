@@ -46,6 +46,8 @@ const PractitionersDetails = (props) => {
 				return;
 			} else {
 
+				console.log("id",id);
+				console.log("job+id",props.navigation.getParam('result')['job_id']);
 				dispatch(checkuserAuthentication(user.id,device_token))
 					.then(response => {
 						if(response.data.error){
@@ -60,7 +62,7 @@ const PractitionersDetails = (props) => {
 							});
 							props.navigation.dispatch(resetAction);
 						}else{
-							dispatch(acceptApplication(id, 1,props.navigation,0))
+							dispatch(acceptApplication(id,props.navigation.getParam('result')['job_id'], 1,props.navigation,0))
 						}
 				})
 
@@ -93,7 +95,7 @@ const PractitionersDetails = (props) => {
 							});
 							props.navigation.dispatch(resetAction);
 						}else{
-							dispatch(acceptApplication(id, 2,props.navigation,0))
+							dispatch(acceptApplication(id,props.navigation.getParam('result')['job_id'], 2,props.navigation,0))
 						}
 				})
 
@@ -158,15 +160,21 @@ const PractitionersDetails = (props) => {
 	
     return(
         <KeyboardAwareScrollView>
-            <View style={{flex: 1,marginLeft:10,marginTop:20}}>
+            <View style={{flex: 1,marginLeft:10,marginTop:20,marginBottom:20}}>
 						<View style={{ margin: 5, justifyContent: 'space-between' ,marginTop:20}}>
 							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Email ID</Text>
 							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{email}</Text>
 						</View>
+						{props.navigation.getParam('result')['application_status'] == 1
+						?
 						<View style={{ margin: 5, justifyContent: 'space-between' }}>
 							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Contact</Text>
 							<Text style={{fontFamily:"roboto-light",  color: 'black', fontSize: 15 }}>{contact}</Text>
 						</View>
+						:
+						null
+						}
+						
 						
 						<View style={{ margin: 5, justifyContent: 'space-between', }}>
 							<Text style={{fontFamily:"roboto-light",  fontWeight: "bold" }}>Profession</Text>

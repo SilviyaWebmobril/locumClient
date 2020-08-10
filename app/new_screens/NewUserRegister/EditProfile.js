@@ -17,6 +17,7 @@ const EditProfile = (props) => {
     const user = useSelector(state => state.register.user);
     const device_token  = useSelector(state => state.auth.device_token)
     const [profession_id ,setProfessionId ] = useState(user.bussiness_type_id);
+    console.log("profession id",user);
     const [profession_label ,setProfessionLabel ] = useState("");
     const [speciality_id ,setSpecialityId ] = useState("");
     const [speciality_label ,setSpecialityLabel ] = useState("");
@@ -49,6 +50,7 @@ const EditProfile = (props) => {
     let get_states_list = useSelector(state => state.register.states_list);
     let get_cities_list = useSelector(state => state.register.cities_list);
     const [state_id ,setStateId ] = useState(user.state_id);
+    console.log("state",user.state_id);
     const [state_label ,setStateLabel ] = useState("");
     const [city_label ,setCityLabel ] = useState("");
 
@@ -81,6 +83,7 @@ const EditProfile = (props) => {
 
                             profession_categories.forEach(element => {
 
+                                console.log("before if",profession_id);
                                 if(element.value  == profession_id){
                                     
                                     setProfessionLabel(element.label);
@@ -88,13 +91,16 @@ const EditProfile = (props) => {
                                     .then(response => {
                                         if(response ==  1){
 
+                                            console.log("before if")
+
                                             get_states_list.map(element => {
             
                                                 if(element.value == state_id){
+                                                    
                                                     setStateLabel(element.label);
                                                     dispatch(getCitiesList(state_id))
                                                         .then(response => {
-
+                                                            console.log("after if",response);
                                                             if(response ==  1){
                                                                 get_cities_list.forEach(ele => {
 
@@ -556,7 +562,7 @@ const EditProfile = (props) => {
                     labelPadding={0}
                     labelHeight={15}
                     fontSize={14}
-                    label='Select States'
+                    label='Select State'
                     data={get_states_list}
                     value={state_label}
                     onChangeText={(value) => { onStateChangeListener(value) }} // passing id here

@@ -1,12 +1,18 @@
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {View ,TouchableOpacity,Text,Image,StyleSheet} from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 
 const MyHeader =(props) => {
 
     return (
-
-
+    <>
+    <LinearGradient   
+        colors= {["#4E73E6","#9456CE"]}
+        start= {{x: 0.0, y: 0.5}}
+        end= {{ x: 0.6, y: 0.4 }} >
+    <SafeAreaView  />
+    </LinearGradient>
     <LinearGradient   
         style={{ height:60,}}
         colors= {["#4E73E6","#9456CE"]}
@@ -31,8 +37,8 @@ const MyHeader =(props) => {
           
       </View>
     </LinearGradient>
-
-
+    </>
+    
     )
 }
 

@@ -90,7 +90,7 @@ const JobDetails =(props) => {
     const updateValues = (response ) => {
 
         //console.log("update values...12222",response.city.name);
-        if(response.city.name !== null){
+        if(response.city !== null){
             setCity(response.city.name);
         }else{
             setCity("");
@@ -165,7 +165,7 @@ const JobDetails =(props) => {
                     {/* </View> */}
                     
                 </View>
-                {city[0] !== ""
+                {city !== ""
                     ?
                 <View style={styles.viewRow}>
                    

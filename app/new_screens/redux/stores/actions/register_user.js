@@ -90,7 +90,6 @@ export const getCitiesList = (state_id) => (dispatch) =>
         axios.get(ApiUrl.base_url+ApiUrl.get_city+"?state_id="+state_id)
             .then(response => {
 
-                console.log("resonse on cities",response.data);
                 if(!response.data.error){
 
                     let city_list =[] ;
@@ -165,8 +164,6 @@ export const userRegister  = (name,email,mobile,password,navigation) => {
       .then(response => {
 
         if(response.data.status === "success" ){
-
-            console.log("data status",response.data);
 
             dispatch({
                 type: LOGOUT_USER,
@@ -469,7 +466,6 @@ export const submitCreateProfile1 = (user_id,name,profession_val,mobile,ic_no,sp
         axios.post(ApiUrl.base_url + ApiUrl.create_profile,formData,)
         .then(response => {
   
-           console.log("response on create ", response.data.result)
           if(response.data.status === "success" ){
   
               
@@ -562,7 +558,6 @@ return dispatch => {
     .then(response => {
 
        
-        console.log("response from edit profile",response.data.result)
       if(response.data.status === "success" ){
 
           
@@ -758,6 +753,24 @@ export const uploadProfilePic = (user_id,picUri ,picName) => {
                         navigation.navigate('UploadDocuments');
                     }else if( response.data.result.profile_update_status ==  1 && response.data.result.document_update_status ==  1){
 
+                            if(response.data.result.verify ==  2){
+                                showMessage(0,"Your account is rejected by admin.", 'Home', true, false);
+                                return;
+                            }
+                            if(response.data.result.verify == 3){
+                                showMessage(0,"Admin has rejected your documents ! Please upload again", 'Home', true, false);
+
+                                dispatch( {
+                                    type:CREATE_PROFILE,
+                                    result_user:response.data.result
+                                });
+                    
+                                navigation.navigate('UploadDocuments');
+
+                                return;
+                                
+                            }
+                      
                         dispatch({
                             type:CREATE_PROFILE,
                             result_user:response.data.result
@@ -863,6 +876,27 @@ export const uploadProfilePic = (user_id,picUri ,picName) => {
     return {
         type:UPDATE_WALLET_BALANCE,
         wallet_balance : bal
+    }
+}
+
+export const upadetUserData = (response) => {
+
+  
+
+    return {
+        type:CREATE_PROFILE,
+        result_user:response.data.data
+    }
+}
+
+export const updateUserId = response => {
+
+    return{
+        type:STORE_USER_ID_GLOBALLY,
+        user_details:response.data.data,
+        result_user_id:response.data.data.id,
+        device_token:response.data.data.device_tokken
+
     }
 }
 

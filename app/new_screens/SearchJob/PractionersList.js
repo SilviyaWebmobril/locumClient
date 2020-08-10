@@ -196,7 +196,7 @@ const PractionersList = (props) => {
     const nextDetails = (item) => {
 
         let result = {}
-        result["id"] = item.user_name.id //practiiontre_id
+        result["id"] = item.user_name.id //practiiontre_id //user
         result["about"] =item.user_name.about
         result["name"] =  item.user_name.name
         result["description"] = item.user_name.description
@@ -219,7 +219,7 @@ const PractionersList = (props) => {
 		result['speciality'] = item.user_name.speciality.name,
 		result['post_code'] = item.user_name.post_code,
 		//result['street_2'] = item.user_name.street_2,
-		
+		result['job_id'] =  job_id[0],
 		result['fetch'] = 1 // to function fectch again
 
         props.navigation.navigate('PractitionersDetails', { result: result, fetch: fetchAgain });

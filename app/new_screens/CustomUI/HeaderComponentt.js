@@ -1,5 +1,5 @@
 import React , { useState , useEffect} from 'react';
-import {View ,Text, Image,TouchableOpacity,StyleSheet, Dimensions ,Platform} from 'react-native';
+import {View ,Text, Image,TouchableOpacity,StyleSheet, Dimensions ,Platform,SafeAreaView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from "react-native-image-picker";
 import {uploadProfilePic ,uploadEditProfilePic} from '../redux/stores/actions/register_user';
@@ -15,6 +15,14 @@ const HeaderComponentt = (props) => {
 
   
     return (
+
+              <>
+              <LinearGradient   
+              colors= {["#4E73E6","#9456CE"]}
+              start= {{x: 0.0, y: 0.5}}
+              end= {{ x: 0.6, y: 0.4 }} >
+          <SafeAreaView  />
+          </LinearGradient>
        
             <LinearGradient   
                 style={{ height:150, }}
@@ -52,6 +60,7 @@ const HeaderComponentt = (props) => {
                   
               </React.Fragment>
             </LinearGradient>
+            </>
        
     )
 

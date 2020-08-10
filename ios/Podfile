@@ -39,6 +39,7 @@ target 'LocumClinic' do
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
 
   pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
 
   target 'LocumClinicTests' do
     inherit! :search_paths

@@ -11,7 +11,7 @@ import { showMessage } from '../Globals/Globals';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import { useDispatch, useSelector } from "react-redux";
-import {fetchBusinessTypes,fetchGrades,fetchSpecialities,submitCreateProfile1,getStatesList,getCitiesList} from '../redux/stores/actions/register_user';
+import {fetchBusinessTypes,fetchGrades,fetchSpecialities,submitCreateProfile1,getStatesList,getCitiesList,hideSpinner} from '../redux/stores/actions/register_user';
 import Geocoder from 'react-native-geocoding';
 
 const CreateProfile = (props,navigation) => {
@@ -493,7 +493,7 @@ const CreateProfile = (props,navigation) => {
                                 labelPadding={0}
                                 labelHeight={15}
                                 fontSize={14}
-                                label='Select States'
+                                label='Select State'
                                 data={get_states_list}
                                 value={state_label}
                                 onChangeText={(value) => { onStateChangeListener(value) }} // passing id here

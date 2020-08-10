@@ -2,23 +2,29 @@ import React ,{ useState, useEffect } from 'react';
 import {View , Text ,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import { Card } from 'react-native-elements';
 import messaging from '@react-native-firebase/messaging';
-import firebase from 'react-native-firebase/';
+//import firebase from '@react-native-firebase/app';
 import { useDispatch, useSelector } from "react-redux";
-import {userDevicetoken,fetchJobCategories} from '../redux/stores/actions/register_user';
+import {userDevicetoken,fetchJobCategories,upadetUserData,updateUserId, showSpinner, hideSpinner} from '../redux/stores/actions/register_user';
 import {
 	StackActions, NavigationActions
 } from 'react-navigation';
 import { showMessage } from '../Globals/Globals';
+import Axios from 'axios';
+import ApiUrl from '../Globals/ApiUrl';
+import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 
 
 const HomeScreen =(props)  => {
 
     const token = useSelector(state => state.auth.device_token);
+    const user = useSelector(state => state.register.user);
     const verify = useSelector(state => state.register.user.verify);
     const post_available =  useSelector(state => state.register.user.jobs_remaining)
     const wallet_balance =  useSelector(state => state.register.user.wallet_balance)
     console.log("wallet_balance",wallet_balance);
     console.log("post _avail",post_available);
+    const loading_status = useSelector(state => state.register.loading_status);
+
     const dispatch =  useDispatch();
    
     const  onTokenRefreshListener =()=>  messaging().onTokenRefresh(fcmToken => {
@@ -318,23 +324,49 @@ const HomeScreen =(props)  => {
         } 
     })
 
+   
     useEffect(() => {
 
+        dispatch(showSpinner())
         console.log("get fcmtoken123ss");
+        Axios.post(ApiUrl.base_url+"home?user_id="+user.id)
+        .then(response =>{
+
+            dispatch(hideSpinner())
+            if(response.data.status){
+                
+                dispatch(updateUserId(response));
+                dispatch(upadetUserData(response));
+            }else{
+                console.log("error in else");
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            showMessage(0,"Something went wrong ! Please try again later.", 'Home', true, false);
+
+        })
        
         onTokenRefreshListener();
         if(token === null){
           
             getFcmToken();
         }
-        createNotificationListeners();
+      //  createNotificationListeners();
        
         return () => {
-            createNotificationListeners();
+          //  createNotificationListeners();
             onTokenRefreshListener();
         };
 
     },[]);
+
+
+    if(loading_status){
+
+        return <MyActivityIndicator /> 
+    }
+
 
   
     return (
@@ -342,13 +374,50 @@ const HomeScreen =(props)  => {
         // <View style={styles.container}>
           
         <View style={styles.container}>
-           <Image source={require('../assets/clinic/banner.jpg')}  style={styles.bannerImage} /> 
+           {/* <Image source={require('../assets/clinic/banner.jpg')}  style={styles.bannerImage} />  */}
+
+           <View style={styles.viewRow}>
+                <Card  containerStyle={styles.cardContainerStyle}>
+                    <TouchableOpacity onPress={()=>{props.navigation.navigate('Packages');
+                    //below is used to reset stacki navigator so that goes infirst screen only
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Packages',
+                        actions: [NavigationActions.navigate({ routeName: 'Packages' })],
+                    })}}>
+                            <Image style={styles.imageStyle1} source={require('../assets/doctor/package.png')} />
+                            <Text style={styles.textStyle}>Buy Packages</Text>
+                    </TouchableOpacity>
+                </Card>
+                <Card  containerStyle={styles.cardContainerStyle}>
+                    <TouchableOpacity onPress={() => 
+                   { props.navigation.navigate('Wallet');
+                    //below is used to reset stacki navigator so that goes infirst screen only
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        key: 'Wallet',
+                        actions: [NavigationActions.navigate({ routeName: 'Wallet' })],
+                    });
+                    props.navigation.dispatch(resetAction);
+                    }}
+                    >
+                            <Image style={styles.imageStyle1} source={require('../assets/doctor/package.png')} />
+                            <Text style={styles.textStyle}>Wallet</Text>
+                    </TouchableOpacity>
+                </Card>
            
-               
-           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-							<Card containerStyle={{flex:1.5 ,height:null}}>
+             </View>  
+                    <View style={styles.viewRow}>
+
+
+							<Card  containerStyle={styles.cardContainerStyle}>
 								<TouchableOpacity onPress={() => {
 
+                                    if(verify == 0){
+                                        showMessage(0,"Your account is under inspection by admin. Please wait !", 'Home', true, false);
+                                        return;
+                                    }
+                                    
                                    if(wallet_balance == 0 && post_available == 0){
 
                                         showMessage(0,"Please add money and buy packages to post a new job.", 'Home', true, false);
@@ -362,13 +431,11 @@ const HomeScreen =(props)  => {
                                     }
                                   
                                     }}>
-									<View style={{ justifyContent: 'center', alignItems: 'center' }}>
-										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/1.png')} />
-										<Text style={{fontFamily:"Roboto-Light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Add Post</Text>
-									</View>
+										<Image style={styles.imageStyle1} source={require('../assets/clinic/1.png')} />
+										<Text style={styles.textStyle}>Add Post</Text>
 								</TouchableOpacity>
 							</Card>
-							<Card containerStyle={{flex:1.5 ,height:null}}>
+							<Card  containerStyle={styles.cardContainerStyle}>
                                 <TouchableOpacity onPress={() =>{ props.navigation.navigate("JobList");
                                 const resetAction = StackActions.reset({
                                     index: 0,
@@ -377,17 +444,15 @@ const HomeScreen =(props)  => {
                                 });
                                 props.navigation.dispatch(resetAction);
                                 }}>
-									<View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/2.png')} />
-										<Text style={{fontFamily:"Roboto-Light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Listings</Text>
-									</View>
+										<Image style={styles.imageStyle1} source={require('../assets/clinic/2.png')} />
+										<Text style={styles.textStyle}>Listings</Text>
 								</TouchableOpacity>
 							</Card>
 						</View>
 
 
-						<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center',flex:0.3, }}>
-							<Card containerStyle={{flex:1.5 ,height:null}}>
+						<View style={styles.viewRow}>
+							<Card  containerStyle={styles.cardContainerStyle}>
 								<TouchableOpacity onPress={()=>{props.navigation.navigate("FrequentlyAskedQues")
 									const resetAction = StackActions.reset({
 										index: 0,
@@ -395,18 +460,14 @@ const HomeScreen =(props)  => {
 										actions: [NavigationActions.navigate({ routeName: 'FrequentlyAskedQues' })],
 									});
 									props.navigation.dispatch(resetAction);}}>
-									<View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', marginLeft: 3, marginRight: 3 }}>
-										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/3.png')} />
-										<Text style={{ fontFamily:"roboto-light",fontWeight: 'bold', fontSize: 18, color: 'black' }}>FAQs</Text>
-									</View>
+										<Image style={styles.imageStyle1} source={require('../assets/clinic/3.png')} />
+										<Text style={styles.textStyle}>FAQs</Text>
 								</TouchableOpacity>
 							</Card>
-							<Card containerStyle={{flex:1.5 ,height:null}}>
+							<Card containerStyle={styles.cardContainerStyle}>
 								<TouchableOpacity onPress={() => props.navigation.navigate("ContactAdmin")}>
-									<View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-										<Image style={{ width: 40, height: 40 }} source={require('../assets/clinic/4.png')} />
-										<Text style={{fontFamily:"roboto-light", fontWeight: 'bold', fontSize: 18, color: 'black' }}>Feedback</Text>
-									</View>
+										<Image style={styles.imageStyle1} source={require('../assets/clinic/4.png')} />
+										<Text style={styles.textStyle}>Feedback</Text>
 								</TouchableOpacity>
 							</Card>
 					
@@ -436,7 +497,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'center',
         alignItems:'center',
-        flex:1
+        //flex:1
 
     },
     cardContainerStyle:{
@@ -449,9 +510,9 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:"center"
     },
-    imageStyle:{
-        width:60,
-        height:60,
+    imageStyle1:{
+        width:50,
+        height:50,
         alignSelf:'center'
     },
     textStyle:{

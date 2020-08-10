@@ -25,10 +25,14 @@ const Splash = (props) => {
     }
 
     useEffect(() => {
-        StatusBar.setBackgroundColor('#0040FF')
-        check()
+        StatusBar.setBackgroundColor('#0040FF');
 
-    })
+        const timer = setInterval(()=>{
+            check()
+        },3000)
+        
+        return () => clearInterval(timer);
+    },[])
    
 
     return(
