@@ -23,6 +23,56 @@ import { NavigationActions,StackActions } from 'react-navigation';
 
 
 
+export const forgotPassword = (email,navigation) => {
+
+    return dispatch => {
+        dispatch({
+            type:SHOW_LOADING
+        });
+
+        let formData = new FormData();
+
+        formData.append('email', email);
+        axios.post(ApiUrl.base_url+ApiUrl.forgot_password,formData)
+        .then(response =>{
+
+            console.log("response...",response.data);
+            dispatch({
+                type:HIDE_SPINNER
+            })
+            
+
+            if(response.data.status == 'success'){
+
+                showMessage(0,response.data.message, 'Forgot Password', true, false);
+                navigation.navigate("Login")
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    key: 'Login',
+                    actions: [NavigationActions.navigate({ routeName: 'Login' })],
+                });
+                navigation.dispatch(resetAction);
+            }else{
+                showMessage(0,response.data.message, 'Forgot Password', true, false);
+
+            }
+        })
+        .catch(error => {
+
+            console.log("err",error);   
+            showMessage(0,'Something went wrong. Please try again later !', 'Forgot Password', true, false);
+
+            dispatch( {
+                type:RESPONSE_ERROR,
+            })
+        })
+
+        
+    }
+
+ }
+
+
 export const getStatesList = () => (dispatch) => 
     new Promise(function(resolve){
 
@@ -32,9 +82,11 @@ export const getStatesList = () => (dispatch) =>
 
         var formdata = new FormData();
         formdata.append('country_id','132');
+        console.log("my fomr",formdata);
         axios.post(ApiUrl.base_url+ApiUrl.get_states,formdata)
             .then(response => {
 
+                console.log("my states,,,,,,,,",response.data);
                 if(response.data.status === 'success'){
 
                     let states_list =[] ;
@@ -43,7 +95,7 @@ export const getStatesList = () => (dispatch) =>
 
                     new_obj = Object.assign({}, {label:element.name,value :element.id });
                     states_list.push(new_obj);
-                       
+                    resolve(states_list);
                    });
                     dispatch({
                         type:GET_STATES,
@@ -51,6 +103,7 @@ export const getStatesList = () => (dispatch) =>
                     })
     
                 }else{
+                    resolve([]);
                     dispatch( {
                         type:RESPONSE_ERROR,
                     })
@@ -58,11 +111,12 @@ export const getStatesList = () => (dispatch) =>
 
                 console.log("i ansjdbdhb")
 
-                resolve(1);
+               
                
             })
             .catch(error => {
 
+                console.log("my error",error);
                 showMessage(0,'Something went wrong. Please try again later !', 'Create Profile', true, false);
 
                 dispatch( {
@@ -90,9 +144,9 @@ export const getCitiesList = (state_id) => (dispatch) =>
         axios.get(ApiUrl.base_url+ApiUrl.get_city+"?state_id="+state_id)
             .then(response => {
 
+                let city_list =[] ;
                 if(!response.data.error){
 
-                    let city_list =[] ;
                     let new_obj;
                    
                    response.data.data.forEach(element => {
@@ -108,10 +162,10 @@ export const getCitiesList = (state_id) => (dispatch) =>
                     });
 
                     if(response.data.data.length > 0){
-                      //  console.log("length",response.data.data.length)
-                        resolve(1)
+                        console.log("length",response.data.data.length)
+                        resolve(city_list)
                     }else{
-                        resolve(0)
+                        resolve(city_list)
                     }
     
                 }else{
@@ -177,7 +231,7 @@ export const userRegister  = (name,email,mobile,password,navigation) => {
 
             //dispatch(NavigationActions.navigate({ routeName: 'NoNetwork' }));
 
-            navigation.navigate('CreateProfile',{"name":name,"email":email,"mobile":mobile});
+            navigation.navigate('CreateProfile',{"name":name,"email":email,"mobile":mobile,"user_id":response.data.result});
           
         }else{
 
@@ -222,8 +276,6 @@ export const fetchBusinessTypes =  () => (dispatch) =>
 
                 if(response.data.status === 'success'){
 
-                    console.log("BUSINESS_TYPES",response.data)
-
                     let business_type =[] ;
                     let new_obj;
                    response.data.result.forEach(element => {
@@ -237,8 +289,9 @@ export const fetchBusinessTypes =  () => (dispatch) =>
                         type:BUSINESS_TYPES,
                         business_type:business_type
                     })
-                    resolve(1);
+                    resolve(business_type);
                 }else{
+                    resolve([]);
                     dispatch({
                          type:RESPONSE_ERROR,
                     })
@@ -474,7 +527,7 @@ export const submitCreateProfile1 = (user_id,name,profession_val,mobile,ic_no,sp
                   result_user:response.data.result
               });
   
-              navigation.navigate('UploadDocuments');
+              navigation.navigate('UploadDocuments',{"user_id":user_id});
             
           }else{
   
@@ -747,18 +800,25 @@ export const uploadProfilePic = (user_id,picUri ,picName) => {
 
                     if(response.data.result.profile_update_status == 0 ){
                         // move to create profile
-                        navigation.navigate('CreateProfile',{"name":response.data.result.name,"email":response.data.result.email,"mobile":response.data.result.mobile});
+                        showMessage(0,"Complete your profile", 'Login', true, false);
+                        navigation.navigate('CreateProfile',{"name":response.data.result.name,"email":response.data.result.email,"mobile":response.data.result.mobile,"user_id":response.data.result.id});
                     }else if(response.data.result.document_update_status == 0 ){
                         // move to upload documnets 
-                        navigation.navigate('UploadDocuments');
+                        showMessage(0,"Your Documents are not uploaded yet", 'Login', true, false);
+                        navigation.navigate('UploadDocuments',{"user_id":response.data.result.id});
                     }else if( response.data.result.profile_update_status ==  1 && response.data.result.document_update_status ==  1){
 
+                            // if(response.data.result.verify ==  1){
+                            //     showMessage(0,"Please verify your  email .", 'Home', true, false);
+                            //     return;
+                            // }
+
                             if(response.data.result.verify ==  2){
-                                showMessage(0,"Your account is rejected by admin.", 'Home', true, false);
+                                showMessage(0,"Your account is rejected by admin.", 'Login', true, false);
                                 return;
                             }
                             if(response.data.result.verify == 3){
-                                showMessage(0,"Admin has rejected your documents ! Please upload again", 'Home', true, false);
+                                showMessage(0,"Admin has rejected your documents ! Please upload again", 'Login', true, false);
 
                                 dispatch( {
                                     type:CREATE_PROFILE,
@@ -770,7 +830,7 @@ export const uploadProfilePic = (user_id,picUri ,picName) => {
                                 return;
                                 
                             }
-                      
+                            showMessage(0,"You have logged in successfully", 'Login', true, false);
                         dispatch({
                             type:CREATE_PROFILE,
                             result_user:response.data.result
@@ -791,13 +851,15 @@ export const uploadProfilePic = (user_id,picUri ,picName) => {
                   
 
                 }else{
-
+                         
+                    showMessage(0,response.data.message, 'Login', true, false);
+                              
                     dispatch( {
                         type:RESPONSE_ERROR,
                     })
 
                 }
-                showMessage(0,response.data.message, 'Login', true, false);
+              
 
             })
             .catch(error => {

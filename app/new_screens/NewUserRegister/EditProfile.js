@@ -11,13 +11,14 @@ import Geocoder from 'react-native-geocoding';
 import {showMessage} from '../Globals/Globals';
 import {checkuserAuthentication , logoutUser} from '../redux/stores/actions/auth_action';
 import { StackActions, NavigationActions } from 'react-navigation';
+import HeaderComponent from '../CustomUI/HeaderComponent';
 
 const EditProfile = (props) => {
 
     const user = useSelector(state => state.register.user);
     const device_token  = useSelector(state => state.auth.device_token)
     const [profession_id ,setProfessionId ] = useState(user.bussiness_type_id);
-    console.log("profession id",user);
+    console.log("profession",profession_id);
     const [profession_label ,setProfessionLabel ] = useState("");
     const [speciality_id ,setSpecialityId ] = useState("");
     const [speciality_label ,setSpecialityLabel ] = useState("");
@@ -39,7 +40,7 @@ const EditProfile = (props) => {
 
     const [med_pc_id , setMedPcId] = useState(user.med_pc_id);
     const [roc_no , setRocNo] = useState(user.roc_no);
-    console.log("roc_no",roc_no);
+   
     const [owner_name , setOwnerName] = useState(user.directors_name); // directors name
     const [post_code , setPostCode] = useState(user.post_code);
     const [year_of_operation , setYearOfOperation] = useState(user.year_of_operation); // years of establishment
@@ -50,7 +51,6 @@ const EditProfile = (props) => {
     let get_states_list = useSelector(state => state.register.states_list);
     let get_cities_list = useSelector(state => state.register.cities_list);
     const [state_id ,setStateId ] = useState(user.state_id);
-    console.log("state",user.state_id);
     const [state_label ,setStateLabel ] = useState("");
     const [city_label ,setCityLabel ] = useState("");
 
@@ -79,30 +79,31 @@ const EditProfile = (props) => {
                 dispatch(fetchBusinessTypes())
                     .then(response => {
 
-                        if(response ==  1){
+                        if(response.length > 0){
 
-                            profession_categories.forEach(element => {
+                            response.forEach(element => {
 
-                                console.log("before if",profession_id);
+                                
                                 if(element.value  == profession_id){
                                     
                                     setProfessionLabel(element.label);
                                     dispatch(getStatesList())
                                     .then(response => {
-                                        if(response ==  1){
+                                        if(response.length  > 0 ){
 
-                                            console.log("before if")
+                                            console.log("before if",get_states_list)
 
-                                            get_states_list.map(element => {
-            
+                                            response.forEach(element => {
+                                                console.log("before if state",element.value)
                                                 if(element.value == state_id){
-                                                    
+                                                    console.log("before if state",element.label)
+
                                                     setStateLabel(element.label);
                                                     dispatch(getCitiesList(state_id))
                                                         .then(response => {
                                                             console.log("after if",response);
-                                                            if(response ==  1){
-                                                                get_cities_list.forEach(ele => {
+                                                            if(response.length > 0){
+                                                                response.forEach(ele => {
 
                                                                     if(ele.value  == city_id){
                                                         
@@ -166,7 +167,6 @@ const EditProfile = (props) => {
             }
         });
 
-        console.log(profession_categories);
 
     },[setProfessionId]);
 
@@ -466,6 +466,8 @@ const EditProfile = (props) => {
     
 
     return(
+        <>
+         <HeaderComponent  edit={1} create={0} user_id={user.id} {...props}/>
         <KeyboardAwareScrollView>
        
         <View style={styles.container}>
@@ -724,6 +726,7 @@ const EditProfile = (props) => {
         </View>
              
         </KeyboardAwareScrollView>
+        </>
 
       
     )

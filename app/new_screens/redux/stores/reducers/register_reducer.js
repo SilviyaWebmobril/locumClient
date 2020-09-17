@@ -92,7 +92,6 @@ export default  (state = initialState ,action) => {
         case ActionTypes.CREATE_PROFILE :
             let user_data1 = action.result_user;
             let exist_user_data = {...state.user};
-            console.log("bussiness_type",user_data1)
            // await AsyncStorage.setItem('user_id',JSON.stringify(user_data.id));
            let name , email , address, degree , mobile ,hourly_rate, weekly_rate, monthly_rate,daily_rate, grade , longitude,
            latitude ,city_id,state_id,location_preference,preference_one_city,preference_one_state,preference_two_city,preference_two_state,
@@ -351,7 +350,7 @@ export default  (state = initialState ,action) => {
                 address :address,
                 degree : degree,
                 mobile : mobile,
-                bussiness_type_id : user_data1.bussiness_type,
+                bussiness_type_id : user_data1.bussiness_type.id,
                 speciality_id :user_data1.speciality,
                 hourly_rate: hourly_rate,
                 monthly_rate : monthly_rate,
@@ -450,6 +449,8 @@ export default  (state = initialState ,action) => {
                     user :{...user_ex}
                 }}
         case ActionTypes.GET_STATES :
+
+        console.log("GET_STATES",action.states)
         
             return {
                 ...state,

@@ -2,17 +2,20 @@ import React ,{ useState, useEffect } from 'react';
 import {View , Text ,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import { Card } from 'react-native-elements';
 import messaging from '@react-native-firebase/messaging';
-//import firebase from '@react-native-firebase/app';
+import firebase from '@react-native-firebase/app';
 import { useDispatch, useSelector } from "react-redux";
-import {userDevicetoken,fetchJobCategories,upadetUserData,updateUserId, showSpinner, hideSpinner} from '../redux/stores/actions/register_user';
+import {fetchJobCategories,upadetUserData,updateUserId, showSpinner, hideSpinner} from '../redux/stores/actions/register_user';
 import {
 	StackActions, NavigationActions
 } from 'react-navigation';
+import {userDevicetoken,} from '../redux/stores/actions/auth_action';
 import { showMessage } from '../Globals/Globals';
 import Axios from 'axios';
 import ApiUrl from '../Globals/ApiUrl';
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
-
+import PushNotificaton from './PushNotificaton';
+import {Notifications} from 'react-native-notifications';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const HomeScreen =(props)  => {
 
@@ -27,306 +30,43 @@ const HomeScreen =(props)  => {
 
     const dispatch =  useDispatch();
    
-    const  onTokenRefreshListener =()=>  messaging().onTokenRefresh(fcmToken => {
-        // Process your token as required
-        if(fcmToken){
-          console.log("get fcmtoken123",fcmToken);
+    async function checkApplicationPermission () {
+        const authorizationStatus = await messaging().requestPermission()
+    
+        if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED) {
+          getToken()
+        } else if ( authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL ) {
+          requestUserPermission()
+        } else {
+        }
+      }
+    
+      async function getToken () {
+        let fcmToken = await AsyncStorage.getItem('fcmToken');
+        // console.log("fcmToken", fcmToken);
+        if (!fcmToken) {
+          fcmToken = await firebase.messaging().getToken()
+          console.log("fcmToken", fcmToken);
+          if (fcmToken) {
             dispatch(userDevicetoken(fcmToken));
+            // await saveFcmToken({fcm_token: fcmToken}, user.userId);
+          }
         }
-    });
-
-
-    const getNotificationData = (notification,data) => {
-
-        const { title, body } = notification;
-        const channelId = new firebase.notifications.Android.Channel(
-            'Default',
-            'Default',
-            firebase.notifications.Android.Importance.High
-        );
-        firebase.notifications().android.createChannel(channelId);
-
-        let notification_to_be_displayed = new firebase.notifications.Notification({
-            data: ata,
-            sound: 'default',
-            show_in_foreground: true,
-            title:  title  ,
-            body:  body,
-        });
-
-        if (Platform.OS == 'android') {
-            notification_to_be_displayed.android
-                .setPriority(firebase.notifications.Android.Priority.High)
-                .android.setChannelId('Default')
-                .android.setVibrate(1000)
-                .android.setSmallIcon('ic_launcher');
-        }
-      
-       firebase.notifications().displayNotification(notification_to_be_displayed);
-
        
-
       }
 
-
-
-    const createNotificationListeners = () => {
-
-
-        messaging().onMessage(async remoteMessage => {
-
-           console.log("message rece",remoteMessage);
-          // alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-          getNotificationData(remoteMessage.notification,remoteMessage.data);
-        
-         });
-
-         messaging().setBackgroundMessageHandler(async remoteMessage => {
-           console.log('Message handled in the background!', remoteMessage);
-
-         
-         
-   
-         });
-
-         const notificationOpened =  messaging().onNotificationOpenedApp(remoteMessage => {
-           console.log(
-             'Notification caused app to open from background state:',
-             remoteMessage,
-           );
-
-
-                let item1 = JSON.parse(remoteMessage.data.result);
-                console.log("itemmm111",item1);
-                console.log("itemmm222",item1.job_detail);
-                let item = item1.job_detail;
-                if(item !== null && item !== undefined){
-
-                  
-                    // clinic details in users object
-                    let clinic = {};
-                    if(item.users !== null) {
-                        Object.assign(clinic,item.users)
-                    }
-                    let clinic_requirement =  "";
-                    if(item.clinic_requirement !== null){
-                        clinic_requirement = item.clinic_requirement;
-                    }
-                    let job_scope = "";
-                    if(item.job_scope !== null){
-                        job_scope = item.job_scope;
-                    }
-                    let city = "";
-                    if(item.city !== null){
-                        // Object.assign(city,item.job_detail.city)
-                        city = item.city.name;
-                    }
-
-
-
-                    props.navigation.navigate('JobDetails',{"id" :item.id ,
-                    "profile" : item.profile.name ,"location": item.job_location,
-                    "date" : item.required_date , "description" : item.job_desc , "cid" : item.cid ,
-                    "from" : item.from_time , "to" : item.to_time, "job_scope" : job_scope,"clinic_requirement" : clinic_requirement,
-                    "rm_hour" :item.rm_hour ,"dayorhour": item.dayorhour,"no_of_applicants" : 1, "state": item.state.name ,
-                    "city" : city,
-
-                })
-
-                    // let result = {}
-                    // result["id"] = item.job_detail.id //practiiontre_id
-                    // result["about"] = ""
-                    // result["name"] =  item.job_detail.user_name.name
-                    // result["description"] = item.job_detail.job_detail.job_desc 
-                    // result["experience"] = item.job_detail.job_detail.exp_required
-                    // result["profession"] = ""
-                    // result["contact"] = item.job_detail.user_name.mobile
-                    // result["email"] = item.job_detail.user_name.email
-                    // result["image"] = item.job_detail.user_name.user_image
-                    // result["degree"] = item.job_detail.user_name.degree
-                    // result['application_status'] = item.job_detail.application_status
-                    // result["appid"] = item.job_detail.id //application_id
-                    // result['fetch'] = 0 // to function fectch again
-
-
-                    // result["id"] = item.user_name.id //practiiontre_id
-                    // result["about"] =item.user_name.about
-                    // result["name"] =  item.user_name.name
-                    // result["description"] = item.user_name.description
-                    // result["experience"] = item.user_name.experience
-                    // result["profession"] = item.user_name.profession
-                    // result["contact"] = item.user_name.mobile
-                    // result["email"] = item.user_name.email
-                    // result["image"] = item.user_name.user_image
-                    // result["degree"] = item.user_name.degree
-                    // result['application_status'] = item.application_status
-                    // result["appid"] = item.id //application_id
-                    // result['mmc_no'] = item.user_name.mmc_no,
-                    // result['apc_no'] = item.user_name.apc_no,
-                    // result['ic_no'] = item.user_name.ic_no,
-                    // result['street_1'] = item.user_name.street_1,
-                    // result['street_2'] = item.user_name.street_2,
-                    // result['city'] = item.user_name.city.name,
-                    // result['state'] = item.user_name.state.name,
-                    // result['profession'] = item.user_name.profession.name,
-                    // result['speciality'] = item.user_name.speciality.name,
-                    // result['post_code'] = item.user_name.post_code,
-                    // //result['street_2'] = item.user_name.street_2,
-                    
-                    // result['fetch'] = 1 // to function fectch again
-
+      async function requestUserPermission () {
+        const authorizationStatus = await messaging().requestPermission()
     
-                    // props.navigation.navigate('PractitionersDetails', { result: result});
-               
-                }
-          
-         });
-
-
-       
-         
-   }
-
-
-    // const  createNotificationListeners = async() => {
-    //     /*
-    //     * Triggered when a particular notification has been received in foreground
-    //     * */
-    //     notificationListener = firebase.notifications().onNotification((notification) => {
-
-    //         console.log("notifaication log1",notification);
-            
-    //         getNotificationData(notification);
-    //     });
+        if (authorizationStatus) {
+          getToken()
+        }
+      }
       
-      
-    //     messageListener = firebase.messaging().onMessage((message) => {
-    //       //process data message
-
-    //       console.log("get message",JSON.stringify(message));
-         
-    //       getNotificationData(message);
-    //     });
-
-         
-    //     const notificationOpen = await firebase.notifications().getInitialNotification();
-
-	// 		if (notificationOpen) {
-    //          const {  _body ,_data } = notificationOpen.notification;
-    //          console.log("_data",_data);
-    //          let item = JSON.parse(_data.result);
-    //          console.log("itemmm",item);
-    //             if(item !== null && item !== undefined){
-
-    //                 let result = {}
-    //                 result["id"] = item.job_detail.id //practiiontre_id
-    //                 result["about"] = ""
-    //                 result["name"] =  item.job_detail.user_name.name
-    //                 result["description"] = item.job_detail.job_detail.job_desc 
-    //                 result["experience"] = item.job_detail.job_detail.exp_required
-    //                 result["profession"] = ""
-    //                 result["contact"] = item.job_detail.user_name.mobile
-    //                 result["email"] = item.job_detail.user_name.email
-    //                 result["image"] = item.job_detail.user_name.user_image
-    //                 result["degree"] = item.job_detail.user_name.degree
-    //                 result['application_status'] = item.job_detail.application_status
-    //                 result["appid"] = item.job_detail.id //application_id
-    //                 result['fetch'] = 0 // to function fectch again
-    
-    //                 props.navigation.navigate('PractitionersDetails', { result: result});
-               
-    //             }
-            
-    //         }
-
-
-    //         notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOp) =>{
-
-    //            console.log("open",notificationOp);
-    //             if (notificationOp) {
-    //               //  const {  _body ,_data } = notificationOp.notification;
-    //                 //console.log("_data notificationOpenedListener",_data);
-    //                 // let item = JSON.parse(_data.result);
-    //                 // console.log("itemmm",item);
-    //                 //    if(item !== null && item !== undefined){
-       
-    //                 //        let result = {}
-    //                 //        result["id"] = item.job_detail.id //practiiontre_id
-    //                 //        result["about"] = ""
-    //                 //        result["name"] =  item.job_detail.user_name.name
-    //                 //        result["description"] = item.job_detail.job_detail.job_desc 
-    //                 //        result["experience"] = item.job_detail.job_detail.exp_required
-    //                 //        result["profession"] = ""
-    //                 //        result["contact"] = item.job_detail.user_name.mobile
-    //                 //        result["email"] = item.job_detail.user_name.email
-    //                 //        result["image"] = item.job_detail.user_name.user_image
-    //                 //        result["degree"] = item.job_detail.user_name.degree
-    //                 //        result['application_status'] = item.job_detail.application_status
-    //                 //        result["appid"] = item.job_detail.id //application_id
-    //                 //        result['fetch'] = 0 // to function fectch again
-           
-    //                 //        props.navigation.navigate('PractitionersDetails', { result: result});
-                      
-    //                 //    }
-    //             }
-    
-    //         })
-    
-            
-           
-    //         firebase.notifications().removeAllDeliveredNotifications()
-    
-    //   }
-
-
-    //   const getNotificationData = (notification) => {
-
-    //     const { _title, _body } = notification;
-    //     const channelId = new firebase.notifications.Android.Channel(
-    //         'Default',
-    //         'Default',
-    //         firebase.notifications.Android.Importance.High
-    //     );
-    //     firebase.notifications().android.createChannel(channelId);
-
-    //     let notification_to_be_displayed = new firebase.notifications.Notification({
-    //         data: notification._android._body,
-    //         sound: 'default',
-    //         show_in_foreground: true,
-    //         title: _title,
-    //         body: _body,
-    //     });
-
-    //     if (Platform.OS == 'android') {
-    //         notification_to_be_displayed.android
-    //             .setPriority(firebase.notifications.Android.Priority.High)
-    //             .android.setChannelId('Default')
-    //             .android.setVibrate(1000);
-    //     }
-      
-    //    firebase.notifications().displayNotification(notification_to_be_displayed);
-
-     
-
-    //   }
-
-    
-
-    const getFcmToken =  () => messaging().getToken()
-    .then(fcmToken => {
-        if (fcmToken) {
-            dispatch(userDevicetoken(fcmToken));
-            
-        } else {
-            console.log("get fcmtoken111");
-            
-            onTokenRefreshListener();
-        } 
-    })
 
    
     useEffect(() => {
-
+        checkApplicationPermission()
         dispatch(showSpinner())
         console.log("get fcmtoken123ss");
         Axios.post(ApiUrl.base_url+"home?user_id="+user.id)
@@ -335,6 +75,7 @@ const HomeScreen =(props)  => {
             dispatch(hideSpinner())
             if(response.data.status){
                 
+                // console.log("respone",response.data)
                 dispatch(updateUserId(response));
                 dispatch(upadetUserData(response));
             }else{
@@ -345,19 +86,298 @@ const HomeScreen =(props)  => {
             console.log(error);
             showMessage(0,"Something went wrong ! Please try again later.", 'Home', true, false);
 
-        })
-       
-        onTokenRefreshListener();
-        if(token === null){
+        });
+
+
+          // Assume a message-notification contains a "type" property in the data payload of the screen to open
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+        console.log('on notification Message Sync '+JSON.stringify(remoteMessage))
+        // console.log('on notification Message Sync '+remoteMessage)
+  
+        if(Platform.OS=='ios'){
+  
+            Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
+              console.log("Notification Received - Foreground", notification.payload);
+        
+              // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
+             completion({alert: true, sound: true, badge: false});
+            });
+              console.log("Into ABC====>", remoteMessage);
+  
+         
+              Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
+                console.log("Notification Received - Background", notification.payload);
           
-            getFcmToken();
+                // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
+                
+                completion({alert: true, sound: true, badge: false});
+              });
+              
+
+              let item1 = JSON.parse(remoteMessage.data.result);
+              console.log("itemmm111",item1);
+              console.log("itemmm222",item1.job_detail);
+              let item = item1.job_detail;
+              if(item !== null && item !== undefined){
+      
+                
+                  // clinic details in users object
+                  let clinic = {};
+                  if(item.users !== null) {
+                      Object.assign(clinic,item.users)
+                  }
+                  let clinic_requirement =  "";
+                  if(item.clinic_requirement !== null){
+                      clinic_requirement = item.clinic_requirement;
+                  }
+                  let job_scope = "";
+                  if(item.job_scope !== null){
+                      job_scope = item.job_scope;
+                  }
+                  let city = "";
+                  if(item.city !== null){
+                      // Object.assign(city,item.job_detail.city)
+                      city = item.city.name;
+                  }
+      
+      
+      
+                  props.navigation.navigate('JobDetails',{"id" :item.id ,
+                  "profile" : item.profile.name ,"location": item.job_location,
+                  "date" : item.required_date , "description" : item.job_desc , "cid" : item.cid ,
+                  "from" : item.from_time , "to" : item.to_time, "job_scope" : job_scope,"clinic_requirement" : clinic_requirement,
+                  "rm_hour" :item.rm_hour ,"dayorhour": item.dayorhour,"no_of_applicants" : 1, "state": item.state.name ,
+                  "city" : city,
+      
+                    })
+          
+                     
+      
+                      Notifications.postLocalNotification({
+                          title: remoteMessage.notification.title,
+                          body: remoteMessage.notification.body,
+                          data:{
+                              item1
+                          },
+                          silent: false,
+                          category: "SOME_CATEGORY",
+                          userInfo: { }
+                        });
+          
+                }
+             
+            
+            
+    
+        
+  
+        
+        }else{
+          console.log('on notification Message Sync ',remoteMessage.data);
+  
+             
+          let item1 = JSON.parse(remoteMessage.data.result);
+          console.log("itemmm111",item1);
+          console.log("itemmm222",item1.job_detail);
+          let item = item1.job_detail;
+          if(item !== null && item !== undefined){
+  
+            
+              // clinic details in users object
+              let clinic = {};
+              if(item.users !== null) {
+                  Object.assign(clinic,item.users)
+              }
+              let clinic_requirement =  "";
+              if(item.clinic_requirement !== null){
+                  clinic_requirement = item.clinic_requirement;
+              }
+              let job_scope = "";
+              if(item.job_scope !== null){
+                  job_scope = item.job_scope;
+              }
+              let city = "";
+              if(item.city !== null){
+                  // Object.assign(city,item.job_detail.city)
+                  city = item.city.name;
+              }
+  
+  
+  
+              props.navigation.navigate('JobDetails',{"id" :item.id ,
+              "profile" : item.profile.name ,"location": item.job_location,
+              "date" : item.required_date , "description" : item.job_desc , "cid" : item.cid ,
+              "from" : item.from_time , "to" : item.to_time, "job_scope" : job_scope,"clinic_requirement" : clinic_requirement,
+              "rm_hour" :item.rm_hour ,"dayorhour": item.dayorhour,"no_of_applicants" : 1, "state": item.state.name ,
+              "city" : city,
+  
+          })
+      
+                 
+  
+                  Notifications.postLocalNotification({
+                      title: remoteMessage.notification.title,
+                      body: remoteMessage.notification.body,
+                      data:{
+                          item1
+                      },
+                      silent: false,
+                      category: "SOME_CATEGORY",
+                      userInfo: { }
+                    });
+      
+               }
+         
         }
-      //  createNotificationListeners();
+        
+    
+        Notifications.events().registerNotificationOpened((notification, completion) => {
+          console.log(`Notification opened: `+JSON.stringify(notification.payload));
+         
+          // console.log(`Notification opened: `+JSON.stringify(notification));
+          const myRemote = remoteMessage.data.result;
+  
+          let item1 = JSON.parse(myRemote);
+          console.log("itemmm111",item1);
+          console.log("itemmm222",item1.job_detail);
+          let item = item1.job_detail;
+          if(item !== null && item !== undefined){
+  
+            
+              // clinic details in users object
+              let clinic = {};
+              if(item.users !== null) {
+                  Object.assign(clinic,item.users)
+              }
+              let clinic_requirement =  "";
+              if(item.clinic_requirement !== null){
+                  clinic_requirement = item.clinic_requirement;
+              }
+              let job_scope = "";
+              if(item.job_scope !== null){
+                  job_scope = item.job_scope;
+              }
+              let city = "";
+              if(item.city !== null){
+                  // Object.assign(city,item.job_detail.city)
+                  city = item.city.name;
+              }
+  
+  
+  
+              props.navigation.navigate('JobDetails',{"id" :item.id ,
+              "profile" : item.profile.name ,"location": item.job_location,
+              "date" : item.required_date , "description" : item.job_desc , "cid" : item.cid ,
+              "from" : item.from_time , "to" : item.to_time, "job_scope" : job_scope,"clinic_requirement" : clinic_requirement,
+              "rm_hour" :item.rm_hour ,"dayorhour": item.dayorhour,"no_of_applicants" : 1, "state": item.state.name ,
+              "city" : city,
+  
+            })
+          }
+  
+          //completion();
+        });
+      })
+     
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        console.log('on notification Open HEY'+JSON.stringify(remoteMessage));
+        const myRemote = remoteMessage.data.result;
+  
+        let item1 = JSON.parse(myRemote);
+        console.log("itemmm111",item1);
+        console.log("itemmm222",item1.job_detail);
+        let item = item1.job_detail;
+        if(item !== null && item !== undefined){
+  
+          
+            // clinic details in users object
+            let clinic = {};
+            if(item.users !== null) {
+                Object.assign(clinic,item.users)
+            }
+            let clinic_requirement =  "";
+            if(item.clinic_requirement !== null){
+                clinic_requirement = item.clinic_requirement;
+            }
+            let job_scope = "";
+            if(item.job_scope !== null){
+                job_scope = item.job_scope;
+            }
+            let city = "";
+            if(item.city !== null){
+                // Object.assign(city,item.job_detail.city)
+                city = item.city.name;
+            }
+  
+  
+  
+            props.navigation.navigate('JobDetails',{"id" :item.id ,
+            "profile" : item.profile.name ,"location": item.job_location,
+            "date" : item.required_date , "description" : item.job_desc , "cid" : item.cid ,
+            "from" : item.from_time , "to" : item.to_time, "job_scope" : job_scope,"clinic_requirement" : clinic_requirement,
+            "rm_hour" :item.rm_hour ,"dayorhour": item.dayorhour,"no_of_applicants" : 1, "state": item.state.name ,
+            "city" : city,
+  
+          })
+        }
+  
+      })
+  
+      // Check whether an initial notification is available
+      messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          if(remoteMessage !== null && remoteMessage !== undefined){
+  
+            console.log('Initial notification '+JSON.stringify(remoteMessage));
+  
+            const myRemote = remoteMessage.data.result;
+     
+             let item1 = JSON.parse(myRemote);
+             console.log("itemmm111",item1);
+             console.log("itemmm222",item1.job_detail);
+             let item = item1.job_detail;
+             if(item !== null && item !== undefined){
+     
+               
+                 // clinic details in users object
+                 let clinic = {};
+                 if(item.users !== null) {
+                     Object.assign(clinic,item.users)
+                 }
+                 let clinic_requirement =  "";
+                 if(item.clinic_requirement !== null){
+                     clinic_requirement = item.clinic_requirement;
+                 }
+                 let job_scope = "";
+                 if(item.job_scope !== null){
+                     job_scope = item.job_scope;
+                 }
+                 let city = "";
+                 if(item.city !== null){
+                     // Object.assign(city,item.job_detail.city)
+                     city = item.city.name;
+                 }
+     
+     
+     
+                 props.navigation.navigate('JobDetails',{"id" :item.id ,
+                 "profile" : item.profile.name ,"location": item.job_location,
+                 "date" : item.required_date , "description" : item.job_desc , "cid" : item.cid ,
+                 "from" : item.from_time , "to" : item.to_time, "job_scope" : job_scope,"clinic_requirement" : clinic_requirement,
+                 "rm_hour" :item.rm_hour ,"dayorhour": item.dayorhour,"no_of_applicants" : 1, "state": item.state.name ,
+                 "city" : city,
+     
+               })
+             }
+            
+          }
+         
+          //setLoading(false)
+        })
+      return unsubscribe
        
-        return () => {
-          //  createNotificationListeners();
-            onTokenRefreshListener();
-        };
+    
 
     },[]);
 
@@ -374,6 +394,7 @@ const HomeScreen =(props)  => {
         // <View style={styles.container}>
           
         <View style={styles.container}>
+            {/* <PushNotificaton {...props}/> */}
            {/* <Image source={require('../assets/clinic/banner.jpg')}  style={styles.bannerImage} />  */}
 
            <View style={styles.viewRow}>

@@ -11,6 +11,8 @@ import {useDispatch ,useSelector } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import { logoutUser } from '../redux/stores/actions/auth_action';
 import ApiUrl from '../Globals/ApiUrl';
+import { showMessage } from '../Globals/Globals';
+
 
 const Drawer = (props) => {
 
@@ -47,8 +49,8 @@ const Drawer = (props) => {
 
 		//AsyncStorage.clear();
 		dispatch(logoutUser());
-		ToastAndroid.show("Successfully logged out", ToastAndroid.SHORT);
-		
+	//	ToastAndroid.show("Successfully logged out", ToastAndroid.SHORT);
+		showMessage(0,"Successfully logged out", 'Logout', true, false);
 		props.navigation.closeDrawer()
 	    props.navigation.navigate("Login")
 		const resetAction = StackActions.reset({

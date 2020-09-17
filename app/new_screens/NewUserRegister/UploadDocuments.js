@@ -33,7 +33,8 @@ const UploadDocuments = (props) => {
     const [file_name_four, setFileNameFour ] = useState("");
     const [file_four_uploaded , setFileFourUploaded ] = useState("");
 
-    const register_id  = useSelector(state => state.register.register_id);
+    //const register_id  = useSelector(state => state.register.register_id);
+    const [register_id ,setTempRegisterId ] = useState(props.navigation.getParam('user_id')) ;
     const loading_status = useSelector(state => state.register.loading_status);
     const dispatch = useDispatch();
 

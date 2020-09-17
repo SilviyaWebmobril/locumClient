@@ -9,6 +9,7 @@ import {
 	StackActions, NavigationActions
 } from 'react-navigation';
 import {showMessage} from '../Globals/Globals';
+import HeaderComponent from '../CustomUI/HeaderComponent';
 
 const Wallet = (props) => {
 
@@ -50,6 +51,8 @@ const Wallet = (props) => {
     }
 
     return(
+        <>
+         <HeaderComponent wallet={1} edit={0} />
         <ScrollView>
              <View style={{flex:1}}>
 
@@ -62,6 +65,11 @@ const Wallet = (props) => {
                 <FlatList
                     style={{ marginBottom: 20, marginTop: 25 }}
                     data={wallets}
+                    ListEmptyComponent={()=>{
+                        return(
+                            <Text style={{alignSelf:"center",fontFamily:"roboto-bold",marginTop:40}}>No Transactions Found.</Text>
+                        )
+                    }}
                     showsVerticalScrollIndicator={false}
                     scrollEnabled={false}
                     renderItem={({ item }) =>
@@ -89,6 +97,7 @@ const Wallet = (props) => {
             </View>
 
         </ScrollView>
+        </>
        
     )
 } ;

@@ -164,8 +164,9 @@ const Login = (props) => {
   
   
   
-  
-              <Text onPress={()=> {forgot()}} style={{fontFamily:'Roboto-Light', alignSelf: 'flex-end', marginBottom: 5, marginTop: 5 }}>Forgot Password?</Text>
+              <TouchableOpacity onPress={()=> {forgot()}}>
+              <Text  style={{fontFamily:'Roboto-Light', alignSelf: 'flex-end', marginBottom: 5, marginTop: 5 }}>Forgot Password?</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={onSubmitLogin}

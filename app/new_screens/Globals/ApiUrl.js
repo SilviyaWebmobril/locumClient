@@ -8,6 +8,7 @@ export default  {
 
     login:"login",
 
+    forgot_password : "forgot_password",
     get_states : "states",
 
     get_city : 'city',

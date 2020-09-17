@@ -31,6 +31,7 @@ import ContactAdmin from '../ContactAdmin/ContactAdmin';
 import PractionersList  from '../SearchJob/PractionersList';
 import PractitionersDetails from '../SearchJob/PractitionersDetails';
 import EditJobPost from '../SearchJob/EditJobPost';
+import ForgotPassword from '../NewUserRegister/ForgotPassword'
 
 
 const CreateProfileStack =  createStackNavigator({
@@ -46,10 +47,14 @@ const CreateProfileStack =  createStackNavigator({
       }
     },
    
-    // ForgotPassword: { screen: ForgotPassword},
+     ForgotPassword: { screen: ForgotPassword,
+      navigationOptions:{
+        header :props => <MyHeader  {...props}  title="Forgot Password" value={0}/>
+      }
+    },
     CreateProfile :{screen :CreateProfile,
       navigationOptions:{
-        header:  props => <HeaderComponent value={0} {...props} wallet={0} />
+        header:  props => <MyHeader  {...props}  title="" value={0}/>
       }
     },
     UploadDocuments: { screen: UploadDocuments,
@@ -149,7 +154,7 @@ const CreateProfileStack =  createStackNavigator({
   const editStack = createStackNavigator({
     EditProfile: { screen: EditProfile,
        navigationOptions:{
-        header:  props => <HeaderComponent value={1} {...props} edit={1} wallet={0} />
+        header:  props => <MyHeader  {...props}  title="" value={1}/>
       }
     },
     // JobPreferences: { screen: JobPreferences},
@@ -208,7 +213,7 @@ const PackageStack = createStackNavigator({
  const WalletStack = createStackNavigator({
   Wallet: { screen: Wallet ,
     navigationOptions:{
-      header:  props => <HeaderComponent value={1} {...props} edit={0} wallet={1} />
+      header:  props => <MyHeader  {...props}  title="" value={1}/>
     }
   },
   AddMoney: { screen: AddMoney,

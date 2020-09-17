@@ -16,7 +16,7 @@ const HeaderComponent = (props) => {
     const device_token  = useSelector(state => state.auth.device_token)
     const [imageSource , setImageSource ] = useState(user_image);
     
-    const user_id  = useSelector(state => props.edit == 1 ? state.register.user.id : state.register.register_id);
+    const user_id  = useSelector(state => props.user_id);
     console.log("get uer",imageSource);
     
     const user_name = useSelector(state=> state.register.register_user_name);
@@ -43,7 +43,7 @@ const HeaderComponent = (props) => {
 			}
 			else if (response.error) {
                 console.log(response.error);
-				showMessage(1, 'Cancelled', 'Profile', true, false);
+				//showMessage(1, 'Cancelled', 'Profile', true, false);
 
 			}
 			else if (response.customButton) {
@@ -57,7 +57,21 @@ const HeaderComponent = (props) => {
                 setImageSource(source);
                 if(props.edit ==  1){
 
-                    uploadPicDispatch(checkuserAuthentication(user_id,device_token))
+                    if(props.create == 1){
+
+                        if(Platform.OS == 'ios'){
+
+                            uploadPicDispatch(uploadProfilePic(user_id,response.uri,"imgae.jpg"))
+                        
+                          }else{
+                            uploadPicDispatch(uploadProfilePic(user_id,response.uri,response.fileName))
+                        
+                          }
+
+                    }else{
+
+
+                        uploadPicDispatch(checkuserAuthentication(user_id,device_token))
                         .then(responseData => {
 
                                 if(responseData.data.error){
@@ -83,6 +97,8 @@ const HeaderComponent = (props) => {
 
                                 }
                         })
+                    }
+                   
 
                 }else{
 
@@ -114,16 +130,16 @@ const HeaderComponent = (props) => {
             <SafeAreaView  />
             </LinearGradient>
             <LinearGradient   
-                style={{ height:150, }}
+                 style={props.wallet == 1 ? {height:150} : {height :120}}
                 colors= {["#4E73E6","#9456CE"]}
                 start= {{x: 0.0, y: 0.5}}
                 end= {{ x: 0.6, y: 0.4 }} >
 
                 <React.Fragment>
-                    <TouchableOpacity onPress={() => {props.value === 0 ? props.navigation.pop() : props.navigation.goBack()}}>
+                    {/* <TouchableOpacity onPress={() => {props.value === 0 ? props.navigation.pop() : props.navigation.goBack()}}>
                         <Image style={{ width: 20, height: 20, margin: 20 }} source={require('../assets/clinic/left-arrow.png')} />
 
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                   <View style={styles.mainStyle}>
                     <Text style={styles.userNameStyle}>{props.value == 0 ? user_name : name }</Text>
@@ -131,7 +147,7 @@ const HeaderComponent = (props) => {
                     ?
                     <Text style={styles.wallet_balance_text}>MYR {wallet_balance}</Text>
                     :
-                    <View/>
+                    null
                     }
 
                     {((imageSource === null && user_image === null) ||  imageSource == undefined)
@@ -142,7 +158,7 @@ const HeaderComponent = (props) => {
                          <Image source={require("../assets/doctor/avatar1.png")} style={styles.imageStyle} />
                         </View>
                         :
-                        <TouchableOpacity style={styles.fab} onPress={selectPhotoTapped}>
+                        <TouchableOpacity style={styles.fab} onPress={selectPhotoTapped}  disabled={props.edit== 0 ?true :false} >
                             <View style={styles.buttonView}>
                              <Image source={require("../assets/doctor/avatar1.png")} style={styles.imageStyle} />
                             </View>
@@ -152,7 +168,7 @@ const HeaderComponent = (props) => {
                     :
                     (user_image !== null || user_image !== ""
                     ?
-                        <TouchableOpacity style={styles.fab} onPress={selectPhotoTapped}>
+                        <TouchableOpacity style={styles.fab} onPress={selectPhotoTapped}  disabled={props.edit== 0 ?true :false}>
                             <Image source={{uri:ApiUrl.image_url+user_image}} style={styles.imageStyle} />
                         </TouchableOpacity>
                     //     (props.edit == 1
@@ -167,7 +183,7 @@ const HeaderComponent = (props) => {
                     //     </View>
                     //    )
                     :
-                    <TouchableOpacity style={styles.fab} onPress={selectPhotoTapped}>
+                    <TouchableOpacity style={styles.fab} onPress={selectPhotoTapped} disabled={props.edit== 0 ?true :false}>
                         <Image source={imageSource} style={styles.imageStyle} />
                     </TouchableOpacity>
                     )
@@ -188,18 +204,18 @@ const HeaderComponent = (props) => {
 
 const styles = StyleSheet.create({
 
+    
     mainStyle:{
-        justifyContent:"center",alignItems:"center",
-        bottom:0,
-        right:0,
-        left:0,
-        top:120,
-        position: 'absolute',
+        justifyContent:"center",
+        alignItems:"center",
+      //  backgroundColor:"green"
+       
     },
 
+
     fab:{
-        height: 100,
-        width: 100,
+        height: 80,
+        width: 80,
         borderRadius: 50,
         borderColor:"black",
         borderWidth:1,
@@ -223,13 +239,13 @@ const styles = StyleSheet.create({
         // shadowOpacity: 0.2,
         // shadowOffset: { height: 1 },
         // top: 0,
-        width: 100,
-        height: 100,
+        width: 80,
+        height: 80,
         borderRadius:50,
        
       },
       userNameStyle:{
-          fontSize:20,
+          fontSize:16,
           marginBottom:10,
           color:'white',
           fontFamily:'roboto-bold'

@@ -13,6 +13,7 @@ import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import { useDispatch, useSelector } from "react-redux";
 import {fetchBusinessTypes,fetchGrades,fetchSpecialities,submitCreateProfile1,getStatesList,getCitiesList,hideSpinner} from '../redux/stores/actions/register_user';
 import Geocoder from 'react-native-geocoding';
+import  HeaderComponent  from '../CustomUI/HeaderComponent';
 
 const CreateProfile = (props,navigation) => {
 
@@ -39,7 +40,7 @@ const CreateProfile = (props,navigation) => {
     // bussiness type
     const profession_categories =  useSelector(state => state.register.business_type);
     const specialities  = useSelector(state => state.register.specialities);
-    const temp_register_id =  useSelector(state => state.register.register_id);
+    const [temp_register_id ,setTempRegisterId ] = useState(props.navigation.getParam('user_id')) ;
 
     const get_states_list = useSelector(state => state.register.states_list);
     const get_cities_list = useSelector(state => state.register.cities_list);
@@ -150,10 +151,26 @@ const CreateProfile = (props,navigation) => {
                         setCityId("");
                         setCityLabel("");
                         dispatch((getCitiesList(id)))
-                            .then(response => {
-                                if(response ==  0){
-                                    setCityLabel(element.label)
-                                }
+                        .then(response =>{
+
+                            if(response.length >0 ){
+
+                                response.forEach(ele => {
+
+                                    if(ele.value  == city_id){
+                        
+                                        // setCityId(ele.value);
+                                        setCityLabel(ele.label)
+                                       
+                                    }
+
+                                })
+                              
+                            }else{
+                                setCityLabel(element.label)
+                            }
+                           
+
                             })
                         }
                 });
@@ -390,7 +407,7 @@ const CreateProfile = (props,navigation) => {
         <View style={{ flex: 1,marginBottom:20 }}>
             <SafeAreaView style={{ backgroundColor: '#4C74E6' }} />
 
-
+            <HeaderComponent  edit={1} create={1} user_id={temp_register_id} {...props}/>
             <View style={styles.container}>
                
                 <KeyboardAwareScrollView >

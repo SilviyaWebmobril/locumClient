@@ -20,10 +20,10 @@
 		4D9023C02E784A3DB9413E53 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B2768A2149B47BBB4A3184E /* Roboto-Light.ttf */; };
 		64E0491EE82F5921DE67C97A /* libPods-LocumClinic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DBCC27500F8A38DFE729176 /* libPods-LocumClinic.a */; };
 		66DB3F74DD3AD6EDD0657D04 /* libPods-LocumClinic-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2F44E8961845A24F9DBE66 /* libPods-LocumClinic-tvOS.a */; };
+		79EDF66524F94AAD00FBE941 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 79EDF66424F94AAD00FBE941 /* GoogleService-Info.plist */; };
 		7F23379E0C304CE6B36A75F7 /* roboto-light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F8B8713C44F4072B00062B7 /* roboto-light.ttf */; };
 		948A3D12561A45B28EBD7E2C /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92FB433FE07346F0942B2989 /* Roboto-Black.ttf */; };
 		B1F15CC0A8949E65858B1F8C /* libPods-LocumClinic-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 521332CA142148BF5845D289 /* libPods-LocumClinic-tvOSTests.a */; };
-		CE10C9B724C2FD700038A2BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE10C9B624C2FD6F0038A2BB /* GoogleService-Info.plist */; };
 		CED40E2123AB94F3002AD562 /* libipay88-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED40E2023AB94F3002AD562 /* libipay88-sdk.a */; };
 		DB0249B5883F41F2A7FF62BD /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1602756EDE54001B30A1C24 /* Roboto-Bold.ttf */; };
 		EBD012F916A95AB04D12C38A /* libPods-LocumClinicTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B29C93B3991546D5AB48CD /* libPods-LocumClinicTests.a */; };
@@ -75,6 +75,8 @@
 		623EB7A079A841948A9717A6 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		6A60DF677C18421FBD221305 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		6F83DECE7060497DB9A4DF4D /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		79EDF65524F6414000FBE941 /* LocumClinic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = LocumClinic.entitlements; path = LocumClinic/LocumClinic.entitlements; sourceTree = "<group>"; };
+		79EDF66424F94AAD00FBE941 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Documents/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8DBCC27500F8A38DFE729176 /* libPods-LocumClinic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LocumClinic.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92FB433FE07346F0942B2989 /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../assets/fonts/Roboto-Black.ttf"; sourceTree = "<group>"; };
 		9748EEE2C77C4564A67927D1 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -83,7 +85,6 @@
 		B686126E9CA64A9E95D21E9D /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		BDCCF9AB84FFDB17026CE573 /* Pods-LocumClinic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LocumClinic.release.xcconfig"; path = "Target Support Files/Pods-LocumClinic/Pods-LocumClinic.release.xcconfig"; sourceTree = "<group>"; };
 		C5D7F8BD48DA4125AFD06317 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		CE10C9B624C2FD6F0038A2BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CE10C9B824C2FDDE0038A2BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CED40E1E23AB9096002AD562 /* libipay88-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libipay88-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED40E2023AB94F3002AD562 /* libipay88-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libipay88-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,6 +160,7 @@
 		13B07FAE1A68108700A75B9A /* LocumClinic */ = {
 			isa = PBXGroup;
 			children = (
+				79EDF65524F6414000FBE941 /* LocumClinic.entitlements */,
 				CE10C9B824C2FDDE0038A2BB /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -196,7 +198,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				CE10C9B624C2FD6F0038A2BB /* GoogleService-Info.plist */,
+				79EDF66424F94AAD00FBE941 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* LocumClinic */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* LocumClinicTests */,
@@ -409,7 +411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				CE10C9B724C2FD700038A2BB /* GoogleService-Info.plist in Resources */,
+				79EDF66524F94AAD00FBE941 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				948A3D12561A45B28EBD7E2C /* Roboto-Black.ttf in Resources */,
 				DB0249B5883F41F2A7FF62BD /* Roboto-Bold.ttf in Resources */,
@@ -752,6 +754,7 @@
 			baseConfigurationReference = A27A14D2FE1E90B333F2BC2D /* Pods-LocumClinic.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LocumClinic/LocumClinic.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 29BJH2XM73;
@@ -775,6 +778,7 @@
 			baseConfigurationReference = BDCCF9AB84FFDB17026CE573 /* Pods-LocumClinic.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LocumClinic/LocumClinic.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 29BJH2XM73;
 				ENABLE_BITCODE = NO;

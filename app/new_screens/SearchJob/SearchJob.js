@@ -1,5 +1,5 @@
-import React ,{ useState, useEffect }  from 'react';
-import {View ,Text, TouchableOpacity, StyleSheet ,SafeAreaView,TouchableWithoutFeedback,Image, Dimensions,BackHandler} from 'react-native'
+import React ,{ useState, useEffect, useCallback }  from 'react';
+import {View ,Text, TouchableOpacity, StyleSheet ,SafeAreaView,Alert,Image, Dimensions,BackHandler} from 'react-native'
 import MyActivityIndicator from '../CustomUI/MyActivityIndicator';
 import { TextField } from 'react-native-material-textfield';
 import NetInfo from "@react-native-community/netinfo";
@@ -66,20 +66,56 @@ const SearchJob = (props) => {
 
     const dispatch = useDispatch();
     const user_id = useSelector(state=>  state.auth.user_id);
+    const [isMounted,setIsMounted]  = useState(true);
 
+    
     useEffect(() => {
+      // const backButtonHandler = ()=> {
+      //   console.log("location_frame_status",location_frame_status);
+      //   Alert.alert("Hold on!", "Are you sure you want to go back?", [
+      //     {
+      //       text: "Cancel",
+      //       onPress: () => null,
+      //       style: "cancel"
+      //     },
+      //     { text: "YES", onPress: () => BackHandler.exitApp() }
+      //   ]);
+      //   return true;
+      // }
+  
 
-        dispatch(fetchJobCategories());
-         // fetch state and cities
-         dispatch(getStatesList())
-         .then(response => {
-             if(response ==  1){
-                 
-             }
-             
-         })
+      // const hello = BackHandler.addEventListener("hardwareBackPress", backButtonHandler);
+      dispatch(fetchJobCategories());
+      // fetch state and cities
+      dispatch(getStatesList())
+      .then(response => {
+          if(response ==  1){
+              setIsMounted(false)
+          }
+        
+    });
+
+    //   if(isMounted){
+
+    //       dispatch(fetchJobCategories());
+    //       // fetch state and cities
+    //       dispatch(getStatesList())
+    //       .then(response => {
+    //           if(response ==  1){
+    //               setIsMounted(false)
+    //           }
+            
+    //     });
+
+    //  }
+       
+       //  return () => hello.remove();
        
     },[]);
+ 
+    
+
+  
 
     const onStateChangeListener = (id) => {
         
@@ -406,7 +442,7 @@ const SearchJob = (props) => {
                  labelPadding={0}
                  labelHeight={15}
                  fontSize={14}
-                label='Select States'
+                label='Select State'
                 data={get_states_list}
                 value={state_label}
                 onChangeText={(value) => { onStateChangeListener(value) }} // passing id here

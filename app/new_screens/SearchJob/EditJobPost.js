@@ -92,7 +92,17 @@ const EditJobPost = (props) => {
               setDate(postResponse.required_date);
               setfromTime(postResponse.from_time);
               setToTime(postResponse.to_time);
-              setFullAddress(postResponse.job_location)
+              setFullAddress(postResponse.job_location);
+              setStateId(postResponse.state_id);
+              setStateLabel(postResponse.state.name);
+              
+              if(postResponse.city !== null){
+                setCityId(postResponse.city_id);
+                setCityLabel(postResponse.city.name)
+              }else{
+                setCityLabel(postResponse.state.name)
+              }
+              
 
               dispatch(fetchJobCategories())
                 .then(responseCategories => {
@@ -108,47 +118,88 @@ const EditJobPost = (props) => {
                         }
                       })
 
-                      // fetch state and cities
-                      dispatch(getStatesList())
-                          .then(response => {
-                              if(response ==  1){
-                                console.log("state id",postResponse.state);
-                                  get_states_list.map(element => {
-  
-                                      if(element.value == postResponse.state.id){
-                                          setStateLabel(element.label);
-                                          setStateId(postResponse.state.id)
+                      // dispatch(getStatesList())
+                      // .then(response => {
+                      //     if(response.length  > 0 ){
+
+                      //         console.log("before if",get_states_list)
+
+                      //         response.forEach(element => {
+                      //             console.log("before if state",element.value)
+                      //             if(element.value == state_id){
+                      //                 console.log("before if state",element.label)
+
+                      //                 setStateLabel(element.label);
+                      //                 setStateId(element.value)
+                      //                 dispatch(getCitiesList(state_id))
+                      //                     .then(response => {
+                      //                         console.log("after if",response);
+                      //                         if(response.length > 0){
+                      //                             response.forEach(ele => {
+
+                      //                                 if(ele.value  == city_id){
                                           
-                                      }
-                                  });
-                                  dispatch(getCitiesList(postResponse.state.id))
-                                    .then(response => {
+                      //                                     setCityId(ele.value)
+                      //                                     setCityLabel(ele.label)
+                                                      
+                      //                                 }
+                      //                             });
+                      //                         }else{
+                      //                             setCityLabel(element.label);
+                      //                         }
+
+                      //                 })
+                              
+                                        
+                      //             }
+                      //         });
+
+                              
+                      //     }
+                         
+                      // })
+
+                      // fetch state and cities
+                      // dispatch(getStatesList())
+                      //     .then(response => {
+                      //         if(response ==  1){
+                      //           console.log("state id",postResponse.state);
+                      //             get_states_list.map(element => {
+  
+                      //                 if(element.value == postResponse.state.id){
+                      //                     setStateLabel(element.label);
+                      //                     setStateId(postResponse.state.id)
+                                          
+                      //                 }
+                      //             });
+                      //             dispatch(getCitiesList(postResponse.state.id))
+                      //               .then(response => {
 
                                      
-                                        if(response ==  1){
-                                            get_cities_list.forEach(ele => {
+                      //                   if(response ==  1){
+                      //                       get_cities_list.forEach(ele => {
 
-                                              if(postResponse.city !== null ){
+                      //                         if(postResponse.city !== null ){
                                                 
-                                                if(ele.value  == postResponse.city.id){
+                      //                           if(ele.value  == postResponse.city.id){
                                     
-                                                  // setCityId(ele.value);
-                                                  setCityLabel(ele.label)
-                                                  setCityId(ele.value)
+                      //                             // setCityId(ele.value);
+                      //                             setCityLabel(ele.label)
+                      //                             setCityId(ele.value)
                                                   
-                                                }
-                                              }
+                      //                           }
+                      //                         }
                                                 
-                                            });
-                                        }else{
-                                            setCityLabel(postResponse.state.name);
-                                        }
+                      //                       });
+                      //                   }else{
+                      //                       setCityLabel(postResponse.state.name);
+                      //                   }
 
-                                    })
+                      //               })
                                   
-                              }
+                      //         }
                               
-                          })
+                      //     })
 
 
 
